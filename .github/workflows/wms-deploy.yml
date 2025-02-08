@@ -1,0 +1,82 @@
+name: WMS App Production Deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-deploy:
+    if: startsWith(github.event.release.tag_name, 'wms-')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: |
+          npm i
+
+      - name: Create .env file
+        run: |
+          cd packages/wms
+          echo "VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}" >> .env
+        #  echo "VITE_NAVER_CLIENT_ID=${{ secrets.VITE_NAVER_CLIENT_ID }}" >> .env
+
+      - name: Build React App
+        run: |
+          cd packages/wms
+          npm run build
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract tag without prefix
+        id: extract_tag
+        run: |
+          RAW_TAG=${{ github.event.release.tag_name }}
+          CLEAN_TAG=${RAW_TAG#wms-}
+          echo "clean_tag=${CLEAN_TAG}" >> $GITHUB_ENV
+
+      - name: Log clean tag
+        run: |
+          echo ${{ env.clean_tag }}
+          echo "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_APP }}:${{ env.clean_tag }}"
+
+      - name: Build and push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./packages/wms
+          platforms: linux/amd64/v3
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_APP }}:${{ env.clean_tag }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_APP }}:latest
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_APP }}
+          username: ${{ secrets.EC2_USERNAME_APP }}
+          key: ${{ secrets.EC2_SSH_KEY_APP }}
+          script: |
+            cd ${{ secrets.PROJECT_PATH_APP }}
+            sudo docker compose pull
+            sudo docker compose down
+            sudo docker compose up -d
+            sudo docker image prune -f
