@@ -1,0 +1,277 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+:root {
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+
+  --color-gray-50-0: #f8fafc00;
+  --color-gray-900-50: #0f172a80;
+  --color-gray-900-75: #0f172ac0;
+
+  --color-error: #fe5d26;
+  --color-success: #358600;
+  --color-info: #0075f2;
+  --color-warning: #e28413;
+
+  --color-primary: #024caa;
+  --color-primary-light: #0363de;
+  --color-primary-dark: #013679;
+
+  --color-secondary: #ec8305;
+  --color-secondary-light: #fa9b28;
+  --color-secondary-dark: #b96704;
+
+  /* Font Size and Line Height */
+  --font-xs: 10px;
+  --line-height-xs: 14px;
+
+  --font-sm: 14px;
+  --line-height-sm: 20px;
+
+  --font-md: 16px;
+  --line-height-md: 24px;
+
+  --font-lg: 20px;
+  --line-height-lg: 28px;
+
+  --font-xl: 24px;
+  --line-height-xl: 32px;
+
+  /* Header 스타일 */
+  --font-header-h4: 20px;
+  --line-height-header-h4: 28px;
+
+  --font-header-h3: 24px;
+  --line-height-header-h3: 32px;
+
+  --font-header-h2: 28px;
+  --line-height-header-h2: 40px;
+
+  --font-header-h1: 36px;
+  --line-height-header-h1: 52px;
+
+  /* Font Weight */
+  --font-weight-extralight: 200;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Size */
+  --size-main-header-height: 44px;
+  --size-bottom-button-height: 60px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+html,
+body {
+  overflow: hidden;
+}
+
+body {
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-900);
+  font-family: "Pretendard", sans-serif;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+input {
+  border: none;
+  outline: none;
+}
+
+img {
+  pointer-events: none;
+  user-select: none;
+}
+
+.font-l-xs {
+  font-weight: var(--font-weight-extralight);
+  font-size: var(--font-xs);
+  line-height: var(--line-height-xs);
+}
+
+.font-l-sm {
+  font-weight: var(--font-weight-extralight);
+  font-size: var(--font-sm);
+  line-height: var(--line-height-sm);
+}
+
+.font-l-md {
+  font-weight: var(--font-weight-extralight);
+  font-size: var(--font-md);
+  line-height: var(--line-height-md);
+}
+
+.font-l-lg {
+  font-weight: var(--font-weight-extralight);
+  font-size: var(--font-lg);
+  line-height: var(--line-height-lg);
+}
+
+.font-l-xl {
+  font-weight: var(--font-weight-extralight);
+  font-size: var(--font-xl);
+  line-height: var(--line-height-xl);
+}
+
+.font-r-xs {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-xs);
+  line-height: var(--line-height-xs);
+}
+
+.font-r-sm {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-sm);
+  line-height: var(--line-height-sm);
+}
+
+.font-r-md {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-md);
+  line-height: var(--line-height-md);
+}
+
+.font-r-lg {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-lg);
+  line-height: var(--line-height-lg);
+}
+
+.font-r-xl {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-xl);
+  line-height: var(--line-height-xl);
+}
+
+.font-b-xs {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-xs);
+  line-height: var(--line-height-xs);
+}
+
+.font-b-sm {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-sm);
+  line-height: var(--line-height-sm);
+}
+
+.font-b-md {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-md);
+  line-height: var(--line-height-md);
+}
+
+.font-b-lg {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-lg);
+  line-height: var(--line-height-lg);
+}
+
+.font-b-xl {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-xl);
+  line-height: var(--line-height-xl);
+}
+
+.font-h4 {
+  font-size: var(--font-header-h4);
+  line-height: var(--line-height-header-h4);
+  font-weight: var(--font-weight-bold);
+}
+
+.font-h3 {
+  font-size: var(--font-header-h3);
+  line-height: var(--line-height-header-h3);
+  font-weight: var(--font-weight-bold);
+}
+
+.font-h2 {
+  font-size: var(--font-header-h2);
+  line-height: var(--line-height-header-h2);
+  font-weight: var(--font-weight-bold);
+}
+
+.font-h1 {
+  font-size: var(--font-header-h1);
+  line-height: var(--line-height-header-h1);
+  font-weight: var(--font-weight-bold);
+}
+
+.color-primary {
+  color: var(--color-primary);
+}
+
+.color-secondary {
+  color: var(--color-secondary);
+}
+
+.color-gray-50 {
+  color: var(--color-gray-50);
+}
+
+.color-gray-400 {
+  color: var(--color-gray-400);
+}
+
+.color-gray-600 {
+  color: var(--color-gray-600);
+}
+
+.layout-line {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.layout-vertical {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.div-line {
+  width: 100%;
+  height: 0;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.div-line-400 {
+  width: 100%;
+  height: 0;
+  border-bottom: 1px solid var(--color-gray-400);
+}
