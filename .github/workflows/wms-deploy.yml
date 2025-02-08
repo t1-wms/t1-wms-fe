@@ -56,7 +56,7 @@ jobs:
       - name: Log clean tag
         run: |
           echo ${{ env.clean_tag }}
-          echo "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_APP }}:${{ env.clean_tag }}"
+          echo "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_WMS }}:${{ env.clean_tag }}"
 
       - name: Build and push Docker Image
         uses: docker/build-push-action@v5
@@ -65,17 +65,17 @@ jobs:
           platforms: linux/amd64/v3
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_APP }}:${{ env.clean_tag }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_APP }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_WMS }}:${{ env.clean_tag }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_WMS }}:latest
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST_APP }}
-          username: ${{ secrets.EC2_USERNAME_APP }}
-          key: ${{ secrets.EC2_SSH_KEY_APP }}
+          host: ${{ secrets.EC2_HOST_WMS }}
+          username: ${{ secrets.EC2_USERNAME_WMS }}
+          key: ${{ secrets.EC2_SSH_KEY_WMS }}
           script: |
-            cd ${{ secrets.PROJECT_PATH_APP }}
+            cd ${{ secrets.PROJECT_PATH_WMS }}
             sudo docker compose pull
             sudo docker compose down
             sudo docker compose up -d
