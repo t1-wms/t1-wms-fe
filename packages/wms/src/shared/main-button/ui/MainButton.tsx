@@ -1,9 +1,8 @@
-import { ReactNode } from "react";
+import { ButtonHTMLAttributes } from "react";
 import styles from "./MainButton.module.css";
 import type { Size } from "@shared/ui/types";
 
-interface MainButtonProps {
-  children: ReactNode;
+interface MainButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "primary" | "gray";
   fullWidth?: boolean;
   bold?: boolean;
@@ -11,19 +10,20 @@ interface MainButtonProps {
 }
 
 export const MainButton = ({
-  children,
   fullWidth,
   color = "primary",
   bold,
   size = "md",
+  ...props
 }: MainButtonProps) => {
   return (
     <button
+      {...props}
       className={`${styles.container} ${
         fullWidth ? styles["full-width"] : ""
       } ${styles[color]} ${bold ? styles.bold : ""} font-r-${size}`}
     >
-      {children}
+      {props.children}
     </button>
   );
 };
