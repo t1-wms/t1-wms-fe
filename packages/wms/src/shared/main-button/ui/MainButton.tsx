@@ -1,12 +1,13 @@
 import { ReactNode } from "react";
 import styles from "./MainButton.module.css";
+import type { Size } from "@shared/ui/types";
 
 interface MainButtonProps {
   children: ReactNode;
   color?: "primary" | "gray";
   fullWidth?: boolean;
   bold?: boolean;
-  size?: "sm" | "md";
+  size?: Size;
 }
 
 export const MainButton = ({
