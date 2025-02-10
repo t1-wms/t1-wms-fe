@@ -51,7 +51,7 @@ export const SideBarItem = ({ routes }: SideBarItemProps) => {
             <Link
               key={i}
               to={subItem.path}
-              className={`${styles.link} font-b-sm`}
+              className={`${styles.link} font-r-sm`}
             >
               {subItem.label}
             </Link>
