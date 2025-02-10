@@ -1,0 +1,37 @@
+.container {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--color-primary);
+  color: var(--color-gray-50);
+}
+
+.logo-box {
+  flex: auto 0 0;
+
+  user-select: none;
+}
+
+.profile-box {
+  display: flex;
+  gap: 8px;
+
+  .profile-name {
+    user-select: none;
+    flex: auto 0 0;
+  }
+
+  .noti-button {
+    flex: 20px 0 0;
+    height: 20px;
+
+    & > svg {
+      width: 100%;
+      height: 100%;
+      fill: var(--color-gray-50);
+    }
+  }
+}
