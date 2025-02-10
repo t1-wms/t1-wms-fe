@@ -1,0 +1,50 @@
+.container {
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-900);
+  transition: background-color 0.25s;
+
+  &.folded {
+    background-color: var(--color-gray-200);
+  }
+
+  &:hover {
+    background-color: var(--color-gray-200);
+  }
+}
+
+.main-button {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  align-items: center;
+  padding: 8px 16px;
+  gap: 8px;
+  color: var(--color-gray-900);
+}
+
+.icon-wrapper {
+  width: 20px;
+  height: 20px;
+
+  & > svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--color-gray-900);
+  }
+}
+
+.sub-items {
+  width: 100%;
+  padding: 0 8px 12px 32px;
+}
+
+.link {
+  display: block;
+  width: 100%;
+  height: 24px;
+  line-height: 24px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

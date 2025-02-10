@@ -64,8 +64,7 @@
   --font-weight-bold: 700;
 
   /* Size */
-  --size-main-header-height: 44px;
-  --size-bottom-button-height: 60px;
+  --size-header-height: 60px;
 }
 
 * {
