@@ -5,6 +5,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   PaginationState,
+  RowSelectionState,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -23,6 +24,8 @@ interface BaseTableProps<TData> {
   setPagination: Dispatch<SetStateAction<PaginationState>>;
   sorting: SortingState;
   setSorting: Dispatch<SetStateAction<SortingState>>;
+  rowSelection: RowSelectionState;
+  setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
 }
 
 export const BaseTable = <TData extends unknown>({
@@ -33,6 +36,8 @@ export const BaseTable = <TData extends unknown>({
   setPagination,
   sorting,
   setSorting,
+  rowSelection,
+  setRowSelection,
 }: BaseTableProps<TData>) => {
   const table = useReactTable<TData>({
     data: data ? data.data : [],
@@ -47,9 +52,12 @@ export const BaseTable = <TData extends unknown>({
     state: {
       pagination,
       sorting,
+      rowSelection,
     },
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
+    onRowSelectionChange: setRowSelection,
+    enableMultiRowSelection: false,
   });
 
   console.log(sorting);
@@ -88,7 +96,11 @@ export const BaseTable = <TData extends unknown>({
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr
+              key={row.id}
+              className={row.getIsSelected() ? styles["selected-row"] : ""}
+              onClick={row.getToggleSelectedHandler()}
+            >
               {row.getAllCells().map((cell) => (
                 <td key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

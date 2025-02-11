@@ -22,6 +22,7 @@
       tr {
         border-spacing: 1px;
         border-bottom: 1px solid var(--color-gray-300);
+        cursor: pointer;
 
         td {
           height: 32px;
@@ -59,4 +60,8 @@
       fill: var(--color-gray-50);
     }
   }
+}
+
+.selected-row {
+  background-color: var(--color-primary-o25);
 }

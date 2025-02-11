@@ -1,10 +1,11 @@
 import {
   createColumnHelper,
   PaginationState,
+  RowSelectionState,
   SortingState,
 } from "@tanstack/react-table";
 import { Sort, TestUser, useTestCount, useTestPage } from "@shared/api/TestApi";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BaseTable } from "@widgets/base-table/ui/BaseTable";
 
 const columnHelper = createColumnHelper<TestUser>();
@@ -34,6 +35,12 @@ export const TestTable = () => {
     pageSize: 20,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+
+  useEffect(() => {
+    setRowSelection({});
+  }, [pagination]);
+
   const sort = useMemo<Sort | undefined>(() => {
     return sorting.length === 0
       ? undefined
@@ -69,6 +76,8 @@ export const TestTable = () => {
         setPagination={setPagination}
         sorting={sorting}
         setSorting={setSorting}
+        rowSelection={rowSelection}
+        setRowSelection={setRowSelection}
         serverSide={isServerSide}
       />
     </>
