@@ -28,13 +28,10 @@ export const Pagination = memo(
     }, [currentPage, maxPage]);
 
     const pages = useMemo(() => {
-      const result = [];
-      for (let i = currentPage - size; i <= currentPage + size; i++) {
-        if (i < 1 || i > maxPage) continue;
-        result.push(i);
-      }
+      const start = Math.max(1, currentPage - size);
+      const end = Math.min(maxPage, currentPage + size);
 
-      return result;
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     }, [currentPage, size, maxPage]);
 
     return (

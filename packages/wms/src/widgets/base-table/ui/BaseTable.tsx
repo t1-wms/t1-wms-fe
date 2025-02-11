@@ -60,8 +60,6 @@ export const BaseTable = <TData extends unknown>({
     enableMultiRowSelection: false,
   });
 
-  console.log(sorting);
-
   return (
     <div className={styles.container}>
       <table>
