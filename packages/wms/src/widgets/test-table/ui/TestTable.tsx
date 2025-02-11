@@ -1,12 +1,7 @@
-import {
-  createColumnHelper,
-  PaginationState,
-  RowSelectionState,
-  SortingState,
-} from "@tanstack/react-table";
-import { Sort, TestUser, useTestCount, useTestPage } from "@shared/api/TestApi";
-import { useEffect, useMemo, useState } from "react";
-import { BaseTable } from "@widgets/base-table/ui/BaseTable";
+import { createColumnHelper } from "@tanstack/react-table";
+import { TestUser, useTestCount, useTestPage } from "@shared/api/TestApi";
+import { BaseTable } from "@shared/base-table/ui/BaseTable";
+import { useTable } from "@shared/base-table";
 
 const columnHelper = createColumnHelper<TestUser>();
 
@@ -30,42 +25,16 @@ const defaultColumns = [
 ];
 
 export const TestTable = () => {
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 20,
-  });
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-
-  useEffect(() => {
-    setRowSelection({});
-  }, [pagination]);
-
-  const sort = useMemo<Sort | undefined>(() => {
-    return sorting.length === 0
-      ? undefined
-      : {
-          sortField: sorting[0].id,
-          sortOrder: sorting[0].desc ? "desc" : "asc",
-        };
-  }, [sorting]);
-
-  const { data: testCount } = useTestCount();
-
-  const isServerSide = useMemo(() => {
-    if (testCount === undefined) return undefined;
-    else {
-      return testCount.count >= 10000;
-    }
-  }, [testCount]);
-
-  const { data: pagedTestUsers } = useTestPage(
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
     isServerSide,
-    pagination.pageIndex + 1,
-    sort
-  );
-
-  console.log(pagedTestUsers);
+    data: pagedTestUsers,
+  } = useTable(useTestCount, useTestPage);
 
   return (
     <>

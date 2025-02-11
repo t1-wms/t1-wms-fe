@@ -1,28 +1,12 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { noAuthAxios } from "./base";
-
-export interface PageResponse<T> {
-  data: T[];
-  pagination: {
-    currentPage: number;
-    itemsPerPage: number;
-    nextPage?: number;
-    previousPage?: number;
-    totalItems: number;
-    totalPages: number;
-  };
-}
+import { PageResponse, Sort } from "@shared/model";
 
 export interface TestUser {
   id: number;
   name: string;
   age: number;
   email: string;
-}
-
-export interface Sort {
-  sortField: string;
-  sortOrder: "asc" | "desc";
 }
 
 export const getTestCount = async () => {
