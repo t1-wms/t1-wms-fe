@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { noAuthAxios } from "./base";
 
 export interface PageResponse<T> {
@@ -20,6 +20,11 @@ export interface TestUser {
   email: string;
 }
 
+export interface Sort {
+  sortField: string;
+  sortOrder: "asc" | "desc";
+}
+
 export const getTestCount = async () => {
   const response = await noAuthAxios.get<{ count: number }>(`/api/users/count`);
 
@@ -34,9 +39,11 @@ export const getTestPageNoPage = async () => {
   return response.data;
 };
 
-export const getTestPage = async (page: number) => {
+export const getTestPage = async (page: number, sort?: Sort) => {
   const response = await noAuthAxios.get<PageResponse<TestUser>>(
-    `api/users?page=${page}`
+    `api/users?page=${page}${
+      sort ? `&sortField=${sort.sortField}&sortOrder=${sort.sortOrder}` : ""
+    }`
   );
 
   return response.data;
@@ -58,12 +65,17 @@ export const useTestPageNoPage = () => {
 
 export const useTestPage = (
   isServerSide: boolean | undefined,
-  page?: number
+  page?: number,
+  sort?: Sort
 ) => {
   if (isServerSide) {
     return useQuery({
-      queryKey: ["test", page],
-      queryFn: () => getTestPage(page!),
+      queryKey: [
+        "test",
+        page,
+        sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
+      ],
+      queryFn: () => getTestPage(page!, sort),
       enabled: isServerSide !== undefined && isServerSide,
     });
   } else {
