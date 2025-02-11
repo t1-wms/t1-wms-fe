@@ -35,8 +35,6 @@ export const MainInput = forwardRef(
     { label, width, fontSize = "md", error, ...props }: MainInputProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
-    console.log(error);
-
     return (
       <div
         className={`${styles.container}`}

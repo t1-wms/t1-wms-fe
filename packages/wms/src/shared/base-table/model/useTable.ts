@@ -40,7 +40,7 @@ export function useTable<T>(
   const isServerSide = useMemo(() => {
     if (countResult === undefined) return undefined;
     else {
-      return countResult.count >= 10000;
+      return countResult.count > 10000;
     }
   }, [countResult]);
 
@@ -54,6 +54,7 @@ export function useTable<T>(
     rowSelection,
     setRowSelection,
     isServerSide,
+    sort,
     data,
   };
 }

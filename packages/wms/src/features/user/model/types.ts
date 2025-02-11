@@ -11,3 +11,7 @@ export interface UserListDto {
   birthDate: string;
   supplierId: number;
 }
+
+export interface UpdateActiveResDto {
+  isActive: boolean;
+}

@@ -1,12 +1,31 @@
 import { Sort } from "@shared/model";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getUserCount, getUsers, getUsersPaged } from "../api/UserApi";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  getUserCount,
+  getUsers,
+  getUsersPaged,
+  updateUserActive,
+} from "../api/UserApi";
 
 export const useUserCount = () => {
   return useQuery({
     queryKey: ["user", "count"],
     queryFn: () => getUserCount(),
   });
+};
+
+export const createUseUsersQueryKey = (
+  isServerSide: boolean | undefined,
+  page?: number,
+  sort?: Sort
+) => {
+  return isServerSide
+    ? [
+        "user",
+        page!,
+        sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
+      ]
+    : ["user"];
 };
 
 export const useUsers = (
@@ -16,11 +35,7 @@ export const useUsers = (
 ) => {
   if (isServerSide) {
     return useQuery({
-      queryKey: [
-        "user",
-        page,
-        sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
-      ],
+      queryKey: createUseUsersQueryKey(isServerSide, page!, sort),
       queryFn: () => getUsersPaged(page!, sort),
       enabled: isServerSide !== undefined && isServerSide,
       placeholderData: keepPreviousData,
@@ -32,4 +47,11 @@ export const useUsers = (
       enabled: isServerSide !== undefined && !isServerSide,
     });
   }
+};
+
+export const useUpdateActive = (onMutate: (userId: number) => void) => {
+  return useMutation({
+    mutationFn: (userId: number) => updateUserActive(userId),
+    onMutate,
+  });
 };

@@ -1,59 +1,20 @@
 import styles from "./UserPage.module.css";
 import { PageContentBox } from "@shared/page-content-box";
 import {
+  createUseUsersQueryKey,
   UserControlPanel,
   UserListDto,
+  useUpdateActive,
   useUserCount,
   useUsers,
 } from "@features/user";
 import { BaseTable, useTable } from "@shared/base-table";
 import { createColumnHelper } from "@tanstack/react-table";
+import { useMemo } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { PageResponse } from "@shared/model";
 
 const columnHelper = createColumnHelper<UserListDto>();
-
-const defaultColumns = [
-  columnHelper.accessor("userId", {
-    header: "ID",
-    cell: (row) => row.getValue(),
-    sortDescFirst: false,
-  }),
-  columnHelper.accessor("name", {
-    header: "이름",
-    cell: (row) => row.getValue(),
-  }),
-  columnHelper.accessor("staffNumber", {
-    header: "사원번호",
-    cell: (row) => row.getValue(),
-  }),
-  columnHelper.accessor("phone", {
-    header: "휴대폰 번호",
-    cell: (row) => row.getValue(),
-  }),
-  columnHelper.accessor("gender", {
-    header: "성별",
-    cell: (row) => (row.getValue() === "M" ? "남자" : "여자"),
-  }),
-  columnHelper.accessor("isActive", {
-    header: "활성화",
-    cell: (row) => <input type="checkbox" checked={row.getValue()} />,
-  }),
-  columnHelper.accessor("address", {
-    header: "주소",
-    cell: (row) => row.getValue(),
-  }),
-  columnHelper.accessor("userRole", {
-    header: "권한",
-    cell: (row) => row.getValue(),
-  }),
-  columnHelper.accessor("birthDate", {
-    header: "생일",
-    cell: (row) => row.getValue(),
-  }),
-  columnHelper.accessor("supplierId", {
-    header: "납품업체",
-    cell: (row) => row.getValue(),
-  }),
-];
 
 export default function UserPage() {
   const {
@@ -64,9 +25,81 @@ export default function UserPage() {
     rowSelection,
     setRowSelection,
     isServerSide,
+    sort,
     data: pagedUsers,
   } = useTable(useUserCount, useUsers);
 
+  const queryClient = useQueryClient();
+
+  const { mutate } = useUpdateActive((userId: number) => {
+    queryClient.setQueryData<PageResponse<UserListDto>>(
+      createUseUsersQueryKey(isServerSide, pagination.pageIndex + 1, sort),
+      (oldData) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          data: oldData.data.map((user) =>
+            user.userId === userId
+              ? { ...user, isActive: !user.isActive }
+              : user
+          ),
+        };
+      }
+    );
+  });
+
+  const defaultColumns = useMemo(() => {
+    return [
+      columnHelper.accessor("userId", {
+        header: "ID",
+        cell: (row) => row.getValue(),
+        sortDescFirst: false,
+      }),
+      columnHelper.accessor("name", {
+        header: "이름",
+        cell: (row) => row.getValue(),
+      }),
+      columnHelper.accessor("staffNumber", {
+        header: "사원번호",
+        cell: (row) => row.getValue(),
+      }),
+      columnHelper.accessor("phone", {
+        header: "휴대폰 번호",
+        cell: (row) => row.getValue(),
+      }),
+      columnHelper.accessor("gender", {
+        header: "성별",
+        cell: (row) => (row.getValue() === "M" ? "남자" : "여자"),
+      }),
+      columnHelper.accessor("isActive", {
+        header: "활성화",
+        cell: (row) => (
+          <input
+            type="checkbox"
+            checked={row.getValue()}
+            onChange={() => mutate(row.row.getValue("userId"))}
+          />
+        ),
+      }),
+      columnHelper.accessor("address", {
+        header: "주소",
+        cell: (row) => row.getValue(),
+      }),
+      columnHelper.accessor("userRole", {
+        header: "권한",
+        cell: (row) => row.getValue(),
+      }),
+      columnHelper.accessor("birthDate", {
+        header: "생일",
+        cell: (row) => row.getValue(),
+      }),
+      columnHelper.accessor("supplierId", {
+        header: "납품업체",
+        cell: (row) => row.getValue(),
+      }),
+    ];
+  }, [mutate]);
   return (
     <div className={styles.container}>
       <PageContentBox>
