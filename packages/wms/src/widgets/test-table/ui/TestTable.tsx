@@ -62,17 +62,15 @@ export const TestTable = () => {
 
   return (
     <>
-      {pagedTestUsers && (
-        <BaseTable
-          data={pagedTestUsers}
-          columns={defaultColumns}
-          pagination={pagination}
-          setPagination={setPagination}
-          sorting={sorting}
-          setSorting={setSorting}
-          serverSide={isServerSide}
-        />
-      )}
+      <BaseTable
+        data={pagedTestUsers}
+        columns={defaultColumns}
+        pagination={pagination}
+        setPagination={setPagination}
+        sorting={sorting}
+        setSorting={setSorting}
+        serverSide={isServerSide}
+      />
     </>
   );
 };

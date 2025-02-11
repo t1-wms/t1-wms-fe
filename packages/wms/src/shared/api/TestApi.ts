@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { noAuthAxios } from "./base";
 
 export interface PageResponse<T> {
@@ -77,6 +77,7 @@ export const useTestPage = (
       ],
       queryFn: () => getTestPage(page!, sort),
       enabled: isServerSide !== undefined && isServerSide,
+      placeholderData: keepPreviousData,
     });
   } else {
     return useQuery({

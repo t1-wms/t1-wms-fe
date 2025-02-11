@@ -13,10 +13,11 @@ import { PageResponse } from "@shared/api/TestApi";
 import { Dispatch, SetStateAction } from "react";
 import SortAscIcon from "@assets/sort-asc.svg?react";
 import SortDescIcon from "@assets/sort-desc.svg?react";
+import { Pagination } from "@shared/pagination";
 
 interface BaseTableProps<TData> {
   serverSide?: boolean;
-  data: PageResponse<TData>;
+  data?: PageResponse<TData>;
   columns: ColumnDef<TData, any>[];
   pagination: PaginationState;
   setPagination: Dispatch<SetStateAction<PaginationState>>;
@@ -34,15 +35,15 @@ export const BaseTable = <TData extends unknown>({
   setSorting,
 }: BaseTableProps<TData>) => {
   const table = useReactTable<TData>({
-    data: data.data,
+    data: data ? data.data : [],
     columns,
     manualPagination: serverSide,
     manualSorting: serverSide,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: !serverSide ? getPaginationRowModel() : undefined,
     getSortedRowModel: !serverSide ? getSortedRowModel() : undefined,
-    rowCount: serverSide ? data.pagination.totalItems : undefined,
-    pageCount: serverSide ? data.pagination.totalPages : undefined,
+    rowCount: data && serverSide ? data.pagination.totalItems : undefined,
+    pageCount: data && serverSide ? data.pagination.totalPages : undefined,
     state: {
       pagination,
       sorting,
@@ -97,8 +98,14 @@ export const BaseTable = <TData extends unknown>({
           ))}
         </tbody>
       </table>
-      <button onClick={() => table.previousPage()}>{"<"}</button>
-      <button onClick={() => table.nextPage()}>{">"}</button>
+      <Pagination
+        currentPage={pagination.pageIndex + 1}
+        size={2}
+        maxPage={table.getPageCount()}
+        onClickPrev={() => table.previousPage()}
+        onClickNext={() => table.nextPage()}
+        onClickPage={(page: number) => table.setPageIndex(page - 1)}
+      />
     </div>
   );
 };
