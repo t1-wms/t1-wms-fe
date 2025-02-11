@@ -11,5 +11,8 @@
   },
   "devDependencies": {
     "vite-plugin-svgr": "^4.3.0"
+  },
+  "dependencies": {
+    "@tanstack/react-table": "^8.20.6"
   }
 }
