@@ -33,3 +33,9 @@ export const updateUserActive = async (userId: number) => {
 
   return response.data;
 };
+
+export const getRoles = async () => {
+  const response = await noAuthAxios.get<string[]>("api/roles");
+
+  return response;
+};

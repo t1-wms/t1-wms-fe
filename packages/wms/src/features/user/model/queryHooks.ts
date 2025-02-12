@@ -1,6 +1,7 @@
 import { Sort } from "@shared/model";
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import {
+  getRoles,
   getUserCount,
   getUsers,
   getUsersPaged,
@@ -53,5 +54,12 @@ export const useUpdateActive = (onMutate: (userId: number) => void) => {
   return useMutation({
     mutationFn: (userId: number) => updateUserActive(userId),
     onMutate,
+  });
+};
+
+export const useRoles = () => {
+  return useQuery({
+    queryKey: ["role"],
+    queryFn: () => getRoles(),
   });
 };
