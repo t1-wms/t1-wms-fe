@@ -1,9 +1,10 @@
 import { ButtonHTMLAttributes } from "react";
 import styles from "./MainButton.module.css";
 import type { Size } from "@shared/ui/types";
+import { MainButtonColor } from "../model/types";
 
 interface MainButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  color?: "primary" | "gray";
+  color?: MainButtonColor;
   fullWidth?: boolean;
   bold?: boolean;
   size?: Size;

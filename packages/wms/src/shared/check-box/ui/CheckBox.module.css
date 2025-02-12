@@ -20,7 +20,7 @@
     stroke: var(--color-gray-300);
 
     &:hover {
-      background-color: var(--color-primary-o25);
+      background-color: var(--color-primary-25);
       stroke: var(--color-gray-500);
     }
   }

@@ -2,6 +2,9 @@ import { MainInput } from "@shared/main-input";
 import styles from "./UserControlPanel.module.css";
 import { MainButton } from "@shared/main-button";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useCallback } from "react";
+import { useModalStore } from "@shared/base-modal";
+import { BasicModalInfo } from "@shared/basic-modal";
 
 interface UserSearchFormInputs {
   staffNumber: string;
@@ -14,9 +17,22 @@ export const UserControlPanel = () => {
     handleSubmit,
   } = useForm<UserSearchFormInputs>();
 
+  const { openModal } = useModalStore();
+
   const onSubmit: SubmitHandler<UserSearchFormInputs> = (data) => {
     console.log(data);
   };
+
+  const handleClickAdd = useCallback(() => {
+    const modalInfo: BasicModalInfo = {
+      title: "TestModal",
+      buttons: [
+        { label: "확인", color: "primary", onClick: () => {} },
+        { label: "취소", color: "gray", onClick: () => {} },
+      ],
+    };
+    openModal(modalInfo);
+  }, [openModal]);
 
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
@@ -38,7 +54,7 @@ export const UserControlPanel = () => {
       </div>
       <div className={styles["button-box"]}>
         <MainButton size="sm">조회</MainButton>
-        <MainButton size="sm" type="button">
+        <MainButton size="sm" type="button" onClick={handleClickAdd}>
           추가
         </MainButton>
       </div>
