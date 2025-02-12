@@ -1,0 +1,16 @@
+.title {
+  padding: 16px;
+  user-select: none;
+  color: var(--color-gray-900);
+}
+
+.content {
+  padding: 16px;
+}
+
+.footer {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}

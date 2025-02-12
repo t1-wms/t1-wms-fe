@@ -4,6 +4,7 @@ import { MainButton } from "@shared/main-button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useCallback } from "react";
 import { useModalStore } from "@shared/base-modal";
+import { BasicModalInfo } from "@shared/basic-modal";
 
 interface UserSearchFormInputs {
   staffNumber: string;
@@ -23,7 +24,14 @@ export const UserControlPanel = () => {
   };
 
   const handleClickAdd = useCallback(() => {
-    openModal({ a: 1 });
+    const modalInfo: BasicModalInfo = {
+      title: "TestModal",
+      buttons: [
+        { label: "확인", color: "primary", onClick: () => {} },
+        { label: "취소", color: "gray", onClick: () => {} },
+      ],
+    };
+    openModal(modalInfo);
   }, [openModal]);
 
   return (

@@ -1,21 +1,27 @@
-import { useCallback } from "react";
+import { ReactNode, useCallback } from "react";
 import { useModalStore } from "../model/modalStore";
 import styles from "./BaseModal.module.css";
 import "@shared/config/styles/keyframes.module.css";
 
-export const BaseModal = () => {
-  const { openModal } = useModalStore();
+interface BaseModalProps {
+  children: ReactNode;
+}
+
+export const BaseModal = ({ children }: BaseModalProps) => {
+  const { closeModal } = useModalStore();
 
   const handleCloseModal = useCallback(() => {
-    openModal(null);
-  }, [openModal]);
+    closeModal();
+  }, [closeModal]);
 
   return (
     <div className={styles.wrapper} onClick={handleCloseModal}>
       <div
         className={`${styles.container} shadow-md`}
         onClick={(e) => e.stopPropagation()}
-      ></div>
+      >
+        {children}
+      </div>
     </div>
   );
 };
