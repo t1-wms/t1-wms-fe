@@ -1,7 +1,7 @@
 import { ReactNode, useCallback } from "react";
-import { useModalStore } from "../model/modalStore";
 import styles from "./BaseModal.module.css";
 import "@shared/config/styles/keyframes.module.css";
+import { useModalStore } from "@/shared";
 
 interface BaseModalProps {
   children: ReactNode;

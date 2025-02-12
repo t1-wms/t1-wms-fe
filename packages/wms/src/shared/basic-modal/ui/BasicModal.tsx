@@ -5,12 +5,12 @@ import { BasicModalInfo } from "../model/types";
 import { MainButton } from "@shared/main-button";
 
 export interface BasicModalProps {
-  info: BasicModalInfo;
+  modalInfo: BasicModalInfo;
   children: ReactNode;
 }
 
-export const BasicModal = ({ info, children }: BasicModalProps) => {
-  const { title, buttons = [] } = info;
+export const BasicModal = ({ modalInfo, children }: BasicModalProps) => {
+  const { title, buttons = [] } = modalInfo;
   return (
     <BaseModal>
       <h1 className={`${styles.title} font-h4`}>{title}</h1>
