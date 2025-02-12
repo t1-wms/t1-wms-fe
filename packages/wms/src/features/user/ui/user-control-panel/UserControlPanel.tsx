@@ -1,7 +1,8 @@
 import styles from "./UserControlPanel.module.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useCallback } from "react";
-import { BasicModalInfo, MainButton, MainInput, useModalStore } from "@/shared";
+import { MainButton, MainInput, useModalStore } from "@/shared";
+import { CreateUserModalInfo } from "../../model";
 
 interface UserSearchFormInputs {
   staffNumber: string;
@@ -21,13 +22,8 @@ export const UserControlPanel = () => {
   };
 
   const handleClickAdd = useCallback(() => {
-    const modalInfo: BasicModalInfo = {
-      key: "basic",
-      title: "TestModal",
-      buttons: [
-        { label: "확인", color: "primary", onClick: () => {} },
-        { label: "취소", color: "gray", onClick: () => {} },
-      ],
+    const modalInfo: CreateUserModalInfo = {
+      key: "createUser",
     };
     openModal(modalInfo);
   }, [openModal]);

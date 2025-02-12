@@ -1,5 +1,4 @@
 import styles from "./UserPage.module.css";
-import { PageContentBox } from "@shared/page-content-box";
 import {
   createUseUsersQueryKey,
   UserControlPanel,
@@ -8,12 +7,16 @@ import {
   useUserCount,
   useUsers,
 } from "@features/user";
-import { BaseTable, useTable } from "@shared/base-table";
+import {
+  BaseTable,
+  CheckBox,
+  PageContentBox,
+  PageResponse,
+  useTable,
+} from "@/shared";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { PageResponse } from "@shared/model";
-import { CheckBox } from "@shared/check-box/ui/CheckBox";
 
 const columnHelper = createColumnHelper<UserListDto>();
 

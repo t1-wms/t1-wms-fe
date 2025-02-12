@@ -18,4 +18,6 @@ export interface UpdateActiveResDto {
   isActive: boolean;
 }
 
-export interface CreateUserModalInfo extends ModalInfoBase {}
+export interface CreateUserModalInfo extends ModalInfoBase {
+  key: "createUser";
+}

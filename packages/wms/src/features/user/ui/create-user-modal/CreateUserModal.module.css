@@ -1,0 +1,6 @@
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  width: 496px;
+  gap: 16px;
+}
