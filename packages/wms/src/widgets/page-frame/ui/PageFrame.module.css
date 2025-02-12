@@ -1,0 +1,16 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.content {
+  flex-grow: 1;
+  height: calc(100% - var(--size-header-height));
+  max-width: calc(100% - 240px);
+}

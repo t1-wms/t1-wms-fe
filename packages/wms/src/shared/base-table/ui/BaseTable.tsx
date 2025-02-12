@@ -10,11 +10,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import styles from "./BaseTable.module.css";
-import { PageResponse } from "@shared/api/TestApi";
 import { Dispatch, SetStateAction } from "react";
 import SortAscIcon from "@assets/sort-asc.svg?react";
 import SortDescIcon from "@assets/sort-desc.svg?react";
 import { Pagination } from "@shared/pagination";
+import { PageResponse } from "@shared/model";
 
 interface BaseTableProps<TData> {
   serverSide?: boolean;
@@ -57,6 +57,7 @@ export const BaseTable = <TData extends unknown>({
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
+    autoResetPageIndex: false,
     enableMultiRowSelection: false,
   });
 

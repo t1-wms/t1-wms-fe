@@ -32,6 +32,7 @@ export const LoginPage = () => {
             })}
             placeholder="사원번호"
             autoFocus
+            width="fullWidth"
           />
           <MainInput
             placeholder="비밀번호"
@@ -41,6 +42,7 @@ export const LoginPage = () => {
               minLength: 6,
             })}
             type="password"
+            width="fullWidth"
           />
           <MainButton>Login</MainButton>
         </form>
