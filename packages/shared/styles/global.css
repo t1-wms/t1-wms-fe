@@ -13,6 +13,7 @@
   --color-gray-900: #0f172a;
 
   --color-gray-50-0: #f8fafc00;
+  --color-gray-900-25: #0f172a40;
   --color-gray-900-50: #0f172a80;
   --color-gray-900-75: #0f172ac0;
 
@@ -25,7 +26,7 @@
   --color-primary-light: #0363de;
   --color-primary-dark: #013679;
 
-  --color-primary-o25: #024caa40;
+  --color-primary-25: #024caa40;
 
   --color-secondary: #ec8305;
   --color-secondary-light: #fa9b28;
@@ -278,5 +279,5 @@ img {
 }
 
 .shadow-md {
-  box-shadow: 0px 4px 4px var(--color-gray-200);
+  box-shadow: 0px 4px 4px var(--color-gray-900-25);
 }
