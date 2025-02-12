@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+body {
+  background: white;
+}
+
+#root {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: white;
+}
+
+@theme {
+  --color-t1normal: #024CAA;
+  --color-t1light: #0363DE;
+  --color-t1dark: #013679;
+}
