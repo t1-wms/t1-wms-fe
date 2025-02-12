@@ -13,6 +13,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { PageResponse } from "@shared/model";
+import { CheckBox } from "@shared/check-box/ui/CheckBox";
 
 const columnHelper = createColumnHelper<UserListDto>();
 
@@ -75,11 +76,13 @@ export default function UserPage() {
       columnHelper.accessor("isActive", {
         header: "활성화",
         cell: (row) => (
-          <input
-            type="checkbox"
-            checked={row.getValue()}
-            onChange={() => mutate(row.row.getValue("userId"))}
-          />
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <CheckBox
+              type="checkbox"
+              defaultChecked={row.getValue()}
+              onChange={() => mutate(row.row.getValue("userId"))}
+            />
+          </div>
         ),
       }),
       columnHelper.accessor("address", {
