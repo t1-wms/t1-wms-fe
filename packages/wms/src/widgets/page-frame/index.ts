@@ -1,1 +1,1 @@
-export * from "./ui/PageFrame";
+export * from "./ui";
