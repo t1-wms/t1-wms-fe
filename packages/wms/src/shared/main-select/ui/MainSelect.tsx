@@ -64,7 +64,7 @@ export const MainSelect = forwardRef(
       >
         {label ? (
           <label>
-            <div>{label}</div>
+            <div className="font-b-md">{label}</div>
             <Select
               ref={ref}
               options={options}

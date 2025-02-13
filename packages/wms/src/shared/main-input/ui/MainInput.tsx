@@ -42,7 +42,7 @@ export const MainInput = forwardRef(
       >
         {label ? (
           <label>
-            <div>{label}</div>
+            <div className="font-b-md">{label}</div>
             <Input
               ref={ref}
               label={label}
