@@ -9,7 +9,7 @@ interface MainSelectProps extends InputHTMLAttributes<HTMLSelectElement> {
   label?: string;
   width: string | "fullWidth";
   fontSize?: Size;
-  error?: FieldError;
+  error?: FieldError | null;
 }
 
 const Select = forwardRef(
@@ -39,7 +39,9 @@ const Select = forwardRef(
             </option>
           ))}
         </select>
-        <p className={`${styles.hint} font-r-xs`}>{error && error.message}</p>
+        {error !== null && (
+          <p className={`${styles.hint} font-r-xs`}>{error && error.message}</p>
+        )}
       </>
     );
   }

@@ -1,4 +1,4 @@
-import { CheckBox, PageResponse, useTable } from "@/shared";
+import { CheckBox, MainSelect, PageResponse, useTable } from "@/shared";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   createUseUsersQueryKey,
@@ -86,7 +86,25 @@ export const useUserTable = () => {
       }),
       columnHelper.accessor("userRole", {
         header: "권한",
-        cell: (row) => row.getValue(),
+        cell: (row) => (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <MainSelect
+              width="100px"
+              onChange={() => mutate(row.row.getValue("userId"))}
+              options={[
+                { value: "ADMIN", display: "관리자" },
+                { value: "WORKER", display: "작업자" },
+              ]}
+              error={null}
+            />
+          </div>
+        ),
       }),
       columnHelper.accessor("birthDate", {
         header: "생일",
