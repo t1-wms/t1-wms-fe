@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import { App } from "../App";
 import { LoginPage } from "@pages/login";
 import UserPage from "@pages/user/ui/UserPage";
+import { OutBoundPlanPage } from "@pages/outbound-plan";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,15 @@ const router = createBrowserRouter([
       {
         path: "/user",
         element: <UserPage />,
+      },
+      {
+        path: "/outbonud",
+        children: [
+          {
+            path: "/plan",
+            element: <OutBoundPlanPage />,
+          },
+        ],
       },
     ],
   },
