@@ -1,5 +1,5 @@
 import { Count, PageResponse, Sort } from "@shared/model";
-import { UseQueryResult } from "@tanstack/react-query";
+import { UseQueryResult, UseSuspenseQueryResult } from "@tanstack/react-query";
 import {
   PaginationState,
   RowSelectionState,
@@ -13,7 +13,7 @@ export function useTable<T>(
     isServerSide: boolean | undefined,
     page?: number,
     sort?: Sort
-  ) => UseQueryResult<PageResponse<T>, Error>
+  ) => UseSuspenseQueryResult<PageResponse<T>, Error>
 ) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -40,7 +40,7 @@ export function useTable<T>(
   const isServerSide = useMemo(() => {
     if (countResult === undefined) return undefined;
     else {
-      return countResult.count > 10000;
+      return countResult.count >= 10000;
     }
   }, [countResult]);
 

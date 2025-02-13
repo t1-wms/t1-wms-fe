@@ -1,39 +1,63 @@
 import type { Size } from "@shared/ui/types";
-import styles from "./MainInput.module.css";
+import styles from "./MainSelect.module.css";
 import { ForwardedRef, forwardRef, InputHTMLAttributes } from "react";
 import { FieldError } from "react-hook-form";
+import { Option } from "../model";
 
-interface MainInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface MainSelectProps extends InputHTMLAttributes<HTMLSelectElement> {
+  options: Option[];
   label?: string;
   width: string | "fullWidth";
   fontSize?: Size;
-  error?: FieldError;
+  error?: FieldError | null;
 }
 
-export const Input = forwardRef(
+const Select = forwardRef(
   (
-    { label, width, fontSize = "md", error, ...props }: MainInputProps,
-    ref: ForwardedRef<HTMLInputElement>
+    {
+      options,
+      label,
+      width,
+      fontSize = "md",
+      error,
+      ...props
+    }: MainSelectProps,
+    ref: ForwardedRef<HTMLSelectElement>
   ) => {
     return (
       <>
-        <input
+        <select
           {...props}
           ref={ref}
           className={`${styles.container} font-r-${fontSize} ${
             width === "fullWidth" ? styles["full-width"] : ""
           } ${error ? styles.error : ""}`}
-        />
-        <p className={`${styles.hint} font-r-xs`}>{error && error.message}</p>
+        >
+          {options.map((option, i) => (
+            <option key={i} value={option.value}>
+              {option.display || option.value}
+            </option>
+          ))}
+        </select>
+        {error !== null && (
+          <p className={`${styles.hint} font-r-xs`}>{error && error.message}</p>
+        )}
       </>
     );
   }
 );
 
-export const MainInput = forwardRef(
+export const MainSelect = forwardRef(
   (
-    { label, width, fontSize = "md", error, ...props }: MainInputProps,
-    ref: ForwardedRef<HTMLInputElement>
+    {
+      options,
+      label,
+      width,
+      fontSize = "md",
+      error,
+      ...props
+    }: MainSelectProps,
+    ref: ForwardedRef<HTMLSelectElement>
   ) => {
     return (
       <div
@@ -43,8 +67,9 @@ export const MainInput = forwardRef(
         {label ? (
           <label>
             <div className="font-b-md">{label}</div>
-            <Input
+            <Select
               ref={ref}
+              options={options}
               label={label}
               width={width}
               fontSize={fontSize}
@@ -53,8 +78,9 @@ export const MainInput = forwardRef(
             />
           </label>
         ) : (
-          <Input
+          <Select
             ref={ref}
+            options={options}
             label={label}
             width={width}
             fontSize={fontSize}

@@ -20,6 +20,8 @@
   border-radius: 4px;
   background-color: var(--color-gray-50);
   animation: fadeIn 0.25s, slideUp 0.25s;
+  overflow: hidden;
+  max-height: 90%;
 }
 
 @keyframes slideUp {

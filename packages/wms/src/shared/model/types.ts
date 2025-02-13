@@ -18,3 +18,7 @@ export interface Sort {
   sortField: string;
   sortOrder: "asc" | "desc";
 }
+
+export interface ModalInfoBase {
+  key: string;
+}

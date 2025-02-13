@@ -113,6 +113,11 @@ input {
   outline: none;
 }
 
+select {
+  border: none;
+  outline: none;
+}
+
 img {
   pointer-events: none;
   user-select: none;

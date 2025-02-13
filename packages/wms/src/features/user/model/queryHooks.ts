@@ -1,5 +1,5 @@
 import { Sort } from "@shared/model";
-import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   getRoles,
   getUserCount,
@@ -35,17 +35,17 @@ export const useUsers = (
   sort?: Sort
 ) => {
   if (isServerSide) {
-    return useQuery({
+    return useSuspenseQuery({
       queryKey: createUseUsersQueryKey(isServerSide, page!, sort),
       queryFn: () => getUsersPaged(page!, sort),
-      enabled: isServerSide !== undefined && isServerSide,
-      placeholderData: keepPreviousData,
+      // enabled: isServerSide !== undefined && isServerSide,
+      // placeholderData: keepPreviousData,
     });
   } else {
-    return useQuery({
+    return useSuspenseQuery({
       queryKey: ["user"],
       queryFn: () => getUsers(),
-      enabled: isServerSide !== undefined && !isServerSide,
+      // enabled: isServerSide !== undefined && !isServerSide,
     });
   }
 };

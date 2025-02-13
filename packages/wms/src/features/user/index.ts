@@ -1,3 +1,3 @@
-export * from "./ui/UserControlPanel";
-export type * from "./model/types";
-export * from "./model/queryHooks";
+export * from "./ui/user-control-panel/UserControlPanel";
+export * from "./model";
+export * from "./ui";

@@ -1,3 +1,5 @@
+import { ModalInfoBase } from "@/shared";
+
 export interface UserListDto {
   userId: number;
   name: string;
@@ -14,4 +16,8 @@ export interface UserListDto {
 
 export interface UpdateActiveResDto {
   isActive: boolean;
+}
+
+export interface CreateUserModalInfo extends ModalInfoBase {
+  key: "createUser";
 }
