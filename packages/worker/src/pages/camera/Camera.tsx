@@ -1,6 +1,13 @@
 import { useQRScanner } from '@/pages/camera/hooks/useQrScanner';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 export const Camera = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { expectedCode, returnPath } = location.state || {};
+  const [showToast, setShowToast] = useState(false);
+  
   const {
     videoRef,
     canvasRef,
@@ -9,29 +16,43 @@ export const Camera = () => {
     startCamera,
     setQrData
   } = useQRScanner();
+  
+
+  useEffect(() => {
+    startCamera();
+  }, []);
+
+  useEffect(() => {
+    if (qrData) {
+      if (qrData.data === expectedCode) {
+        // 스캔 성공 시 바로 이전 페이지로 이동
+        navigate(returnPath, { 
+          state: { 
+            scanSuccess: true,
+            scannedCode: qrData.data 
+          }
+        });
+      } else {
+        // 스캔 실패 시 토스트 메시지 표시 및 카메라 재시작
+        setShowToast(true);
+        setQrData(null); // QR 데이터 초기화
+        startCamera(); // 카메라 재시작
+        
+        // 3초 후 토스트 메시지 숨김
+        setTimeout(() => {
+          setShowToast(false);
+        }, 3000);
+      }
+    }
+  }, [qrData, expectedCode, navigate, returnPath]);
 
   return (
     <div className="fixed inset-0 bg-black flex flex-col">
-      {/* 헤더 */}
-      <div className="bg-t1normal text-white py-4 px-4 text-center">
-        <h1 className="text-lg font-bold">QR 스캐너</h1>
-      </div>
-
-      {/* 메인 컨텐츠 */}
       <div className="flex-1 flex flex-col items-center justify-center p-4">
-        {!cameraActive && !qrData && (
-          <button
-            onClick={startCamera}
-            className="w-full bg-t1normal text-white py-6 rounded-2xl text-lg font-bold active:bg-t1dark shadow-lg"
-          >
-            QR 코드 스캔하기
-          </button>
-        )}
-        
         {/* 카메라 뷰 */}
         <div
           style={{ display: cameraActive ? "block" : "none" }}
-          className="relative w-90 h-90" 
+          className="relative w-70 h-70" 
         >
           <video
             className="absolute inset-0 w-full h-full object-cover rounded-lg"
@@ -39,7 +60,6 @@ export const Camera = () => {
             autoPlay
             playsInline
           />
-          {/* 스캔 가이드 오버레이 */}
           <div className="absolute inset-0">
             <div className="w-full h-full border-2 border-white rounded-md"></div>
           </div>
@@ -47,31 +67,17 @@ export const Camera = () => {
 
         <canvas ref={canvasRef} style={{ display: "none" }} />
 
-        {qrData && (
-          <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold mb-4">스캔 완료</h3>
-            <p className="mb-4 p-4 bg-gray-50 rounded-lg break-all">
-              {qrData.data}
-            </p>
-            <button
-              onClick={() => {
-                setQrData(null);
-                startCamera();
-              }}
-              className="w-full bg-t1normal text-white py-4 rounded-xl text-lg font-bold active:bg-purple-800"
-            >
-              다시 스캔하기
-            </button>
+        {/* 토스트 메시지 */}
+        {showToast && (
+          <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg">
+            일치하지 않는 코드입니다.
           </div>
         )}
       </div>
-
-      {/* 안내 텍스트 */}
-      {cameraActive && (
-        <div className="text-white py-4 px-4 text-center bg-black bg-opacity-50">
-          <p>QR 코드를 스캔 영역 안에 위치시켜 주세요</p>
-        </div>
-      )}
+      
+      <div className="text-white py-4 px-4 pb-20 text-center bg-opacity-50">
+        <p>QR 코드를 스캔해주세요</p>
+      </div>
     </div>
   );
 };

@@ -32,8 +32,8 @@ export interface ScanningItem extends Pick<Product, 'id' | 'code' | 'name'> {
 
 // 스캔 컴포넌트 props
 export interface LocationScanProps extends Location {
-  onLocationScan: () => void;
-  isLocationScanned: boolean;
+  onLocationScan: () => void;     // 위치 스캔 완료시 실행할 함수
+  isLocationScanned: boolean;      // 위치 스캔 완료 여부
 }
 
 export interface ItemScanProps {
