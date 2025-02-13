@@ -1,10 +1,10 @@
-import { MainButtonColor } from "@shared/main-button";
-import { ModalInfoBase } from "@shared/model";
+import { MainButtonColor, ModalInfoBase } from "@/shared";
 
 export interface BasicModalButton {
   label: string;
   onClick: () => void;
   color?: MainButtonColor;
+  form?: string;
 }
 
 export interface BasicModalInfo extends ModalInfoBase {

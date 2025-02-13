@@ -19,7 +19,12 @@ export const BasicModal = ({ modalInfo, children }: BasicModalProps) => {
         {buttons.length > 0 && (
           <div className={styles.footer}>
             {buttons.map((button, i) => (
-              <MainButton key={i} color={button.color} onClick={button.onClick}>
+              <MainButton
+                key={i}
+                color={button.color}
+                onClick={button.onClick}
+                form={button.form}
+              >
                 {button.label}
               </MainButton>
             ))}
