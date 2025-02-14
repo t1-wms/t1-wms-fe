@@ -14,7 +14,7 @@ export const menuItems: MenuItem[] = [
     id: 2,
     title: '출고 집품',
     description: '주문 상품 집품 작업',
-    path: '/outbound',
+    path: '/outbound/location/1',
     icon: <FaTruck />
   },
   {

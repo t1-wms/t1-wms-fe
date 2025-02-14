@@ -48,7 +48,7 @@ export const useQRScanner = () => {
 
     if (code) {
       // setQrData({ data: code.data });
-      setQrData({ data: 'hello' });
+      setQrData({ data: code.data });
       stopCamera();
     }
   };

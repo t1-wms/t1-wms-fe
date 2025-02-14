@@ -40,3 +40,15 @@ export interface ItemScanProps {
   item: ScanningItem;
   onScanComplete: () => void;
 }
+
+export interface PickingItem extends ScanningItem {
+  pickingSeq: number;  // 집품 순서
+  isLocationScanned: boolean;  // 위치 스캔 완료 여부
+  isItemScanned: boolean;     // 물품 스캔 완료 여부
+}
+
+export interface PickingList {
+  pickingId: string;
+  items: PickingItem[];
+  currentItemIndex: number;
+}

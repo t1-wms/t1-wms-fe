@@ -69,7 +69,7 @@ export const Camera = () => {
 
         {/* 토스트 메시지 */}
         {showToast && (
-          <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg">
+          <div className="fixed top-16 left-1/2 w-sm transform -translate-x-1/2 bg-red-500 text-white px-3 py-3 rounded-md shadow-lg">
             일치하지 않는 코드입니다.
           </div>
         )}

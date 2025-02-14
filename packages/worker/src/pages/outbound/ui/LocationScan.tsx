@@ -1,23 +1,21 @@
 import { LocationScanProps, Location } from '@/shared/types/items';
 import { ScanButton } from '@/shared/ui/scanbutton/ScanButton';
 import { HiLocationMarker } from 'react-icons/hi';
-import { useNavigate,useLocation } from 'react-router-dom';
-import { useState,useEffect } from 'react';
+
+// ✨ 제거: useLocation, useState, useEffect import
+// ✨ 제거: location.state 관련 로직
 
 export const LocationScan = ({ 
   zone, 
   aisle,
   rack,  
   shelf,
-  onLocationScan,
+  onLocationScan,  // ✨ 이 함수는 부모 컴포넌트에서 처리할 예정
   isLocationScanned 
 }: LocationScanProps) => {
-  const navigate = useNavigate();
-  const location = useLocation();  // useLocation 추가
-  const [error, setError] = useState<string | null>(null);
+  // ✨ 제거: const location = useLocation();
+  // ✨ 제거: const [error, setError] = useState<string | null>(null);
   
-  const expectedBinCode = `Z${zone}${aisle}${rack}${shelf}`;
-
   const LocationInfo = ({ label, value }: { label: string; value: string }) => (
     <div className="flex justify-between items-center py-2 border-b border-gray-200">
       <span className="font-black text-2xl text-gray-900">{label}</span>
@@ -25,31 +23,16 @@ export const LocationScan = ({
     </div>
   );
 
-    // location.state 변화 감지를 위한 useEffect 추가
-    useEffect(() => {
-      const state = location.state as { scanSuccess?: boolean };
-      if (state?.scanSuccess) {
-        onLocationScan();  // QR 스캔 성공 시 상위 컴포넌트의 핸들러 실행
-      }
-    }, [location.state, onLocationScan]);
+  // ✨ 제거: useEffect hook
 
   const BinCodeDisplay = ({ zone, aisle, rack, shelf }: Location) => (
-    <div className="flex justify-center text-gray-50 p-2 items-center text-2xl font-bold">
-      <span className="bg-purple-700 px-5 py-1 rounded-l-sm">Z{zone}</span>
-      <span className="bg-gray-600 px-5 py-1">{aisle}</span>
-      <span className="bg-gray-400 px-5 py-1">{rack}</span>
-      <span className="bg-green-600 px-5 py-1 rounded-r-sm">{shelf}</span>
+    <div className="flex justify-center text-gray-50 px-2 py-4 items-center text-4xl font-bold">
+      <span className="bg-purple-700 px-5 py-2">Z{zone}</span>
+      <span className="bg-gray-600 px-5 py-2">{aisle}</span>
+      <span className="bg-gray-400 px-5 py-2">{rack}</span>
+      <span className="bg-green-600 px-5 py-2">{shelf}</span>
     </div>
   );
-
-  const handleLocationScan = () => {
-    navigate('/camera', { 
-      state: { 
-        expectedCode: 'hello',
-        returnPath: '/outbound'
-      }
-    });
-  };
 
   return (
     <div className="flex flex-col h-full">
@@ -58,7 +41,6 @@ export const LocationScan = ({
         다음 위치로 이동해주세요.
       </div>
       
-      {/* 빈코드 표시 */}
       <div className="mb-4">
         <BinCodeDisplay zone={zone} aisle={aisle} rack={rack} shelf={shelf} />
       </div> 
@@ -72,15 +54,9 @@ export const LocationScan = ({
         </div>
       </div>
 
-      {error && (
-        <div className="text-red-500 text-center my-2 p-2 bg-red-50 rounded">
-          {error}
-        </div>
-      )}
-
       <div className="mt-auto">
         <ScanButton 
-          onClick={handleLocationScan}
+          onClick={onLocationScan}  // ✨ 수정: handleLocationScan -> onLocationScan
           isScanned={isLocationScanned}
           scanText="위치 바코드 스캔"
           completedText="위치 확인 완료"
