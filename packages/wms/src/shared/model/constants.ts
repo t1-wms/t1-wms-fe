@@ -5,4 +5,4 @@ export const formMessages = {
   outboundNumberLength: "10글자 입력해야합니다",
 };
 
-export const minCountForServerSide = 10000;
+export const minCountForServerSide = 10001;
