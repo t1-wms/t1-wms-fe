@@ -10,6 +10,13 @@ export interface OutboundPlanResponseDto {
   productList: ProductListDto[];
 }
 
+export interface CreateOutboundPlanRequestDto {
+  outboundScheduleDate: string;
+  planDate: string;
+  productionPlanNumber: string;
+  productList: ProductListDto[];
+}
+
 export interface CreateOutboundPlanModalInfo extends ModalInfoBase {
   key: "createOutboundPlan";
 }

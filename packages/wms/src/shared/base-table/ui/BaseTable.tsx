@@ -74,52 +74,55 @@ export const BaseTable = <TData extends unknown>({
 
   return (
     <div className={styles.container}>
-      <table>
-        <thead className="font-r-md">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  <div
-                    className={`${styles["th-button"]} font-b-sm`}
-                    onClick={header.column.getToggleSortingHandler()}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                    {header.column.getCanSort() &&
-                      (header.column.getIsSorted() === "asc" ? (
-                        <div className={styles["icon-wrapper"]}>
-                          <SortAscIcon />
-                        </div>
-                      ) : header.column.getIsSorted() === "desc" ? (
-                        <div className={styles["icon-wrapper"]}>
-                          <SortDescIcon />
-                        </div>
-                      ) : undefined)}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className={row.getIsSelected() ? styles["selected-row"] : ""}
-              onClick={row.getToggleSelectedHandler()}
-            >
-              {row.getAllCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className={styles["table-wrapper"]}>
+        <table>
+          <thead className="font-r-md">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id}>
+                    <div
+                      className={`${styles["th-button"]} font-b-sm`}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                      {header.column.getCanSort() &&
+                        (header.column.getIsSorted() === "asc" ? (
+                          <div className={styles["icon-wrapper"]}>
+                            <SortAscIcon />
+                          </div>
+                        ) : header.column.getIsSorted() === "desc" ? (
+                          <div className={styles["icon-wrapper"]}>
+                            <SortDescIcon />
+                          </div>
+                        ) : undefined)}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className={row.getIsSelected() ? styles["selected-row"] : ""}
+                onClick={row.getToggleSelectedHandler()}
+              >
+                {row.getAllCells().map((cell) => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       <Pagination
         currentPage={pagination.pageIndex + 1}
         size={2}

@@ -4,9 +4,15 @@ import { BaseTable, createPageResponse } from "@/shared";
 
 interface OutboundProductTableProps {
   data: ProductListDto[];
+  canCount?: boolean;
+  onChangeProductCount?: (productId: number, productCount: number) => void;
 }
 
-export const OutboundProductTable = ({ data }: OutboundProductTableProps) => {
+export const OutboundProductTable = ({
+  data,
+  canCount,
+  onChangeProductCount,
+}: OutboundProductTableProps) => {
   const {
     pagination,
     setPagination,
@@ -15,7 +21,7 @@ export const OutboundProductTable = ({ data }: OutboundProductTableProps) => {
     rowSelection,
     setRowSelection,
     defaultColumns,
-  } = useOutboundProductTable();
+  } = useOutboundProductTable(canCount, onChangeProductCount);
 
   const pagedData = createPageResponse(data);
 

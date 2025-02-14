@@ -1,4 +1,9 @@
-import { CreateUserModal, CreateUserModalInfo } from "@/features";
+import {
+  CreateOutboundPlanModal,
+  CreateOutboundPlanModalInfo,
+  CreateUserModal,
+  CreateUserModalInfo,
+} from "@/features";
 import {
   ModalInfoBase,
   useModalStore,
@@ -16,6 +21,12 @@ const isCreateUserModalInfo = (
   return info.key === "createUser";
 };
 
+const isCreateOutboundPlanModalInfo = (
+  info: ModalInfoBase
+): info is CreateOutboundPlanModalInfo => {
+  return info.key === "createOutboundPlan";
+};
+
 export const AppModal = () => {
   const { openedModal } = useModalStore();
 
@@ -26,6 +37,10 @@ export const AppModal = () => {
       </BasicModal>
     ) : isCreateUserModalInfo(openedModal) ? (
       <CreateUserModal modalInfo={openedModal}></CreateUserModal>
+    ) : isCreateOutboundPlanModalInfo(openedModal) ? (
+      <CreateOutboundPlanModal
+        modalInfo={openedModal}
+      ></CreateOutboundPlanModal>
     ) : (
       <></>
     )

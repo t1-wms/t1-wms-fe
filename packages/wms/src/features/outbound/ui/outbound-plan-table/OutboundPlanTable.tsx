@@ -26,16 +26,12 @@ export const OutboundPlanTable = ({
     defaultColumns,
   } = useOutboundPlanTable(columnFilters, isServerSide);
 
-  console.log("rowSelection", rowSelection);
-
   const selectedId = useMemo(() => {
     return (
       Object.keys(rowSelection).length > 0 &&
       parseInt(Object.keys(rowSelection)[0])
     );
   }, [rowSelection]);
-
-  console.log(selectedId);
 
   return (
     <>

@@ -8,10 +8,11 @@
   height: 100vh;
   background-color: var(--color-gray-900-25);
   animation: fadeIn 0.25s;
+  z-index: 10;
 }
 
 .container {
-  position: absolute;
+  position: fixed;
   width: auto;
   height: calc(100% - var(--size-header-height));
   top: var(--size-header-height);
