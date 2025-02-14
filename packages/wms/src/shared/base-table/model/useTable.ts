@@ -1,25 +1,12 @@
-import { PageResponse, Sort } from "@shared/model";
-import { UseSuspenseQueryResult } from "@tanstack/react-query";
+import { Sort } from "@/shared";
 import {
-  ColumnFiltersState,
   PaginationState,
   RowSelectionState,
   SortingState,
 } from "@tanstack/react-table";
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-export function useTable<T, Filter>(
-  columnFilters: ColumnFiltersState,
-  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>,
-  isServerSide: boolean,
-  filter: Filter | undefined,
-  useData: (
-    isServerSide: boolean,
-    page?: number,
-    sort?: Sort,
-    filter?: Filter
-  ) => UseSuspenseQueryResult<PageResponse<T>, Error>
-) {
+export function useTable() {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -41,16 +28,7 @@ export function useTable<T, Filter>(
         };
   }, [sorting]);
 
-  const { data } = useData(
-    isServerSide,
-    pagination.pageIndex + 1,
-    sort,
-    filter
-  );
-
   return {
-    columnFilters,
-    setColumnFilters,
     pagination,
     setPagination,
     sorting,
@@ -58,6 +36,5 @@ export function useTable<T, Filter>(
     rowSelection,
     setRowSelection,
     sort,
-    data,
   };
 }

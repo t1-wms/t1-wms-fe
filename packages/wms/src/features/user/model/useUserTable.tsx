@@ -12,14 +12,13 @@ import {
   useUsers,
 } from "./queryHooks";
 import { UserFilter, UserListDto } from "./types";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { useMemo } from "react";
 import { ColumnFiltersState, createColumnHelper } from "@tanstack/react-table";
 
 const columnHelper = createColumnHelper<UserListDto>();
 
 export const useUserTable = (
   columnFilters: ColumnFiltersState,
-  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>,
   isServerSide: boolean
 ) => {
   const filter: UserFilter | undefined = useMemo(() => {
@@ -40,8 +39,14 @@ export const useUserTable = (
     rowSelection,
     setRowSelection,
     sort,
-    data: pagedUsers,
-  } = useTable(columnFilters, setColumnFilters, isServerSide, filter, useUsers);
+  } = useTable();
+
+  const { data } = useUsers(
+    isServerSide,
+    pagination.pageIndex + 1,
+    sort,
+    filter
+  );
 
   const queryClient = useQueryClient();
 
@@ -144,7 +149,7 @@ export const useUserTable = (
     rowSelection,
     setRowSelection,
     isServerSide,
-    pagedUsers,
+    data,
     defaultColumns,
   };
 };

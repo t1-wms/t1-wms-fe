@@ -1,7 +1,8 @@
 import { BaseTable } from "@/shared";
 import { useOutboundPlanTable } from "../../model";
 import { ColumnFiltersState } from "@tanstack/react-table";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
+import { OutboundProductTable } from "@/features/product/ui";
 
 interface OutboundPlanTableProps {
   columnFilters: ColumnFiltersState;
@@ -23,7 +24,16 @@ export const OutboundPlanTable = ({
     setRowSelection,
     data,
     defaultColumns,
-  } = useOutboundPlanTable(columnFilters, setColumnFilters, isServerSide);
+  } = useOutboundPlanTable(columnFilters, isServerSide);
+
+  const selectedId = useMemo(() => {
+    return (
+      Object.keys(rowSelection).length > 0 &&
+      parseInt(Object.keys(rowSelection)[0])
+    );
+  }, [rowSelection]);
+
+  console.log(selectedId);
 
   return (
     <>
@@ -40,6 +50,9 @@ export const OutboundPlanTable = ({
         rowSelection={rowSelection}
         setRowSelection={setRowSelection}
       />
+      {selectedId && (
+        <OutboundProductTable data={data.data[selectedId].productList} />
+      )}
     </>
   );
 };

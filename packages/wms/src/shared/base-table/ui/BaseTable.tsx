@@ -22,14 +22,15 @@ interface BaseTableProps<TData> {
   serverSide: boolean;
   data: PageResponse<TData>;
   columns: ColumnDef<TData, any>[];
-  columnFilters: ColumnFiltersState;
-  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
+  columnFilters?: ColumnFiltersState;
+  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   pagination: PaginationState;
   setPagination: Dispatch<SetStateAction<PaginationState>>;
   sorting: SortingState;
   setSorting: Dispatch<SetStateAction<SortingState>>;
   rowSelection: RowSelectionState;
   setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
+  noPagination?: boolean;
 }
 
 export const BaseTable = <TData extends unknown>({
@@ -55,8 +56,8 @@ export const BaseTable = <TData extends unknown>({
     getPaginationRowModel: !serverSide ? getPaginationRowModel() : undefined,
     getSortedRowModel: !serverSide ? getSortedRowModel() : undefined,
     getFilteredRowModel: !serverSide ? getFilteredRowModel() : undefined,
-    rowCount: data && serverSide ? data.pagination.totalItems : undefined,
-    pageCount: data && serverSide ? data.pagination.totalPages : undefined,
+    rowCount: serverSide ? data.pagination.totalItems : undefined,
+    pageCount: serverSide ? data.pagination.totalPages : undefined,
     state: {
       pagination,
       sorting,

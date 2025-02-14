@@ -1,4 +1,5 @@
 import { UserTable, useUserCount } from "@/features";
+import { minCountForServerSide } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, Suspense, useMemo } from "react";
 
@@ -14,7 +15,7 @@ export const UserTableWrapper = ({
   const { data: countResult } = useUserCount();
 
   const isServerSide = useMemo(() => {
-    return countResult.count > 10000;
+    return countResult.count >= minCountForServerSide;
   }, [countResult]);
 
   return (

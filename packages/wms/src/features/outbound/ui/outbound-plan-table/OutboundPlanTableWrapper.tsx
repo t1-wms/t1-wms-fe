@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, Suspense, useMemo } from "react";
 import { useOutboundPlanCount } from "../../model";
 import { OutboundPlanTable } from "./OutboundPlanTable";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { minCountForServerSide } from "@/shared";
 
 interface OutboundPlanTableWrapperProps {
   columnFilters: ColumnFiltersState;
@@ -15,7 +16,7 @@ export const OutboundPlanTableWrapper = ({
   const { data: countResult } = useOutboundPlanCount();
 
   const isServerSide = useMemo(() => {
-    return countResult.count > 10000;
+    return countResult.count >= minCountForServerSide;
   }, [countResult]);
 
   return (

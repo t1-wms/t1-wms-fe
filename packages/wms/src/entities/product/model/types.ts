@@ -2,5 +2,6 @@
 export interface ProductListDto {
   productId: number;
   productCode: string;
+  productName: string;
   productCount: number;
 }

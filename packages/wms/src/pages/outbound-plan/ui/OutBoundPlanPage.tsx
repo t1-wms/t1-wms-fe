@@ -22,7 +22,7 @@ export const OutBoundPlanPage = () => {
       <PageContentBox>
         <OutboundPlanControlPanel onSearch={handleSearch} />
       </PageContentBox>
-      <PageContentBox stretch>
+      <PageContentBox>
         <Suspense fallback={<>LOADING</>}>
           <OutboundPlanTableWrapper
             columnFilters={columnFilters}

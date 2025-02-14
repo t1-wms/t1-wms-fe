@@ -1,4 +1,4 @@
-import { ProductListDto } from "@/features/product";
+import { ProductListDto } from "@/entities/product";
 import { ModalInfoBase } from "@/shared";
 
 export interface OutboundPlanResponseDto {

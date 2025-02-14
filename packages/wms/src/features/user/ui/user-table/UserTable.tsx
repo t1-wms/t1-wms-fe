@@ -21,15 +21,15 @@ export const UserTable = ({
     setSorting,
     rowSelection,
     setRowSelection,
-    pagedUsers,
+    data,
     defaultColumns,
-  } = useUserTable(columnFilters, setColumnFilters, isServerSide);
+  } = useUserTable(columnFilters, isServerSide);
 
   return (
     <>
       <BaseTable
         serverSide={isServerSide}
-        data={pagedUsers}
+        data={data}
         columns={defaultColumns}
         pagination={pagination}
         setPagination={setPagination}

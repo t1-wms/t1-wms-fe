@@ -1,5 +1,5 @@
 import { getFilterValue, useTable } from "@/shared";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { useMemo } from "react";
 import {
   ColumnFiltersState,
   createColumnHelper,
@@ -28,7 +28,6 @@ const dateFilterFn: FilterFnOption<OutboundPlanResponseDto> = (
 
 export const useOutboundPlanTable = (
   columnFilters: ColumnFiltersState,
-  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>,
   isServerSide: boolean
 ) => {
   // 서버사이드 필터링에서만 사용
@@ -60,13 +59,14 @@ export const useOutboundPlanTable = (
     setSorting,
     rowSelection,
     setRowSelection,
-    data,
-  } = useTable(
-    columnFilters,
-    setColumnFilters,
+    sort,
+  } = useTable();
+
+  const { data } = useOutboundPlans(
     isServerSide,
-    filter,
-    useOutboundPlans
+    pagination.pageIndex + 1,
+    sort,
+    filter
   );
 
   const defaultColumns = useMemo(() => {
@@ -97,8 +97,6 @@ export const useOutboundPlanTable = (
   }, []);
 
   return {
-    columnFilters,
-    setColumnFilters,
     pagination,
     setPagination,
     sorting,
