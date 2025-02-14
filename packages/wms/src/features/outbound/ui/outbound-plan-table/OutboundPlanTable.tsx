@@ -1,19 +1,19 @@
 import { BaseTable } from "@/shared";
-import { useUserTable } from "../../model/useUserTable";
+import { useOutboundPlanTable } from "../../model";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 
-interface UserTableProps {
-  isServerSide: boolean;
+interface OutboundPlanTableProps {
   columnFilters: ColumnFiltersState;
   setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
+  isServerSide: boolean;
 }
 
-export const UserTable = ({
-  isServerSide,
+export const OutboundPlanTable = ({
   columnFilters,
   setColumnFilters,
-}: UserTableProps) => {
+  isServerSide,
+}: OutboundPlanTableProps) => {
   const {
     pagination,
     setPagination,
@@ -21,24 +21,24 @@ export const UserTable = ({
     setSorting,
     rowSelection,
     setRowSelection,
-    pagedUsers,
+    data,
     defaultColumns,
-  } = useUserTable(columnFilters, setColumnFilters, isServerSide);
+  } = useOutboundPlanTable(columnFilters, setColumnFilters, isServerSide);
 
   return (
     <>
       <BaseTable
         serverSide={isServerSide}
-        data={pagedUsers}
+        data={data}
         columns={defaultColumns}
+        columnFilters={columnFilters}
+        setColumnFilters={setColumnFilters}
         pagination={pagination}
         setPagination={setPagination}
         sorting={sorting}
         setSorting={setSorting}
         rowSelection={rowSelection}
         setRowSelection={setRowSelection}
-        columnFilters={columnFilters}
-        setColumnFilters={setColumnFilters}
       />
     </>
   );

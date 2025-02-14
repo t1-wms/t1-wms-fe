@@ -1,17 +1,30 @@
 import styles from "./UserPage.module.css";
-import { UserControlPanel, UserTable } from "@features/user";
+import { UserControlPanel, UserTableWrapper } from "@/features";
 import { PageContentBox } from "@/shared";
-import { Suspense } from "react";
+import { Suspense, useCallback, useState } from "react";
+import { ColumnFiltersState } from "@tanstack/react-table";
 
 export default function UserPage() {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const handleSearch = useCallback(
+    (staffNumber: string) => {
+      setColumnFilters([{ id: "staffNumber", value: staffNumber }]);
+    },
+    [setColumnFilters]
+  );
+
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <UserControlPanel />
+        <UserControlPanel onSearch={handleSearch} />
       </PageContentBox>
       <PageContentBox stretch>
         <Suspense fallback={<>LOADING</>}>
-          <UserTable />
+          <UserTableWrapper
+            columnFilters={columnFilters}
+            setColumnFilters={setColumnFilters}
+          />
         </Suspense>
       </PageContentBox>
     </div>

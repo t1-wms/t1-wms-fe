@@ -1,1 +1,2 @@
-export * from "./out-bound-plan-control-panel";
+export * from "./outbound-plan-control-panel";
+export * from "./outbound-plan-table";

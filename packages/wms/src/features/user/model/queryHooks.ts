@@ -7,45 +7,46 @@ import {
   getUsersPaged,
   updateUserActive,
 } from "../api/UserApi";
+import { UserFilter } from "@/features";
 
 export const useUserCount = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ["user", "count"],
     queryFn: () => getUserCount(),
   });
 };
 
 export const createUseUsersQueryKey = (
-  isServerSide: boolean | undefined,
+  isServerSide: boolean,
   page?: number,
-  sort?: Sort
+  sort?: Sort,
+  filter?: UserFilter
 ) => {
   return isServerSide
     ? [
         "user",
         page!,
         sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
+        filter ? `${filter.staffNumber}` : "not-filtering",
       ]
     : ["user"];
 };
 
 export const useUsers = (
-  isServerSide: boolean | undefined,
+  isServerSide: boolean,
   page?: number,
-  sort?: Sort
+  sort?: Sort,
+  filter?: UserFilter
 ) => {
   if (isServerSide) {
     return useSuspenseQuery({
-      queryKey: createUseUsersQueryKey(isServerSide, page!, sort),
-      queryFn: () => getUsersPaged(page!, sort),
-      // enabled: isServerSide !== undefined && isServerSide,
-      // placeholderData: keepPreviousData,
+      queryKey: createUseUsersQueryKey(isServerSide, page!, sort, filter),
+      queryFn: () => getUsersPaged(page!, sort, filter),
     });
   } else {
     return useSuspenseQuery({
       queryKey: ["user"],
       queryFn: () => getUsers(),
-      // enabled: isServerSide !== undefined && !isServerSide,
     });
   }
 };

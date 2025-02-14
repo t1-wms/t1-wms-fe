@@ -1,2 +1,3 @@
-export * from "./ui/BaseTable";
-export * from "./model/useTable";
+export * from "./model";
+export * from "./lib";
+export * from "./ui";

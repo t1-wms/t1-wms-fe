@@ -1,32 +1,38 @@
-import { Count, PageResponse, Sort } from "@shared/model";
-import { UseQueryResult, UseSuspenseQueryResult } from "@tanstack/react-query";
+import { PageResponse, Sort } from "@shared/model";
+import { UseSuspenseQueryResult } from "@tanstack/react-query";
 import {
+  ColumnFiltersState,
   PaginationState,
   RowSelectionState,
   SortingState,
 } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 
-export function useTable<T>(
-  useCount: () => UseQueryResult<Count, Error>,
+export function useTable<T, Filter>(
+  columnFilters: ColumnFiltersState,
+  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>,
+  isServerSide: boolean,
+  filter: Filter | undefined,
   useData: (
-    isServerSide: boolean | undefined,
+    isServerSide: boolean,
     page?: number,
-    sort?: Sort
+    sort?: Sort,
+    filter?: Filter
   ) => UseSuspenseQueryResult<PageResponse<T>, Error>
 ) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 10,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   useEffect(() => {
-    setRowSelection({});
+    () => setRowSelection({});
   }, [pagination]);
 
   const sort = useMemo<Sort | undefined>(() => {
+    if (!sorting) return undefined;
     return sorting.length === 0
       ? undefined
       : {
@@ -35,25 +41,22 @@ export function useTable<T>(
         };
   }, [sorting]);
 
-  const { data: countResult } = useCount();
-
-  const isServerSide = useMemo(() => {
-    if (countResult === undefined) return undefined;
-    else {
-      return countResult.count >= 10000;
-    }
-  }, [countResult]);
-
-  const { data } = useData(isServerSide, pagination.pageIndex + 1, sort);
+  const { data } = useData(
+    isServerSide,
+    pagination.pageIndex + 1,
+    sort,
+    filter
+  );
 
   return {
+    columnFilters,
+    setColumnFilters,
     pagination,
     setPagination,
     sorting,
     setSorting,
     rowSelection,
     setRowSelection,
-    isServerSide,
     sort,
     data,
   };

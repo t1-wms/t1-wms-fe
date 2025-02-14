@@ -1,7 +1,9 @@
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   PaginationState,
@@ -17,9 +19,11 @@ import { Pagination } from "@shared/pagination";
 import { PageResponse } from "@shared/model";
 
 interface BaseTableProps<TData> {
-  serverSide?: boolean;
-  data?: PageResponse<TData>;
+  serverSide: boolean;
+  data: PageResponse<TData>;
   columns: ColumnDef<TData, any>[];
+  columnFilters: ColumnFiltersState;
+  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
   pagination: PaginationState;
   setPagination: Dispatch<SetStateAction<PaginationState>>;
   sorting: SortingState;
@@ -29,9 +33,11 @@ interface BaseTableProps<TData> {
 }
 
 export const BaseTable = <TData extends unknown>({
-  serverSide = false,
+  serverSide,
   data,
   columns,
+  columnFilters,
+  setColumnFilters,
   pagination,
   setPagination,
   sorting,
@@ -44,19 +50,23 @@ export const BaseTable = <TData extends unknown>({
     columns,
     manualPagination: serverSide,
     manualSorting: serverSide,
+    manualFiltering: serverSide,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: !serverSide ? getPaginationRowModel() : undefined,
     getSortedRowModel: !serverSide ? getSortedRowModel() : undefined,
+    getFilteredRowModel: !serverSide ? getFilteredRowModel() : undefined,
     rowCount: data && serverSide ? data.pagination.totalItems : undefined,
     pageCount: data && serverSide ? data.pagination.totalPages : undefined,
     state: {
       pagination,
       sorting,
       rowSelection,
+      columnFilters,
     },
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
+    onColumnFiltersChange: setColumnFilters,
     autoResetPageIndex: false,
     enableMultiRowSelection: false,
   });

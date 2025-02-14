@@ -1,4 +1,3 @@
-import { formMessages } from "@/shared";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 interface SearchOutboundPlanFormInputs {
@@ -7,40 +6,34 @@ interface SearchOutboundPlanFormInputs {
   endDate: string;
 }
 
-export const useSearchOutboundPlanForm = () => {
+export const useSearchOutboundPlanForm = (
+  onValid: (number: string, startDate: string, endDate: string) => void
+) => {
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<SearchOutboundPlanFormInputs>();
 
-  const onSubmit: SubmitHandler<SearchOutboundPlanFormInputs> = (data) => {
-    console.log(data);
+  const handleValid: SubmitHandler<SearchOutboundPlanFormInputs> = (data) => {
+    onValid(data.number, data.startDate, data.endDate);
   };
 
   return {
     inputProps: {
       number: {
-        ...register("number", {
-          required: { value: true, message: formMessages.required },
-          maxLength: { value: 10, message: formMessages.outboundNumberLength },
-          minLength: { value: 10, message: formMessages.outboundNumberLength },
-        }),
+        ...register("number", {}),
         error: errors.number,
       },
       startDate: {
-        ...register("startDate", {
-          required: { value: true, message: formMessages.required },
-        }),
+        ...register("startDate", {}),
         error: errors.startDate,
       },
       endDate: {
-        ...register("endDate", {
-          required: { value: true, message: formMessages.required },
-        }),
+        ...register("endDate", {}),
         error: errors.endDate,
       },
     },
-    onSubmit: handleSubmit(onSubmit),
+    onSubmit: handleSubmit(handleValid),
   };
 };

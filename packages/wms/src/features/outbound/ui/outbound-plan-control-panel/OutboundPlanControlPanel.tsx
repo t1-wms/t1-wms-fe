@@ -11,8 +11,14 @@ import {
   useSearchOutboundPlanForm,
 } from "../../model";
 
-export const OutboundPlanControlPanel = () => {
-  const { inputProps, onSubmit } = useSearchOutboundPlanForm();
+interface OutboundPlanControlPanelProps {
+  onSearch: (number: string, startDate: string, endDate: string) => void;
+}
+
+export const OutboundPlanControlPanel = ({
+  onSearch,
+}: OutboundPlanControlPanelProps) => {
+  const { inputProps, onSubmit } = useSearchOutboundPlanForm(onSearch);
 
   const { openModal } = useModalStore();
 
