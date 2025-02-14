@@ -1,4 +1,4 @@
-import { BaseTable } from "@/shared";
+import { BaseDrawer, BaseTable } from "@/shared";
 import { useOutboundPlanTable } from "../../model";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useMemo } from "react";
@@ -26,6 +26,8 @@ export const OutboundPlanTable = ({
     defaultColumns,
   } = useOutboundPlanTable(columnFilters, isServerSide);
 
+  console.log("rowSelection", rowSelection);
+
   const selectedId = useMemo(() => {
     return (
       Object.keys(rowSelection).length > 0 &&
@@ -50,8 +52,13 @@ export const OutboundPlanTable = ({
         rowSelection={rowSelection}
         setRowSelection={setRowSelection}
       />
-      {selectedId && (
-        <OutboundProductTable data={data.data[selectedId].productList} />
+      {(selectedId || selectedId === 0) && (
+        <BaseDrawer
+          title={`${data.data[selectedId].outboundScheduleNumber} 출고예정품목`}
+          onClose={() => setRowSelection({})}
+        >
+          <OutboundProductTable data={data.data[selectedId].productList} />
+        </BaseDrawer>
       )}
     </>
   );
