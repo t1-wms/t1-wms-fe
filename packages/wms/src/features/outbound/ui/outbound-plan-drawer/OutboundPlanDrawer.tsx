@@ -1,16 +1,22 @@
 import styles from "./OutboundPlanDrawer.module.css";
-import { BaseDrawer, MainButton, MainInput } from "@/shared";
-import { OutboundPlanResponseDto } from "../../model";
+import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
+import {
+  CreateOutboundPlanModalInfo,
+  OutboundPlanResponseDto,
+} from "../../model";
 import { OutboundProductTable } from "@/features";
+import { useCallback } from "react";
 
 interface OutboundPlanDrawerProps {
   data: OutboundPlanResponseDto;
   onClose: () => void;
+  queryKey: (string | number)[];
 }
 
 export const OutboundPlanDrawer = ({
   data,
   onClose,
+  queryKey,
 }: OutboundPlanDrawerProps) => {
   const {
     outboundScheduleNumber,
@@ -19,6 +25,18 @@ export const OutboundPlanDrawer = ({
     productionPlanNumber,
     productList,
   } = data;
+
+  const { openModal } = useModalStore();
+
+  const handleClickUpdate = useCallback(() => {
+    const modalInfo: CreateOutboundPlanModalInfo = {
+      key: "createOutboundPlan",
+      outboundPlan: data,
+      queryKey,
+    };
+
+    openModal(modalInfo);
+  }, [openModal, queryKey, data]);
 
   return (
     <BaseDrawer title={`출고예정 조회`} onClose={onClose}>
@@ -56,7 +74,7 @@ export const OutboundPlanDrawer = ({
         <p className={`font-b-md ${styles.header}}`}>출고예정 품목</p>
         <OutboundProductTable data={productList} />
         <div className={styles["button-box"]}>
-          <MainButton size="sm" padding="sm">
+          <MainButton size="sm" padding="sm" onClick={handleClickUpdate}>
             수정
           </MainButton>
           <MainButton size="sm" padding="sm">

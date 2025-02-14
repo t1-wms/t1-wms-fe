@@ -19,6 +19,8 @@ export interface CreateOutboundPlanRequestDto {
 
 export interface CreateOutboundPlanModalInfo extends ModalInfoBase {
   key: "createOutboundPlan";
+  outboundPlan?: OutboundPlanResponseDto;
+  queryKey?: (string | number)[];
 }
 
 export interface OutboundFilter {

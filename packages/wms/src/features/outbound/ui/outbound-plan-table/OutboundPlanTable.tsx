@@ -24,6 +24,7 @@ export const OutboundPlanTable = ({
     setRowSelection,
     data,
     defaultColumns,
+    queryKey,
   } = useOutboundPlanTable(columnFilters, isServerSide);
 
   const selectedId = useMemo(() => {
@@ -52,6 +53,7 @@ export const OutboundPlanTable = ({
         <OutboundPlanDrawer
           data={data.data[selectedId]}
           onClose={() => setRowSelection({})}
+          queryKey={queryKey}
         />
       )}
     </>

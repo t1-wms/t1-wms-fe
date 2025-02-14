@@ -6,7 +6,7 @@ import {
   FilterFnOption,
 } from "@tanstack/react-table";
 import { OutboundFilter, OutboundPlanResponseDto } from "./types";
-import { useOutboundPlans } from "./queryHooks";
+import { createUseOutboundPlansQueryKey, useOutboundPlans } from "./queryHooks";
 
 const columnHelper = createColumnHelper<OutboundPlanResponseDto>();
 const dateFilterFn: FilterFnOption<OutboundPlanResponseDto> = (
@@ -62,6 +62,13 @@ export const useOutboundPlanTable = (
     sort,
   } = useTable();
 
+  const queryKey = createUseOutboundPlansQueryKey(
+    isServerSide,
+    pagination.pageIndex + 1,
+    sort,
+    filter
+  );
+
   const { data } = useOutboundPlans(
     isServerSide,
     pagination.pageIndex + 1,
@@ -105,5 +112,6 @@ export const useOutboundPlanTable = (
     setRowSelection,
     data,
     defaultColumns,
+    queryKey,
   };
 };

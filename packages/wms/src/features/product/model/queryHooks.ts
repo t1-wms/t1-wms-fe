@@ -5,5 +5,6 @@ export const useSimpleProducts = () => {
   return useSuspenseQuery({
     queryKey: ["product", "simple"],
     queryFn: () => getProductSimple(),
+    staleTime: 10000,
   });
 };

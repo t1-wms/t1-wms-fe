@@ -3,23 +3,47 @@ import { BasicModal, useModalStore } from "@/shared";
 import {
   CreateOutboundPlanModalInfo,
   CreateOutboundPlanRequestDto,
+  OutboundPlanResponseDto,
 } from "../../model";
 import { CreateOutboundPlanForm } from "../create-outbound-plan-form";
-import { Suspense, useCallback, useState } from "react";
+import { Suspense, useCallback, useMemo, useState } from "react";
 import { ProductListDto } from "@/entities";
 import { OutboundProductTable } from "@/features/product/ui";
 import { SimpleProductTable } from "@/features/product/ui/simple-product-table";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateOutboundPlanModalProps {
   modalInfo: CreateOutboundPlanModalInfo;
 }
 
-export const CreateOutboundPlanModal = ({}: CreateOutboundPlanModalProps) => {
+export const CreateOutboundPlanModal = ({
+  modalInfo,
+}: CreateOutboundPlanModalProps) => {
+  const { outboundPlan } = modalInfo;
+
+  const defaultValues: OutboundPlanResponseDto = useMemo(() => {
+    return outboundPlan
+      ? {
+          ...outboundPlan,
+        }
+      : {
+          process: "",
+          outboundScheduleNumber: "",
+          outboundScheduleDate: new Date(Date.now())
+            .toISOString()
+            .substring(0, 10),
+          productionPlanNumber: "",
+          planDate: "",
+          productList: [],
+        };
+  }, [outboundPlan]);
+
   const [selectedProductList, setSelectedProductList] = useState<
     ProductListDto[]
-  >([]);
+  >(defaultValues.productList);
 
   const { closeModal } = useModalStore();
+  const queryClient = useQueryClient();
 
   const handleSubmitValid = (
     productionPlanNumber: string,
@@ -41,6 +65,21 @@ export const CreateOutboundPlanModal = ({}: CreateOutboundPlanModalProps) => {
     };
 
     console.log(data);
+
+    if (outboundPlan) {
+      queryClient.invalidateQueries({
+        predicate: (q) => {
+          const isOutboundPlan = (q.queryKey[0] as string) === "outboundPlan";
+          const isNotCount =
+            q.queryKey[1] === undefined ||
+            !((q.queryKey[1] as string) === "count");
+
+          return isOutboundPlan && isNotCount;
+        },
+      });
+
+      closeModal();
+    }
   };
 
   const handleClickRow = useCallback((product: ProductListDto) => {
@@ -64,13 +103,11 @@ export const CreateOutboundPlanModal = ({}: CreateOutboundPlanModalProps) => {
     []
   );
 
-  console.log(selectedProductList);
-
   return (
     <BasicModal
       modalInfo={{
         key: "basic",
-        title: "사용자 추가",
+        title: `출고예정 ${outboundPlan ? "수정" : "추가"}`,
         buttons: [
           {
             label: "취소",
@@ -82,7 +119,10 @@ export const CreateOutboundPlanModal = ({}: CreateOutboundPlanModalProps) => {
       }}
     >
       <div className={styles.container}>
-        <CreateOutboundPlanForm onSubmitValid={handleSubmitValid} />
+        <CreateOutboundPlanForm
+          onSubmitValid={handleSubmitValid}
+          defaultValues={defaultValues}
+        />
         <div className={styles["table-box"]}>
           <div className={`${styles.products} shadow-md`}>
             <Suspense fallback={<>Loading...</>}>

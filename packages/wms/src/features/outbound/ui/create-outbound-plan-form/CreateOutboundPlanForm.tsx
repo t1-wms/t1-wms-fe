@@ -1,6 +1,9 @@
 import { MainInput } from "@/shared";
 import styles from "./CreateOutboundPlanForm.module.css";
-import { useCreateOutboundPlanForm } from "../../model";
+import {
+  OutboundPlanResponseDto,
+  useCreateOutboundPlanForm,
+} from "../../model";
 
 interface CreateOutboundPlanFormProps {
   onSubmitValid: (
@@ -8,12 +11,14 @@ interface CreateOutboundPlanFormProps {
     outboundScheduleDate: string,
     planDate: string
   ) => void;
+  defaultValues: OutboundPlanResponseDto;
 }
 
 const inputWidth = "240px";
 
 export const CreateOutboundPlanForm = ({
   onSubmitValid,
+  defaultValues,
 }: CreateOutboundPlanFormProps) => {
   const { inputProps, onSubmit } = useCreateOutboundPlanForm(onSubmitValid);
 
@@ -26,6 +31,7 @@ export const CreateOutboundPlanForm = ({
       <MainInput
         label="주문 번호"
         width={inputWidth}
+        defaultValue={defaultValues.productionPlanNumber}
         {...inputProps.productionPlanNumber}
       />
       <MainInput
@@ -33,13 +39,14 @@ export const CreateOutboundPlanForm = ({
         width={inputWidth}
         disabled
         type="date"
-        defaultValue={new Date(Date.now()).toISOString().substring(0, 10)}
+        defaultValue={defaultValues.outboundScheduleDate}
         {...inputProps.outboundScheduleDate}
       />
       <MainInput
         label="주문 날짜"
         width={inputWidth}
         type="date"
+        defaultValue={defaultValues.planDate}
         {...inputProps.planDate}
       />
     </form>

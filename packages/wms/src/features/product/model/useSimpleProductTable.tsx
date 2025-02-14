@@ -38,14 +38,15 @@ export const useSimpleProductTable = (
             <MainButton
               padding="sm"
               size="sm"
-              onClick={() =>
+              onClick={(e) => {
+                e.stopPropagation();
                 onClickAdd({
                   productId: row.row.getAllCells()[0].getValue() as number,
                   productCode: row.row.getAllCells()[1].getValue() as string,
                   productName: row.row.getAllCells()[2].getValue() as string,
                   productCount: 0,
-                })
-              }
+                });
+              }}
             >
               추가
             </MainButton>
