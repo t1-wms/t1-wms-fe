@@ -29,15 +29,6 @@ export const OutboundPlanControlPanel = ({
     openModal(modalInfo);
   }, [openModal]);
 
-  const handleClickUpdate = useCallback(() => {
-    const modalInfo: CreateOutboundPlanModalInfo = {
-      key: "createOutboundPlan",
-    };
-    openModal(modalInfo);
-  }, [openModal]);
-
-  const handleClickDelete = useCallback(() => {}, [openModal]);
-
   return (
     <form className={styles.container} onSubmit={onSubmit}>
       <div className={styles["input-box"]}>
@@ -60,12 +51,6 @@ export const OutboundPlanControlPanel = ({
         <MainButton size="sm">조회</MainButton>
         <MainButton size="sm" type="button" onClick={handleClickAdd}>
           추가
-        </MainButton>
-        <MainButton size="sm" type="button" onClick={handleClickUpdate}>
-          수정
-        </MainButton>
-        <MainButton size="sm" type="button" onClick={handleClickDelete}>
-          삭제
         </MainButton>
       </div>
     </form>

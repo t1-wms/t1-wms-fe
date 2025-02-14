@@ -1,8 +1,8 @@
-import { BaseDrawer, BaseTable } from "@/shared";
+import { BaseTable } from "@/shared";
 import { useOutboundPlanTable } from "../../model";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useMemo } from "react";
-import { OutboundProductTable } from "@/features/product/ui";
+import { OutboundPlanDrawer } from "../outbound-plan-drawer";
 
 interface OutboundPlanTableProps {
   columnFilters: ColumnFiltersState;
@@ -49,12 +49,11 @@ export const OutboundPlanTable = ({
         setRowSelection={setRowSelection}
       />
       {(selectedId || selectedId === 0) && (
-        <BaseDrawer
-          title={`${data.data[selectedId].outboundScheduleNumber} 출고예정품목`}
+        <OutboundPlanDrawer
+          data={data}
+          selectedId={selectedId}
           onClose={() => setRowSelection({})}
-        >
-          <OutboundProductTable data={data.data[selectedId].productList} />
-        </BaseDrawer>
+        />
       )}
     </>
   );
