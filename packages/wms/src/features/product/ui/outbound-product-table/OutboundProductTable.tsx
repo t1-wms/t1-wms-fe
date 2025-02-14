@@ -6,12 +6,14 @@ interface OutboundProductTableProps {
   data: ProductListDto[];
   canCount?: boolean;
   onChangeProductCount?: (productId: number, productCount: number) => void;
+  hasMinHeight?: boolean;
 }
 
 export const OutboundProductTable = ({
   data,
   canCount,
   onChangeProductCount,
+  hasMinHeight,
 }: OutboundProductTableProps) => {
   const {
     pagination,
@@ -37,6 +39,7 @@ export const OutboundProductTable = ({
         setSorting={setSorting}
         rowSelection={rowSelection}
         setRowSelection={setRowSelection}
+        hasMinHeight={hasMinHeight}
       />
     </>
   );

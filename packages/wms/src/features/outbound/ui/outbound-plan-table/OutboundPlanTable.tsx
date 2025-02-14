@@ -50,8 +50,7 @@ export const OutboundPlanTable = ({
       />
       {(selectedId || selectedId === 0) && (
         <OutboundPlanDrawer
-          data={data}
-          selectedId={selectedId}
+          data={data.data[selectedId]}
           onClose={() => setRowSelection({})}
         />
       )}

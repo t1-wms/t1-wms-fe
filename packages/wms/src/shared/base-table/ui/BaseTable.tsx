@@ -31,6 +31,7 @@ interface BaseTableProps<TData> {
   rowSelection: RowSelectionState;
   setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
   noPagination?: boolean;
+  hasMinHeight?: boolean;
 }
 
 export const BaseTable = <TData extends unknown>({
@@ -45,6 +46,7 @@ export const BaseTable = <TData extends unknown>({
   setSorting,
   rowSelection,
   setRowSelection,
+  hasMinHeight,
 }: BaseTableProps<TData>) => {
   const table = useReactTable<TData>({
     data: data ? data.data : [],
@@ -74,7 +76,11 @@ export const BaseTable = <TData extends unknown>({
 
   return (
     <div className={styles.container}>
-      <div className={styles["table-wrapper"]}>
+      <div
+        className={`${styles["table-wrapper"]} ${
+          hasMinHeight ? styles["min-height"] : ""
+        }`}
+      >
         <table>
           <thead className="font-r-md">
             {table.getHeaderGroups().map((headerGroup) => (
