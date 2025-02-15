@@ -3,6 +3,8 @@ import styles from "./OutBoundPlanPage.module.css";
 import {
   CreateOutboundPlanModalInfo,
   OutboundControlPanel,
+  OutboundPlanDrawer,
+  OutboundPlanResponseDto,
   OutboundPlanTableWrapper,
 } from "@/features";
 import { Suspense, useCallback, useState } from "react";
@@ -10,6 +12,8 @@ import { ColumnFiltersState } from "@tanstack/react-table";
 
 export const OutBoundPlanPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [selectedRow, setSelectedRow] =
+    useState<OutboundPlanResponseDto | null>(null);
 
   const { openModal } = useModalStore();
 
@@ -31,6 +35,13 @@ export const OutBoundPlanPage = () => {
     openModal(modalInfo);
   }, [openModal]);
 
+  const handleChangeSelectedRow = useCallback(
+    (row: OutboundPlanResponseDto | null) => {
+      setSelectedRow(row);
+    },
+    [setSelectedRow]
+  );
+
   return (
     <div className={styles.container}>
       <PageContentBox>
@@ -45,9 +56,16 @@ export const OutBoundPlanPage = () => {
           <OutboundPlanTableWrapper
             columnFilters={columnFilters}
             setColumnFilters={setColumnFilters}
+            onChangeSelectedRow={handleChangeSelectedRow}
           />
         </Suspense>
       </PageContentBox>
+      {selectedRow && (
+        <OutboundPlanDrawer
+          data={selectedRow}
+          onClose={() => setSelectedRow(null)}
+        />
+      )}
     </div>
   );
 };

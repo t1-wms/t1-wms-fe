@@ -4,8 +4,7 @@ import {
   createColumnHelper,
   FilterFn,
 } from "@tanstack/react-table";
-import { Dispatch, SetStateAction, useMemo } from "react";
-import { OutboundPlanDrawer } from "../outbound-plan-drawer";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import {
   OutboundPlanResponseDto,
   useOutboundPlans,
@@ -13,9 +12,10 @@ import {
 } from "../../model";
 
 interface OutboundPlanTableProps {
-  columnFilters: ColumnFiltersState;
-  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
+  columnFilters?: ColumnFiltersState;
+  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
+  onChangeSelectedRow: (rowId: OutboundPlanResponseDto | null) => void;
 }
 
 const columnHelper = createColumnHelper<OutboundPlanResponseDto>();
@@ -65,6 +65,7 @@ export const OutboundPlanTable = ({
   columnFilters,
   setColumnFilters,
   isServerSide,
+  onChangeSelectedRow,
 }: OutboundPlanTableProps) => {
   const {
     pagination,
@@ -82,12 +83,14 @@ export const OutboundPlanTable = ({
     useData: useOutboundPlans,
   });
 
-  const selectedId = useMemo(() => {
-    return (
-      Object.keys(rowSelection).length > 0 &&
-      parseInt(Object.keys(rowSelection)[0])
-    );
-  }, [rowSelection]);
+  useEffect(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
+
+    onChangeSelectedRow(rowId || rowId === 0 ? data.data[rowId] : null);
+  }, [rowSelection, onChangeSelectedRow]);
 
   return (
     <>
@@ -104,12 +107,6 @@ export const OutboundPlanTable = ({
         rowSelection={rowSelection}
         setRowSelection={setRowSelection}
       />
-      {(selectedId || selectedId === 0) && (
-        <OutboundPlanDrawer
-          data={data.data[selectedId]}
-          onClose={() => setRowSelection({})}
-        />
-      )}
     </>
   );
 };

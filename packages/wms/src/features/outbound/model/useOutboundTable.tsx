@@ -5,7 +5,7 @@ import { OutboundFilter } from "./types";
 import { UseSuspenseQueryResult } from "@tanstack/react-query";
 
 interface UseOutboundTableParams<OutboundResponseDto> {
-  columnFilters: ColumnFiltersState;
+  columnFilters?: ColumnFiltersState;
   isServerSide: boolean;
   outboundNumberKey: string;
   outboundDateKey: string;
