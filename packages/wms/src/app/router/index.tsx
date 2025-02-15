@@ -3,6 +3,7 @@ import { App } from "../App";
 import { LoginPage } from "@pages/login";
 import UserPage from "@pages/user/ui/UserPage";
 import { OutBoundPlanPage } from "@/pages/outbound-plan";
+import OutboundAssignPage from "@/pages/outbound-assign/ui/OutboundAssignPage";
 
 const router = createBrowserRouter([
   {
@@ -18,8 +19,12 @@ const router = createBrowserRouter([
         element: <UserPage />,
       },
       {
-        path: "/outbonud/plan",
+        path: "/outbound/plan",
         element: <OutBoundPlanPage />,
+      },
+      {
+        path: "/outbound/assign",
+        element: <OutboundAssignPage />,
       },
     ],
   },
