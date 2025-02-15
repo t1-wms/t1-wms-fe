@@ -6,6 +6,7 @@
   height: auto;
   border-radius: 4px;
   padding: 8px 32px;
+  transition: background-color 0.25s;
 
   &.padding-sm {
     padding: 4px 16px;
@@ -24,11 +25,19 @@
 .primary {
   background-color: var(--color-primary);
   color: var(--color-gray-50);
+
+  &:hover {
+    background-color: var(--color-primary-light);
+  }
 }
 
 .gray {
   background-color: var(--color-gray-50);
   color: var(--color-gray-900);
+
+  &:hover {
+    background-color: var(--color-gray-200);
+  }
 }
 
 .bold {
