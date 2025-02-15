@@ -36,7 +36,7 @@ export const Camera = () => {
         // 스캔 실패 시 토스트 메시지 표시 및 카메라 재시작
         setShowToast(true);
         setQrData(null); // QR 데이터 초기화
-        startCamera(); // 카메라 재시작
+        startCamera(); // 카메라 다시 시작
         
         // 3초 후 토스트 메시지 숨김
         setTimeout(() => {
@@ -69,8 +69,9 @@ export const Camera = () => {
 
         {/* 토스트 메시지 */}
         {showToast && (
-          <div className="fixed top-16 left-1/2 w-sm transform -translate-x-1/2 bg-red-500 text-white px-3 py-3 rounded-md shadow-lg">
-            일치하지 않는 코드입니다.
+          <div className="fixed top-16 left-1/2 w-[280px] transform -translate-x-1/2 bg-red-500 text-white p-3 rounded-md shadow-lg text-center">
+            일치하지 않는 코드입니다. 
+            
           </div>
         )}
       </div>

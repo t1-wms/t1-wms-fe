@@ -18,7 +18,6 @@ export const PickingCompletePage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      {/* 완료 아이콘 */}
       <div className="mb-6">
         <BsCheckCircle className="text-green-500 text-6xl" />
       </div>
@@ -47,7 +46,7 @@ export const PickingCompletePage = () => {
       <div className="flex flex-col w-full max-w-sm gap-3">
         <button
           onClick={handleHomeClick}
-          className="w-full bg-purple-700 text-white py-3 rounded-md font-medium"
+          className="w-full bg-t1normal text-white py-3 rounded-md font-medium"
         >
           홈으로 이동
         </button>
