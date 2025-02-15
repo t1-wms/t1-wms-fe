@@ -1,6 +1,9 @@
 import { Sort } from "@/shared";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
+  getOutboundAssignCount,
+  getOutboundAssigns,
+  getOutboundAssignsPaged,
   getOutboundPlanCount,
   getOutboundPlans,
   getOutboundPlansPaged,
@@ -14,7 +17,8 @@ export const useOutboundPlanCount = () => {
   });
 };
 
-export const createUseOutboundPlansQueryKey = (
+export const createUseOutboundQueryKey = (
+  key: string,
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
@@ -22,14 +26,14 @@ export const createUseOutboundPlansQueryKey = (
 ) => {
   return isServerSide
     ? [
-        "outboundPlan",
+        key,
         page!,
         sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
         filter
           ? `${filter.number}/${filter.startDate}/${filter.endDate}`
           : "not-filtering",
       ]
-    : ["outboundPlan"];
+    : [key];
 };
 
 export const useOutboundPlans = (
@@ -40,7 +44,8 @@ export const useOutboundPlans = (
 ) => {
   if (isServerSide) {
     return useSuspenseQuery({
-      queryKey: createUseOutboundPlansQueryKey(
+      queryKey: createUseOutboundQueryKey(
+        "outboundPlan",
         isServerSide,
         page!,
         sort,
@@ -50,13 +55,52 @@ export const useOutboundPlans = (
     });
   } else {
     return useSuspenseQuery({
-      queryKey: createUseOutboundPlansQueryKey(
+      queryKey: createUseOutboundQueryKey(
+        "outboundPlan",
         isServerSide,
         page!,
         sort,
         filter
       ),
       queryFn: () => getOutboundPlans(),
+    });
+  }
+};
+
+export const useOutboundAssignCount = () => {
+  return useSuspenseQuery({
+    queryKey: ["outboundAssign", "count"],
+    queryFn: () => getOutboundAssignCount(),
+  });
+};
+
+export const useOutboundAssigns = (
+  isServerSide: boolean,
+  page?: number,
+  sort?: Sort,
+  filter?: OutboundFilter
+) => {
+  if (isServerSide) {
+    return useSuspenseQuery({
+      queryKey: createUseOutboundQueryKey(
+        "outboundAssign",
+        isServerSide,
+        page!,
+        sort,
+        filter
+      ),
+      queryFn: () => getOutboundAssignsPaged(page!, sort, filter),
+    });
+  } else {
+    return useSuspenseQuery({
+      queryKey: createUseOutboundQueryKey(
+        "outboundAssign",
+        isServerSide,
+        page!,
+        sort,
+        filter
+      ),
+      queryFn: () => getOutboundAssigns(),
     });
   }
 };
