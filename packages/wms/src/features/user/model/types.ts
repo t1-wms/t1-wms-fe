@@ -14,6 +14,10 @@ export interface UserListDto {
   supplierId: number;
 }
 
+export interface UserFilter {
+  staffNumber?: string;
+}
+
 export interface UpdateActiveResDto {
   isActive: boolean;
 }

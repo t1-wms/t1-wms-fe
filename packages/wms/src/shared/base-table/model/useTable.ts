@@ -1,5 +1,4 @@
-import { Count, PageResponse, Sort } from "@shared/model";
-import { UseQueryResult, UseSuspenseQueryResult } from "@tanstack/react-query";
+import { Sort } from "@/shared";
 import {
   PaginationState,
   RowSelectionState,
@@ -7,26 +6,20 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 
-export function useTable<T>(
-  useCount: () => UseQueryResult<Count, Error>,
-  useData: (
-    isServerSide: boolean | undefined,
-    page?: number,
-    sort?: Sort
-  ) => UseSuspenseQueryResult<PageResponse<T>, Error>
-) {
+export function useTable() {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 10,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   useEffect(() => {
-    setRowSelection({});
+    () => setRowSelection({});
   }, [pagination]);
 
   const sort = useMemo<Sort | undefined>(() => {
+    if (!sorting) return undefined;
     return sorting.length === 0
       ? undefined
       : {
@@ -35,17 +28,6 @@ export function useTable<T>(
         };
   }, [sorting]);
 
-  const { data: countResult } = useCount();
-
-  const isServerSide = useMemo(() => {
-    if (countResult === undefined) return undefined;
-    else {
-      return countResult.count >= 10000;
-    }
-  }, [countResult]);
-
-  const { data } = useData(isServerSide, pagination.pageIndex + 1, sort);
-
   return {
     pagination,
     setPagination,
@@ -53,8 +35,6 @@ export function useTable<T>(
     setSorting,
     rowSelection,
     setRowSelection,
-    isServerSide,
     sort,
-    data,
   };
 }

@@ -20,6 +20,10 @@
       color: var(--color-gray-500);
     }
 
+    &:disabled {
+      background-color: var(--color-gray-200);
+    }
+
     &:focus {
       outline: 2px solid var(--color-primary);
     }

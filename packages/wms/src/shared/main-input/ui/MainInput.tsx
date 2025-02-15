@@ -7,7 +7,7 @@ interface MainInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   width: string | "fullWidth";
   fontSize?: Size;
-  error?: FieldError;
+  error?: FieldError | null;
 }
 
 export const Input = forwardRef(
@@ -24,7 +24,9 @@ export const Input = forwardRef(
             width === "fullWidth" ? styles["full-width"] : ""
           } ${error ? styles.error : ""}`}
         />
-        <p className={`${styles.hint} font-r-xs`}>{error && error.message}</p>
+        {error !== null && (
+          <p className={`${styles.hint} font-r-xs`}>{error && error.message}</p>
+        )}
       </>
     );
   }

@@ -1,18 +1,36 @@
-import { CheckBox, MainSelect, PageResponse, useTable } from "@/shared";
+import {
+  CheckBox,
+  getFilterValue,
+  MainSelect,
+  PageResponse,
+  useTable,
+} from "@/shared";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   createUseUsersQueryKey,
   useUpdateActive,
-  useUserCount,
   useUsers,
 } from "./queryHooks";
-import { UserListDto } from "./types";
+import { UserFilter, UserListDto } from "./types";
 import { useMemo } from "react";
-import { createColumnHelper } from "@tanstack/react-table";
+import { ColumnFiltersState, createColumnHelper } from "@tanstack/react-table";
 
 const columnHelper = createColumnHelper<UserListDto>();
 
-export const useUserTable = () => {
+export const useUserTable = (
+  columnFilters: ColumnFiltersState,
+  isServerSide: boolean
+) => {
+  const filter: UserFilter | undefined = useMemo(() => {
+    if (!columnFilters || columnFilters.length === 0) return undefined;
+
+    const staffNumber = getFilterValue(columnFilters, "staffNumber");
+
+    return {
+      staffNumber,
+    };
+  }, [columnFilters]);
+
   const {
     pagination,
     setPagination,
@@ -20,10 +38,15 @@ export const useUserTable = () => {
     setSorting,
     rowSelection,
     setRowSelection,
-    isServerSide,
     sort,
-    data: pagedUsers,
-  } = useTable(useUserCount, useUsers);
+  } = useTable();
+
+  const { data } = useUsers(
+    isServerSide,
+    pagination.pageIndex + 1,
+    sort,
+    filter
+  );
 
   const queryClient = useQueryClient();
 
@@ -59,6 +82,7 @@ export const useUserTable = () => {
       columnHelper.accessor("staffNumber", {
         header: "사원번호",
         cell: (row) => row.getValue(),
+        filterFn: "includesString",
       }),
       columnHelper.accessor("phone", {
         header: "휴대폰 번호",
@@ -125,7 +149,7 @@ export const useUserTable = () => {
     rowSelection,
     setRowSelection,
     isServerSide,
-    pagedUsers,
+    data,
     defaultColumns,
   };
 };

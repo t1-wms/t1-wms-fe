@@ -8,6 +8,7 @@ interface MainButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   bold?: boolean;
   size?: Size;
+  padding?: Size;
 }
 
 export const MainButton = ({
@@ -15,6 +16,7 @@ export const MainButton = ({
   color = "primary",
   bold,
   size = "md",
+  padding = "md",
   ...props
 }: MainButtonProps) => {
   return (
@@ -22,7 +24,9 @@ export const MainButton = ({
       {...props}
       className={`${styles.container} ${
         fullWidth ? styles["full-width"] : ""
-      } ${styles[color]} ${bold ? styles.bold : ""} font-r-${size}`}
+      } ${styles[color]} ${bold ? styles.bold : ""} font-r-${size} ${
+        styles[`padding-${padding}`]
+      }`}
     >
       {props.children}
     </button>

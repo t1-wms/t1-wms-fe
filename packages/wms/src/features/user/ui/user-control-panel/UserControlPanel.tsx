@@ -1,25 +1,16 @@
 import styles from "./UserControlPanel.module.css";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { useCallback } from "react";
 import { MainButton, MainInput, useModalStore } from "@/shared";
-import { CreateUserModalInfo } from "../../model";
+import { CreateUserModalInfo, useSearchUserForm } from "../../model";
 
-interface UserSearchFormInputs {
-  staffNumber: string;
+interface UserControlPanelProps {
+  onSearch: (staffNumber: string) => void;
 }
 
-export const UserControlPanel = () => {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<UserSearchFormInputs>();
+export const UserControlPanel = ({ onSearch }: UserControlPanelProps) => {
+  const { inputProps, onSubmit } = useSearchUserForm(onSearch);
 
   const { openModal } = useModalStore();
-
-  const onSubmit: SubmitHandler<UserSearchFormInputs> = (data) => {
-    console.log(data);
-  };
 
   const handleClickAdd = useCallback(() => {
     const modalInfo: CreateUserModalInfo = {
@@ -29,21 +20,14 @@ export const UserControlPanel = () => {
   }, [openModal]);
 
   return (
-    <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
+    <form className={styles.container} onSubmit={onSubmit}>
       <div className={styles["input-box"]}>
         <MainInput
           label="사용자 ID"
           width="120px"
           fontSize="sm"
           autoFocus
-          error={errors.staffNumber}
-          {...register("staffNumber", {
-            required: "필수로 입력해야합니다",
-            maxLength: {
-              value: 10,
-              message: "최대 10글자까지 입력 가능합니다",
-            },
-          })}
+          {...inputProps.staffNumber}
         />
       </div>
       <div className={styles["button-box"]}>

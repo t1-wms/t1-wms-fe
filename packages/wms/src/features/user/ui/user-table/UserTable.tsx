@@ -1,7 +1,19 @@
 import { BaseTable } from "@/shared";
-import { useUserTable } from "../../model/useUseTable";
+import { useUserTable } from "../../model/useUserTable";
+import { ColumnFiltersState } from "@tanstack/react-table";
+import { Dispatch, SetStateAction } from "react";
 
-export const UserTable = () => {
+interface UserTableProps {
+  isServerSide: boolean;
+  columnFilters: ColumnFiltersState;
+  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
+}
+
+export const UserTable = ({
+  isServerSide,
+  columnFilters,
+  setColumnFilters,
+}: UserTableProps) => {
   const {
     pagination,
     setPagination,
@@ -9,16 +21,15 @@ export const UserTable = () => {
     setSorting,
     rowSelection,
     setRowSelection,
-    isServerSide,
-    pagedUsers,
+    data,
     defaultColumns,
-  } = useUserTable();
+  } = useUserTable(columnFilters, isServerSide);
 
   return (
     <>
       <BaseTable
         serverSide={isServerSide}
-        data={pagedUsers}
+        data={data}
         columns={defaultColumns}
         pagination={pagination}
         setPagination={setPagination}
@@ -26,6 +37,8 @@ export const UserTable = () => {
         setSorting={setSorting}
         rowSelection={rowSelection}
         setRowSelection={setRowSelection}
+        columnFilters={columnFilters}
+        setColumnFilters={setColumnFilters}
       />
     </>
   );
