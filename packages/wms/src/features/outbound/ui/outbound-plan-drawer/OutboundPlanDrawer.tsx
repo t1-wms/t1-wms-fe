@@ -10,13 +10,11 @@ import { useCallback } from "react";
 interface OutboundPlanDrawerProps {
   data: OutboundPlanResponseDto;
   onClose: () => void;
-  queryKey: (string | number)[];
 }
 
 export const OutboundPlanDrawer = ({
   data,
   onClose,
-  queryKey,
 }: OutboundPlanDrawerProps) => {
   const {
     outboundScheduleNumber,
@@ -32,11 +30,10 @@ export const OutboundPlanDrawer = ({
     const modalInfo: CreateOutboundPlanModalInfo = {
       key: "createOutboundPlan",
       outboundPlan: data,
-      queryKey,
     };
 
     openModal(modalInfo);
-  }, [openModal, queryKey, data]);
+  }, [openModal, data]);
 
   return (
     <BaseDrawer title={`출고예정 조회`} onClose={onClose}>
