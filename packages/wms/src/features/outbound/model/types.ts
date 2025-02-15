@@ -10,6 +10,16 @@ export interface OutboundPlanResponseDto {
   productList: ProductListDto[];
 }
 
+export interface OutboundAssignResponseDto {
+  process: string;
+  outboundScheduleNumber: string;
+  outboundAssignNumber: string;
+  outboundAssignDate: string;
+  productionPlanNumber: string;
+  planDate: string;
+  productList: ProductListDto[];
+}
+
 export interface CreateOutboundPlanRequestDto {
   outboundScheduleDate: string;
   planDate: string;
@@ -17,14 +27,18 @@ export interface CreateOutboundPlanRequestDto {
   productList: ProductListDto[];
 }
 
-export interface CreateOutboundPlanModalInfo extends ModalInfoBase {
-  key: "createOutboundPlan";
-  outboundPlan?: OutboundPlanResponseDto;
-  queryKey?: (string | number)[];
-}
-
 export interface OutboundFilter {
   number?: string;
   startDate?: string;
   endDate?: string;
+}
+
+export interface CreateOutboundPlanModalInfo extends ModalInfoBase {
+  key: "createOutboundPlan";
+  outboundPlan?: OutboundPlanResponseDto;
+}
+
+export interface CreateOutboundAssignModalInfo extends ModalInfoBase {
+  key: "createOutboundAssign";
+  outboundAssign?: OutboundAssignResponseDto;
 }

@@ -3,7 +3,7 @@ import { App } from "../App";
 import { LoginPage } from "@pages/login";
 import UserPage from "@pages/user/ui/UserPage";
 import { OutBoundPlanPage } from "@/pages/outbound-plan";
-import OutboundAssignPage from "@/pages/outbound-assign/ui/OutboundAssignPage";
+import { OutboundAssignPage } from "@/pages/outbound-assign";
 
 const router = createBrowserRouter([
   {
