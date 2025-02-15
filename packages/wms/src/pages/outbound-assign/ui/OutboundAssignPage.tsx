@@ -1,17 +1,16 @@
-import { PageContentBox, Spinner, useModalStore } from "@/shared";
+import { PageContentBox, Spinner } from "@/shared";
 import styles from "./OutboundAssignPage.module.css";
 import {
-  CreateOutboundAssignModalInfo,
   OutboundAssignTableWrapper,
   OutboundControlPanel,
+  OutboundPlanListDrawer,
 } from "@/features";
 import { Suspense, useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
 export const OutboundAssignPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
-  const { openModal } = useModalStore();
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
@@ -24,12 +23,8 @@ export const OutboundAssignPage = () => {
   );
 
   const handleClickCreate = useCallback(() => {
-    const modalInfo: CreateOutboundAssignModalInfo = {
-      key: "createOutboundAssign",
-    };
-
-    openModal(modalInfo);
-  }, [openModal]);
+    setDrawerOpen(true);
+  }, [setDrawerOpen]);
 
   return (
     <div className={styles.container}>
@@ -48,6 +43,9 @@ export const OutboundAssignPage = () => {
           />
         </Suspense>
       </PageContentBox>
+      {isDrawerOpen && (
+        <OutboundPlanListDrawer onClose={() => setDrawerOpen(false)} />
+      )}
     </div>
   );
 };
