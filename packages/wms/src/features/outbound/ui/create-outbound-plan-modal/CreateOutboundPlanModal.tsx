@@ -1,5 +1,5 @@
 import styles from "./CreateOutboundPlanModal.module.css";
-import { BasicModal, useModalStore } from "@/shared";
+import { BasicModal, Spinner, useModalStore } from "@/shared";
 import {
   CreateOutboundPlanModalInfo,
   CreateOutboundPlanRequestDto,
@@ -125,7 +125,9 @@ export const CreateOutboundPlanModal = ({
         />
         <div className={styles["table-box"]}>
           <div className={`${styles.products} shadow-md`}>
-            <Suspense fallback={<>Loading...</>}>
+            <Suspense
+              fallback={<Spinner message="품목 리스트를 가져오는 중" />}
+            >
               <SimpleProductTable onClickAdd={handleClickRow} />
             </Suspense>
           </div>

@@ -1,4 +1,4 @@
-import { PageContentBox } from "@/shared";
+import { PageContentBox, Spinner } from "@/shared";
 import styles from "./OutBoundPlanPage.module.css";
 import { OutboundPlanControlPanel, OutboundPlanTableWrapper } from "@/features";
 import { Suspense, useCallback, useState } from "react";
@@ -23,7 +23,7 @@ export const OutBoundPlanPage = () => {
         <OutboundPlanControlPanel onSearch={handleSearch} />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<>LOADING</>}>
+        <Suspense fallback={<Spinner message="출고예정 품목을 세는 중" />}>
           <OutboundPlanTableWrapper
             columnFilters={columnFilters}
             setColumnFilters={setColumnFilters}

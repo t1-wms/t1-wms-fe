@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, Suspense, useMemo } from "react";
 import { useOutboundPlanCount } from "../../model";
 import { OutboundPlanTable } from "./OutboundPlanTable";
 import { ColumnFiltersState } from "@tanstack/react-table";
-import { minCountForServerSide } from "@/shared";
+import { minCountForServerSide, Spinner } from "@/shared";
 
 interface OutboundPlanTableWrapperProps {
   columnFilters: ColumnFiltersState;
@@ -21,7 +21,7 @@ export const OutboundPlanTableWrapper = ({
 
   return (
     <>
-      <Suspense fallback={<>Loading</>}>
+      <Suspense fallback={<Spinner message="출고예정 데이터를 가져오는 중" />}>
         <OutboundPlanTable
           columnFilters={columnFilters}
           setColumnFilters={setColumnFilters}
