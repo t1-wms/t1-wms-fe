@@ -1,11 +1,17 @@
-import { PageContentBox, Spinner } from "@/shared";
+import { PageContentBox, Spinner, useModalStore } from "@/shared";
 import styles from "./OutBoundPlanPage.module.css";
-import { OutboundPlanControlPanel, OutboundPlanTableWrapper } from "@/features";
+import {
+  CreateOutboundPlanModalInfo,
+  OutboundControlPanel,
+  OutboundPlanTableWrapper,
+} from "@/features";
 import { Suspense, useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
 export const OutBoundPlanPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const { openModal } = useModalStore();
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
@@ -17,10 +23,22 @@ export const OutBoundPlanPage = () => {
     [setColumnFilters]
   );
 
+  const handleClickCreate = useCallback(() => {
+    const modalInfo: CreateOutboundPlanModalInfo = {
+      key: "createOutboundPlan",
+    };
+
+    openModal(modalInfo);
+  }, [openModal]);
+
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <OutboundPlanControlPanel onSearch={handleSearch} />
+        <OutboundControlPanel
+          label="출고예정"
+          onSearch={handleSearch}
+          onClickCreate={handleClickCreate}
+        />
       </PageContentBox>
       <PageContentBox>
         <Suspense fallback={<Spinner message="출고예정 품목을 세는 중" />}>

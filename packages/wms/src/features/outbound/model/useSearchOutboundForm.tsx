@@ -1,21 +1,21 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 
-interface SearchOutboundPlanFormInputs {
+interface SearchOutboundFormInputs {
   number: string;
   startDate: string;
   endDate: string;
 }
 
-export const useSearchOutboundPlanForm = (
+export const useSearchOutboundForm = (
   onValid: (number: string, startDate: string, endDate: string) => void
 ) => {
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<SearchOutboundPlanFormInputs>();
+  } = useForm<SearchOutboundFormInputs>();
 
-  const handleValid: SubmitHandler<SearchOutboundPlanFormInputs> = (data) => {
+  const handleValid: SubmitHandler<SearchOutboundFormInputs> = (data) => {
     onValid(data.number, data.startDate, data.endDate);
   };
 
