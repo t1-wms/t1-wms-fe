@@ -1,4 +1,6 @@
 import {
+  CreateOutboundAssignModal,
+  CreateOutboundAssignModalInfo,
   CreateOutboundPlanModal,
   CreateOutboundPlanModalInfo,
   CreateUserModal,
@@ -27,6 +29,12 @@ const isCreateOutboundPlanModalInfo = (
   return info.key === "createOutboundPlan";
 };
 
+const isCreateOutboundAssignModalInfo = (
+  info: ModalInfoBase
+): info is CreateOutboundAssignModalInfo => {
+  return info.key === "createOutboundAssign";
+};
+
 export const AppModal = () => {
   const { openedModal } = useModalStore();
 
@@ -41,6 +49,8 @@ export const AppModal = () => {
       <CreateOutboundPlanModal
         modalInfo={openedModal}
       ></CreateOutboundPlanModal>
+    ) : isCreateOutboundAssignModalInfo(openedModal) ? (
+      <CreateOutboundAssignModal modalInfo={openedModal} />
     ) : (
       <></>
     )

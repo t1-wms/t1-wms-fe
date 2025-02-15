@@ -22,6 +22,7 @@ export const OutboundPlanListDrawer = ({
     if (selectedRow) {
       const modalInfo: CreateOutboundAssignModalInfo = {
         key: "createOutboundAssign",
+        outboundPlan: selectedRow,
       };
 
       openModal(modalInfo);

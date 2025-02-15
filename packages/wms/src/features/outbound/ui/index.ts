@@ -5,3 +5,5 @@ export * from "./outbound-plan-drawer";
 export * from "./outbound-control-panel";
 export * from "./outbound-assign-table";
 export * from "./outbound-plan-list-drawer";
+export * from "./create-outbound-assign-modal";
+export * from "./create-outbound-assign-form";
