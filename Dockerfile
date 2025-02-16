@@ -15,8 +15,10 @@ RUN apk update && apk add --no-cache \
 # Docker 소켓 마운트 설정
 VOLUME /var/run/docker.sock:/var/run/docker.sock
 
-# 빌드된 결과물만 하나의 디렉토리로 복사
-COPY ./packages/dist /home/ec2-user/frontend
+## 빌드된 결과물만 하나의 디렉토리로 복사
+#COPY ./dist /home/ec2-user/frontend
+# 빌드된 wms, worker 디렉토리 파일들을 Nginx에 복사
+COPY ./packages /home/ec2-user/frontend
 
 # Nginx 실행
 CMD ["nginx", "-g", "daemon off;"]
