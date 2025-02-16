@@ -7,6 +7,7 @@ import { OutboundAssignPage } from "@/pages/outbound-assign";
 import { OutboundPickingPage } from "@/pages/outbound-picking";
 import { OutboundPackingPage } from "@/pages/outbound-packing";
 import { OutboundLoadingPage } from "@/pages/outbound-loading";
+import OrderPage from "@/pages/order";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/user",
         element: <UserPage />,
+      },
+      {
+        path: "/order",
+        element: <OrderPage />,
       },
       {
         path: "/outbound/plan",
