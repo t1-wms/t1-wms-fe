@@ -20,6 +20,17 @@ export interface OutboundAssignResponseDto {
   productList: ProductListDto[];
 }
 
+export interface OutboundPickingResponseDto {
+  process: string;
+  outboundScheduleNumber: string;
+  outboundAssignNumber: string;
+  outboundPickingNumber: string;
+  outboundPickingDate: string;
+  productionPlanNumber: string;
+  planDate: string;
+  productList: ProductListDto[];
+}
+
 export interface CreateOutboundPlanRequestDto {
   outboundScheduleDate: string;
   planDate: string;
@@ -41,4 +52,9 @@ export interface CreateOutboundPlanModalInfo extends ModalInfoBase {
 export interface CreateOutboundAssignModalInfo extends ModalInfoBase {
   key: "createOutboundAssign";
   outbound: OutboundPlanResponseDto | OutboundAssignResponseDto;
+}
+
+export interface CreateOutboundPickingModalInfo extends ModalInfoBase {
+  key: "createOutboundPicking";
+  outbound: OutboundAssignResponseDto | OutboundPickingResponseDto;
 }

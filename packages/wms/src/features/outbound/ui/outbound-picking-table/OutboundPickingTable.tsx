@@ -1,5 +1,5 @@
 import { BaseTable } from "@/shared";
-import { OutboundAssignResponseDto, useOutboundAssigns } from "../../model";
+import { OutboundPickingResponseDto, useOutboundPickings } from "../../model";
 import {
   ColumnFiltersState,
   createColumnHelper,
@@ -8,16 +8,16 @@ import {
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useOutboundTable } from "../../model/useOutboundTable";
 
-interface OutboundAssignTableProps {
-  columnFilters?: ColumnFiltersState;
-  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
+interface OutboundPickingTableProps {
+  columnFilters: ColumnFiltersState;
+  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
-  onChangeSelectedRow: (row: OutboundAssignResponseDto | null) => void;
+  onChangeSelectedRow: (row: OutboundPickingResponseDto | null) => void;
 }
 
-const columnHelper = createColumnHelper<OutboundAssignResponseDto>();
+const columnHelper = createColumnHelper<OutboundPickingResponseDto>();
 
-const dateFilterFn: FilterFn<OutboundAssignResponseDto> = (
+const dateFilterFn: FilterFn<OutboundPickingResponseDto> = (
   row,
   columnId,
   filterValue: string
@@ -42,10 +42,14 @@ const defaultColumns = [
   columnHelper.accessor("outboundAssignNumber", {
     header: "출고지시번호",
     cell: (row) => row.getValue(),
+  }),
+  columnHelper.accessor("outboundPickingNumber", {
+    header: "출고피킹번호",
+    cell: (row) => row.getValue(),
     filterFn: "includesString",
   }),
-  columnHelper.accessor("outboundAssignDate", {
-    header: "출고예정날짜",
+  columnHelper.accessor("outboundPickingDate", {
+    header: "출고피킹날짜",
     cell: (row) => row.getValue(),
     filterFn: dateFilterFn,
   }),
@@ -63,12 +67,12 @@ const defaultColumns = [
   }),
 ];
 
-export const OutboundAssignTable = ({
+export const OutboundPickingTable = ({
   columnFilters,
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
-}: OutboundAssignTableProps) => {
+}: OutboundPickingTableProps) => {
   const {
     pagination,
     setPagination,
@@ -80,9 +84,9 @@ export const OutboundAssignTable = ({
   } = useOutboundTable({
     columnFilters,
     isServerSide,
-    outboundNumberKey: "outboundAssignNumber",
-    outboundDateKey: "outboundAssignDate",
-    useData: useOutboundAssigns,
+    outboundNumberKey: "outboundPickingNumber",
+    outboundDateKey: "outboundPickingDate",
+    useData: useOutboundPickings,
   });
 
   useEffect(() => {
