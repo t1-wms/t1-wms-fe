@@ -98,8 +98,8 @@ pipeline {
                                     """
                                 ),
                                 sshTransfer(
-                                    sourceFiles: "./packages/worker/dist/**/*",  // worker dist 폴더 전송
-                                    remoteDirectory: "${WORKER_DIST_PATH}",  // EC2 서버의 worker 폴더
+                                    sourceFiles: "./packages/worker/dist/**/*",
+                                    remoteDirectory: "${WORKER_DIST_PATH}",
                                     removePrefix: "dist",
                                     execCommand: """
                                         echo 'Deploying Worker to EC2...'

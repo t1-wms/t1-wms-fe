@@ -21,7 +21,7 @@ RUN apk update && apk add --no-cache \
 RUN rm -rf /usr/share/nginx/html/*
 
 # 앱의 빌드된 파일을 Nginx의 HTML 디렉토리에 복사
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Nginx 설정 변경 (사용자 변경 방지)
 RUN sed -i 's/^user nginx;/#user nginx;/' /etc/nginx/nginx.conf
