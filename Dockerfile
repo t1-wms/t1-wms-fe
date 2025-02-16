@@ -34,7 +34,7 @@ RUN groupadd -g 998 docker && \
 RUN mkdir -p /var/cache/nginx/client_temp && \
     chown -R jenkins:docker /var/cache/nginx
 
-# Nginx 실행 사용자 변경 방지 (Nginx는 root로 실행)
+# Nginx 실행 사용자 변경 방지
 RUN sed -i 's/^user nginx;/#user nginx;/' /etc/nginx/nginx.conf
 
 # React 빌드된 파일을 Nginx html 디렉토리로 복사
