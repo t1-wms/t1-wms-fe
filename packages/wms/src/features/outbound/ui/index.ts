@@ -21,3 +21,5 @@ export * from "./create-outbound-packing-modal";
 export * from "./outbound-loading-table";
 export * from "./outbound-loading-drawer";
 export * from "./outbound-packing-list-drawer";
+export * from "./create-outbound-loading-form";
+export * from "./create-outbound-loading-modal";

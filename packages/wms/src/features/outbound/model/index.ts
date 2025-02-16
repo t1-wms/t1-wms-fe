@@ -6,3 +6,4 @@ export * from "./useOutboundTable";
 export * from "./useCreateOutboundAssignForm";
 export * from "./useCreateOutboundPickingForm";
 export * from "./useCreateOutboundPackingForm";
+export * from "./useCreateOutboundLoadingForm";
