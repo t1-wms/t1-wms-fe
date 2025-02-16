@@ -9,14 +9,21 @@ pipeline {
             }
         }
 
+        stage('Install dependencies') {
+            steps {
+                sh 'npm install'
+                sh 'npm install typescript --save-dev'
+                sh 'npm install react react-dom @types/react-dom --save'
+                echo 'Dependencies installed successfully!'
+            }
+        }
+
         stage('Build') {
             parallel {
                 stage('Build wms') {
                     steps {
                         dir("./packages/wms") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'npm install'
-                                sh 'npm install typescript --save-dev'
                                 sh 'npm run build'
                             }
                         }
@@ -28,8 +35,6 @@ pipeline {
                     steps {
                         dir("./packages/worker") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'npm install'
-                                sh 'npm install typescript --save-dev'
                                 sh 'npm run build'
                             }
                         }
@@ -41,8 +46,6 @@ pipeline {
                     steps {
                         dir("./packages/shared") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'npm install'
-                                sh 'npm install typescript --save-dev'
                                 sh 'npm run build'
                             }
                         }
