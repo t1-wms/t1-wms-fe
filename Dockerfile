@@ -14,13 +14,6 @@ RUN apk update && apk add --no-cache \
 # Docker 소켓 마운트 설정
 VOLUME /var/run/docker.sock:/var/run/docker.sock
 
-# 사용자 추가 및 권한 설정
-RUN groupadd -g 998 docker && \
-    useradd -u 1000 -g docker -m jenkins && \
-    usermod -aG docker jenkins
-
-USER jenkins
-
 # 빌드된 결과물만 하나의 디렉토리로 복사
 COPY ./packages/dist /home/ec2-user/frontend/
 
