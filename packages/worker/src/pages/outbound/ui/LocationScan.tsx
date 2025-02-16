@@ -3,7 +3,10 @@ import { ScanButton } from '@/shared/ui/scanbutton/ScanButton';
 import { HiLocationMarker } from 'react-icons/hi';
 
 export const LocationScan = ({
-                                 location,
+                                 zone = '00',
+                                 aisle = '01',
+                                 rack = '01',
+                                 shelf = '01',
                                  onLocationScan,
                                  isLocationScanned
                              }: LocationScanProps) => {
@@ -14,12 +17,12 @@ export const LocationScan = ({
         </div>
     );
 
-    const BinCodeDisplay = ({ location }: { location: LocationScanProps }) => (
+    const BinCodeDisplay = ({ zone, aisle, rack, shelf }: LocationScanProps) => (
         <div className="flex justify-center text-gray-50 p-2 items-center text-2xl font-bold">
-            <span className="bg-purple-700 px-5 py-1 rounded-l-sm">Z{location.zone}</span>
-            <span className="bg-gray-600 px-5 py-1">{location.aisle}</span>
-            <span className="bg-gray-400 px-5 py-1">{location.rack}</span>
-            <span className="bg-green-600 px-5 py-1 rounded-r-sm">{location.shelf}</span>
+            <span className="bg-purple-700 px-5 py-1 rounded-l-sm">Z{zone}</span>
+            <span className="bg-gray-600 px-5 py-1">{aisle}</span>
+            <span className="bg-gray-400 px-5 py-1">{rack}</span>
+            <span className="bg-green-600 px-5 py-1 rounded-r-sm">{shelf}</span>
         </div>
     );
 
@@ -32,15 +35,15 @@ export const LocationScan = ({
 
             {/* 빈코드 표시 */}
             <div className="mb-4">
-                <BinCodeDisplay location={location} />
+                <BinCodeDisplay zone={zone} aisle={aisle} rack={rack} shelf={shelf} />
             </div>
 
             <div className="p-2">
                 <div className="flex-col space-y-2">
-                    <LocationInfo label="구역" value={location.zone} />
-                    <LocationInfo label="통로" value={location.rack} />
-                    <LocationInfo label="진열대 번호" value={location.shelf} />
-                    <LocationInfo label="층" value={location.aisle || "01"} />
+                    <LocationInfo label="구역" value={zone} />
+                    <LocationInfo label="통로" value={rack} />
+                    <LocationInfo label="진열대 번호" value={shelf} />
+                    <LocationInfo label="층" value={aisle} />
                 </div>
             </div>
 
