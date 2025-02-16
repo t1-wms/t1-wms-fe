@@ -15,3 +15,4 @@ export * from "./create-outbound-picking-form";
 export * from "./create-outbound-picking-modal";
 export * from "./outbound-packing-table";
 export * from "./outbound-picking-list-drawer";
+export * from "./outbound-packing-drawer";
