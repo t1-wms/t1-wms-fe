@@ -60,13 +60,13 @@ pipeline {
         stage('Compression') {
             steps {
                 dir("./packages/wms/dist") {
-                    sh 'tar -czvf ../front_0.1.0.tar .'
+                    sh 'tar -czvf ../front_wms_0.1.0.tar .'
                 }
                 dir("./packages/worker/dist") {
-                    sh 'tar -czvf ../front_0.1.0.tar .'
+                    sh 'tar -czvf ../front_worker_0.1.0.tar .'
                 }
                 dir("./packages/shared/dist") {
-                    sh 'tar -czvf ../front_0.1.0.tar .'
+                    sh 'tar -czvf ../front_shared_0.1.0.tar .'
                 }
                 echo 'Compression success!'
             }
@@ -81,17 +81,17 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./packages/wms/front_0.1.0.tar",
+                                    sourceFiles: "./packages/wms/front_wms_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
                                     execCommand: "sudo sh /home/ec2-user/frontend/wms/deploy_fe.sh"
                                 ),
                                 sshTransfer(
-                                    sourceFiles: "./packages/worker/front_0.1.0.tar",
+                                    sourceFiles: "./packages/worker/front_worker_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
                                     execCommand: "sudo sh /home/ec2-user/frontend/worker/deploy_fe.sh"
                                 ),
                                 sshTransfer(
-                                    sourceFiles: "./packages/shared/front_0.1.0.tar",
+                                    sourceFiles: "./packages/shared/front_shared_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
                                     execCommand: "sudo sh /home/ec2-user/frontend/shared/deploy_fe.sh"
                                 )
