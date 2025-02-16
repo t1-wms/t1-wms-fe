@@ -20,6 +20,17 @@ export interface OutboundAssignResponseDto {
   productList: ProductListDto[];
 }
 
+export interface OutboundPickingResponseDto {
+  process: string;
+  outboundScheduleNumber: string;
+  outboundAssignNumber: string;
+  outboundPickingNumber: string;
+  outboundPickingDate: string;
+  productionPlanNumber: string;
+  planDate: string;
+  productList: ProductListDto[];
+}
+
 export interface CreateOutboundPlanRequestDto {
   outboundScheduleDate: string;
   planDate: string;
