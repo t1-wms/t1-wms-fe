@@ -16,7 +16,6 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                // 최상위에서 모든 의존성 설치 (노드, 타입스크립트, 리액트 관련)
                 nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
                     sh 'npm install'
                     sh 'npm install typescript --save-dev'
