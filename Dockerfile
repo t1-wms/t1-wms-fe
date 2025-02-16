@@ -9,7 +9,8 @@ RUN apk update && apk add --no-cache \
     sudo \
     bash \
     shadow \
-    docker-cli
+    docker-cli \
+ && rm -rf /var/cache/apk/*
 
 # Docker 소켓 마운트 설정
 VOLUME /var/run/docker.sock:/var/run/docker.sock

@@ -6,6 +6,7 @@
     "worker-app": "npm run dev --workspace=@t1-wms-fe/worker-app",
     "build:wms": "npm run build -w @t1-wms-fe/wms",
     "build:worker-app": "npm run build -w @t1-wms-fe/worker-app",
+    "build": "npm run build:wms && npm run build:worker-app",
     "i:wms": "cd packages/wms && npm install"
   },
   "license": "MIT",
