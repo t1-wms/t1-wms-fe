@@ -75,7 +75,7 @@ pipeline {
                                         docker stop frontend_container || true
                                         docker rm frontend_container || true
 
-                                        # 새로 Docker 컨테이너 실행 (덮어씌우기)
+                                        # 새로 Docker 컨테이너 실행
                                         docker build -f /home/ec2-user/frontend/Dockerfile -t ${DOCKER_TAG} /home/ec2-user/frontend
                                         docker run -d -p 80:80 --name frontend_container ${DOCKER_TAG}
 
