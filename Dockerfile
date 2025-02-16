@@ -21,7 +21,7 @@ RUN groupadd -g 998 docker && \
 
 USER jenkins
 
-# 빌드된 wms, worker 디렉토리의 파일들을 Nginx에 복사
+# 빌드된 wms, worker 디렉토리 파일들을 Nginx에 복사
 COPY ./packages/wms /home/ec2-user/frontend/wms
 COPY ./packages/worker /home/ec2-user/frontend/worker
 
