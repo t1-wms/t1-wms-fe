@@ -15,8 +15,8 @@ pipeline {
                     steps {
                         dir("./packages/wms") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'CI=false yarn install'
-                                sh 'CI=false yarn build'
+                                sh 'CI=false npm install'
+                                sh 'CI=false npm run build'
                             }
                         }
                         echo "wms Build success !"
@@ -27,8 +27,8 @@ pipeline {
                     steps {
                         dir("./packages/worker") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'CI=false yarn install'
-                                sh 'CI=false yarn build'
+                                sh 'CI=false npm install'
+                                sh 'CI=false npm run build'
                             }
                         }
                         echo "worker Build success !"
