@@ -47,15 +47,13 @@ pipeline {
             }
         }
 
-        stage('Compression') {
+        stage('Docker Build and Push') {
             steps {
-                dir("./packages/wms/dist") {
-                    sh 'tar -czvf ../wms_front_0.1.0.tar .'
+                dir("./") {
+                    sh 'docker build -t myrepo/frontend:latest .'
+                    sh 'docker push myrepo/frontend:latest'
                 }
-                dir("./packages/worker/dist") {
-                    sh 'tar -czvf ../worker_front_0.1.0.tar .'
-                }
-                echo 'Compression success!'
+                echo "Docker image pushed successfully!"
             }
         }
 
@@ -68,29 +66,14 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./packages/wms/wms_front_0.1.0.tar",
+                                    sourceFiles: "./Dockerfile",
                                     remoteDirectory: "/home/ec2-user/frontend",
                                     execCommand: """
-                                        tar -xvzf /home/ec2-user/frontend/wms_front_0.1.0.tar &&
-                                        sudo rm -rf /home/ec2-user/frontend/wms/* &&
-                                        mv /home/ec2-user/frontend/wms/dist/* /usr/share/nginx/html/ &&
-                                        sudo nginx -s reload
+                                        docker pull myrepo/frontend:latest &&
+                                        docker stop frontend_container || true &&
+                                        docker rm frontend_container || true &&
+                                        docker run -d -p 80:80 --name frontend_container myrepo/frontend:latest
                                     """
-                                ),
-                                sshTransfer(
-                                    sourceFiles: "./packages/worker/worker_front_0.1.0.tar",
-                                    remoteDirectory: "/home/ec2-user/frontend",
-                                    execCommand: """
-                                        tar -xvzf /home/ec2-user/frontend/worker_front_0.1.0.tar &&
-                                        sudo rm -rf /home/ec2-user/frontend/worker/* &&
-                                        mv /home/ec2-user/frontend/worker/dist/* /usr/share/nginx/html/ &&
-                                        sudo nginx -s reload
-                                    """
-                                ),
-                                sshTransfer(
-                                    sourceFiles: "./packages/shared/style.css",
-                                    remoteDirectory: "/home/ec2-user/frontend/static/css/",
-                                    execCommand: "echo 'Shared assets updated successfully!'"
                                 )
                             ]
                         )
