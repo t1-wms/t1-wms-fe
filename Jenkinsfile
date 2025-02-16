@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'frontend:latest'
         DOCKER_TAG = "frontend:${BUILD_NUMBER}"
+        EC2_DOMAIN = 'stockholmes.store'
     }
 
     stages {
@@ -18,8 +19,6 @@ pipeline {
                 nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh 'rm -rf node_modules package-lock.json'
                     sh 'npm install'
-                    sh 'npm install typescript@~5.6.2 --save-dev'
-                    sh 'npm install react@^18.3.1 react-dom@^18.3.1 @types/react-dom@^18.3.5 --save'
                 }
             }
         }
@@ -52,17 +51,17 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./dist/**/*",
-                                    remoteDirectory: "/home/ec2-user/frontend",
-                                    removePrefix: "dist", // dist 폴더를 EC2로 전송
+                                    sourceFiles: "./packages/frontend/dist/**/*",  // dist 폴더를 전송
+                                    remoteDirectory: "/home/ec2-user/frontend",  // EC2 서버의 폴더
+                                    removePrefix: "dist",  // dist 폴더만 전송
                                     execCommand: """
                                         echo 'Deploying to EC2...'
 
-                                        # 기존 컨테이너가 있다면 중지하고 삭제
+                                        # 기존 컨테이너 중지 및 삭제
                                         docker stop frontend_container || true
                                         docker rm frontend_container || true
 
-                                        # 새로 Docker 컨테이너 실행
+                                        # 새 Docker 컨테이너 실행
                                         docker run -d -v /home/ec2-user/frontend:/usr/share/nginx/html -p 8081:80 --name frontend_container ${DOCKER_TAG}
 
                                         # Nginx 재시작
