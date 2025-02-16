@@ -5,7 +5,7 @@ import {
   OutboundLoadingResponseDto,
   OutboundLoadingTableWrapper,
   OutboundControlPanel,
-  OutboundLoadingListDrawer,
+  OutboundPackingListDrawer,
 } from "@/features";
 import { Suspense, useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
@@ -56,7 +56,7 @@ export const OutboundLoadingPage = () => {
         </Suspense>
       </PageContentBox>
       {isDrawerOpen && (
-        <OutboundLoadingListDrawer onClose={() => setDrawerOpen(false)} />
+        <OutboundPackingListDrawer onClose={() => setDrawerOpen(false)} />
       )}
       {selectedRow && (
         <OutboundLoadingDrawer

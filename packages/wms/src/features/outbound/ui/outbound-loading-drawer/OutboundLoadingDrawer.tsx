@@ -1,4 +1,4 @@
-import styles from "./OutboundPackingDrawer.module.css";
+import styles from "./OutboundLoadingDrawer.module.css";
 import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
 import {
   CreateOutboundLoadingModalInfo,
