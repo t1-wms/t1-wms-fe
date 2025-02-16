@@ -59,28 +59,23 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 script {
-                    // EC2로 파일 전송 및 Docker 컨테이너 실행
                     def sshServerName = 'FrontendServer'
                     sshPublisher(publishers: [
                         sshPublisherDesc(
                             configName: sshServerName,
-                            transfers: [
-                                sshTransfer(
-                                    sourceFiles: "./docker/Dockerfile, ./packages/wms/build/**/*, ./packages/worker/build/**/*",
-                                    remoteDirectory: "/home/ec2-user/frontend",
-                                    execCommand: """
-                                        echo 'Deploying to EC2...'
-                                        # 기존 컨테이너가 있다면 중지하고 삭제
-                                        docker stop frontend_container || true
-                                        docker rm frontend_container || true
+                            execCommand: """
+                                echo 'Deploying to EC2...'
 
-                                        # 새로 Docker 컨테이너 실행
-                                        docker build -f /home/ec2-user/frontend/Dockerfile -t ${DOCKER_TAG} /home/ec2-user/frontend
-                                        docker run -d -p 80:80 --name frontend_container ${DOCKER_TAG}
-                                        echo 'Deployment completed!'
-                                    """
-                                )
-                            ]
+                                # 기존 컨테이너가 있다면 중지하고 삭제
+                                docker stop frontend_container || true
+                                docker rm frontend_container || true
+
+                                # 새로 Docker 컨테이너 실행 (덮어씌우기)
+                                docker build -f /home/ec2-user/frontend/Dockerfile -t ${DOCKER_TAG} /home/ec2-user/frontend
+                                docker run -d -p 80:80 --name frontend_container ${DOCKER_TAG}
+
+                                echo 'Deployment completed!'
+                            """
                         )
                     ])
                 }
