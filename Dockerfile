@@ -33,7 +33,7 @@ RUN groupadd -g 998 docker && \
 USER jenkins
 
 # 빌드된 리액트 파일을 nginx의 html 디렉토리로 복사
-COPY ./dist /usr/share/nginx/html
+COPY ./packages /usr/share/nginx/html
 
 EXPOSE 8081
 
