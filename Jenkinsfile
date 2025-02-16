@@ -2,9 +2,15 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'frontend:latest'
-        DOCKER_TAG = "frontend:${BUILD_NUMBER}"
+        DOCKER_IMAGE_WMS = 'wms:latest'
+        DOCKER_TAG_WMS = "wms:${BUILD_NUMBER}"
+        DOCKER_IMAGE_WORKER = 'worker:latest'
+        DOCKER_TAG_WORKER = "worker:${BUILD_NUMBER}"
         EC2_DOMAIN = 'stockholmes.store'
+        EC2_USER = 'ec2-user'
+        WMS_DIST_PATH = '/home/ec2-user/frontend/wms/dist'
+        WORKER_DIST_PATH = '/home/ec2-user/frontend/worker/dist'
+        SHARED_CSS_PATH = '/home/ec2-user/frontend/shared/css'
     }
 
     stages {
@@ -14,30 +20,58 @@ pipeline {
             }
         }
 
-        stage('Install dependencies') {
+        stage('Install dependencies for WMS') {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
-                    sh 'rm -rf node_modules package-lock.json'
-                    sh 'npm install'
+                    sh 'rm -rf packages/wms/node_modules packages/wms/package-lock.json'
+                    sh 'npm install --prefix packages/wms'
                 }
             }
         }
 
-        stage('Build React Project') {
+        stage('Install dependencies for Worker') {
             steps {
-                dir("./packages") {
-                    nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
-                        sh 'npm run build'
-                    }
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
+                    sh 'rm -rf packages/worker/node_modules packages/worker/package-lock.json'
+                    sh 'npm install --prefix packages/worker'
                 }
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Copy Shared CSS') {
             steps {
                 script {
-                    sh "docker build -f ./Dockerfile -t ${DOCKER_IMAGE} ."
-                    sh "docker tag ${DOCKER_IMAGE} ${DOCKER_TAG}"
+                    // shared/css를 wms 및 worker 디렉토리의 dist로 복사
+                    sh 'cp -r packages/shared/css/* packages/wms/dist/'
+                    sh 'cp -r packages/shared/css/* packages/worker/dist/'
+                }
+            }
+        }
+
+        stage('Build WMS React Project') {
+            steps {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
+                    sh 'npm run build --prefix packages/wms'
+                }
+            }
+        }
+
+        stage('Build Worker React Project') {
+            steps {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
+                    sh 'npm run build --prefix packages/worker'
+                }
+            }
+        }
+
+        stage('Build Docker Images for WMS and Worker') {
+            steps {
+                script {
+                    sh "docker build -f ./packages/wms/Dockerfile -t ${DOCKER_IMAGE_WMS} ./"
+                    sh "docker tag ${DOCKER_IMAGE_WMS} ${DOCKER_TAG_WMS}"
+
+                    sh "docker build -f ./packages/worker/Dockerfile -t ${DOCKER_IMAGE_WORKER} ./"
+                    sh "docker tag ${DOCKER_IMAGE_WORKER} ${DOCKER_TAG_WORKER}"
                 }
             }
         }
@@ -51,23 +85,29 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./packages/frontend/dist/**/*",  // dist 폴더를 전송
-                                    remoteDirectory: "/home/ec2-user/frontend",  // EC2 서버의 폴더
-                                    removePrefix: "dist",  // dist 폴더만 전송
+                                    sourceFiles: "./packages/wms/dist/**/*",  // wms dist 폴더 전송
+                                    remoteDirectory: "${WMS_DIST_PATH}",  // EC2 서버의 wms 폴더
+                                    removePrefix: "dist",
                                     execCommand: """
-                                        echo 'Deploying to EC2...'
-
-                                        # 기존 컨테이너 중지 및 삭제
-                                        docker stop frontend_container || true
-                                        docker rm frontend_container || true
-
-                                        # 새 Docker 컨테이너 실행
-                                        docker run -d -v /home/ec2-user/frontend:/usr/share/nginx/html -p 8081:80 --name frontend_container ${DOCKER_TAG}
-
-                                        # Nginx 재시작
-                                        docker exec frontend_container nginx -s reload
-
-                                        echo 'Deployment completed!'
+                                        echo 'Deploying WMS to EC2...'
+                                        docker stop wms_container || true
+                                        docker rm wms_container || true
+                                        docker run -d -v ${WMS_DIST_PATH}:/usr/share/nginx/html -p 8081:80 --name wms_container ${DOCKER_TAG_WMS}
+                                        docker exec wms_container nginx -s reload
+                                        echo 'WMS deployment completed!'
+                                    """
+                                ),
+                                sshTransfer(
+                                    sourceFiles: "./packages/worker/dist/**/*",  // worker dist 폴더 전송
+                                    remoteDirectory: "${WORKER_DIST_PATH}",  // EC2 서버의 worker 폴더
+                                    removePrefix: "dist",
+                                    execCommand: """
+                                        echo 'Deploying Worker to EC2...'
+                                        docker stop worker_container || true
+                                        docker rm worker_container || true
+                                        docker run -d -v ${WORKER_DIST_PATH}:/usr/share/nginx/html -p 8082:80 --name worker_container ${DOCKER_TAG_WORKER}
+                                        docker exec worker_container nginx -s reload
+                                        echo 'Worker deployment completed!'
                                     """
                                 )
                             ]
