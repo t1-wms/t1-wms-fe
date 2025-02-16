@@ -1,90 +1,55 @@
 pipeline {
+
     agent any
-    environment {
-        DOCKER_IMAGE = 'frontend:latest'
-        DOCKER_TAG = "frontend:${BUILD_NUMBER}"
-        FRONTEND_PATH = "/home/ec2-user/frontend"
-    }
+
     stages {
-        stage('Checkout') {
+
+        stage('Cleanup') {
             steps {
-                checkout scm
+                sh 'rm -f ./frontend/front_0.1.0.tar'
+                echo 'Cleanup success !'
             }
         }
 
-        stage('Get Commit Message') { 
+
+        stage('Build') {
             steps {
-                script {
-                    def gitCommitMessage = sh(
-                        script: "git log -1 --pretty=%B",
-                        returnStdout: true
-                    ).trim()
-                    echo "Commit Message: ${gitCommitMessage}"
-                    env.GIT_COMMIT_MESSAGE = gitCommitMessage
+                dir("./frontend") {
+                    nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
+                        sh 'rm -rf node_modules'
+                        sh 'rm -rf package-lock.json'
+                        sh 'CI=false yarn install'
+                        sh 'CI=false yarn build'
+                    }
                 }
+                echo 'FE Build success !'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Compression') {
             steps {
-                script {
-                    sh "docker build -t ${DOCKER_IMAGE} ."
-                    sh "docker tag ${DOCKER_IMAGE} ${DOCKER_TAG}"
+                dir("./frontend/dist") {
+                    sh 'tar -czvf ../front_0.1.0.tar .'
                 }
+                echo 'Compression success !'
             }
         }
-
-        stage('Push Docker Image') {
+        stage('Deploy') {
             steps {
-                script {
-                    sh "docker tag ${DOCKER_IMAGE} my-docker-hub-account/${DOCKER_IMAGE}"
-                    sh "docker push my-docker-hub-account/${DOCKER_IMAGE}"
+                sshagent(credentials: ['my-ssh-credentials']) {
+                    withCredentials([string(credentialsId: 'EC2_SERVER_IP', variable: 'IP')]) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@$IP uptime
+                        ssh ubuntu@$IP 'sudo chmod -R 777 /home/ubuntu/Frontend'
+                        scp /var/jenkins_home/workspace/Ulvan_FE/frontend/front_0.1.0.tar ubuntu@$IP:/home/ubuntu/Frontend
+                        ssh -t ubuntu@$IP sudo sh ./deploy_fe.sh
+                    '''
+                    }
                 }
-            }
-        }
-
-        stage('Deploy to Frontend Server') {
-            steps {
-                script {
-                    def sshServerName = 'FrontendServer'
-                    sshPublisher(publishers: [
-                        sshPublisherDesc(
-                            configName: sshServerName,
-                            transfers: [
-                                sshTransfer(
-                                    sourceFiles: "docker-compose.yml",
-                                    remoteDirectory: "${FRONTEND_PATH}",
-                                    removePrefix: "./"
-                                ),
-                                sshTransfer(
-                                    sourceFiles: "Dockerfile",
-                                    remoteDirectory: "${FRONTEND_PATH}",
-                                    removePrefix: "./"
-                                )
-                            ],
-                            execCommand: """
-                                echo "Starting frontend deployment..."
-                                docker-compose -f ${FRONTEND_PATH}/docker-compose.yml down
-                                docker-compose -f ${FRONTEND_PATH}/docker-compose.yml up -d
-                                echo "Frontend deployed successfully!"
-                            """
-                        )
-                    ])
+                timeout(time: 30, unit: 'SECONDS') {
                 }
+                 echo 'Deploy success !'
             }
-        }
-    }
-
-    post {
-        success {
-            slackSend (
-                message: ":white_check_mark: 성공: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}). 최근 커밋: '${env.GIT_COMMIT_MESSAGE}'"
-            )
-        }
-        failure {
-            slackSend (
-                message: ":x: 실패: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}). 최근 커밋: '${env.GIT_COMMIT_MESSAGE}'"
-            )
         }
     }
 }
