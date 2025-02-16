@@ -1,4 +1,5 @@
 pipeline {
+    agent any
 
     stages {
         stage('Cleanup') {
@@ -10,17 +11,7 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                dir("./packages/wms") {
-                    sh 'npm install'
-                    sh 'npm install typescript --save-dev'
-                    sh 'npm install react react-dom @types/react-dom --save'
-                }
-                dir("./packages/worker") {
-                    sh 'npm install'
-                    sh 'npm install typescript --save-dev'
-                    sh 'npm install react react-dom @types/react-dom --save'
-                }
-                dir("./packages/shared") {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
                     sh 'npm install'
                     sh 'npm install typescript --save-dev'
                     sh 'npm install react react-dom @types/react-dom --save'
