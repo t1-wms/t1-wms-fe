@@ -36,7 +36,6 @@ export default function OrderPage() {
     <div className={styles.container}>
       <PageContentBox>
         <OrderControlPanel
-          label="발주"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
         />
