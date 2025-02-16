@@ -13,6 +13,9 @@ import {
   getOutboundPackingCount,
   getOutboundPackingsPaged,
   getOutboundPackings,
+  getOutboundLoadingCount,
+  getOutboundLoadingsPaged,
+  getOutboundLoadings,
 } from "../api";
 import { OutboundFilter } from "./types";
 
@@ -183,6 +186,44 @@ export const useOutboundPackings = (
         filter
       ),
       queryFn: () => getOutboundPackings(),
+    });
+  }
+};
+
+export const useOutboundLoadingCount = () => {
+  return useSuspenseQuery({
+    queryKey: ["outboundLoading", "count"],
+    queryFn: () => getOutboundLoadingCount(),
+  });
+};
+
+export const useOutboundLoadings = (
+  isServerSide: boolean,
+  page?: number,
+  sort?: Sort,
+  filter?: OutboundFilter
+) => {
+  if (isServerSide) {
+    return useSuspenseQuery({
+      queryKey: createUseOutboundQueryKey(
+        "outboundLoading",
+        isServerSide,
+        page!,
+        sort,
+        filter
+      ),
+      queryFn: () => getOutboundLoadingsPaged(page!, sort, filter),
+    });
+  } else {
+    return useSuspenseQuery({
+      queryKey: createUseOutboundQueryKey(
+        "outboundLoading",
+        isServerSide,
+        page!,
+        sort,
+        filter
+      ),
+      queryFn: () => getOutboundLoadings(),
     });
   }
 };

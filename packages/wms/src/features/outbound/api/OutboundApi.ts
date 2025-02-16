@@ -3,6 +3,7 @@ import { Count, PageResponse, Sort } from "@shared/model";
 import {
   OutboundAssignResponseDto,
   OutboundFilter,
+  OutboundLoadingResponseDto,
   OutboundPackingResponseDto,
   OutboundPickingResponseDto,
   OutboundPlanResponseDto,
@@ -137,6 +138,42 @@ export const getOutboundPackingsPaged = async (
     PageResponse<OutboundPackingResponseDto>
   >(
     `api/outbound/packing?page=${page}${
+      sort ? `&sortField=${sort.sortField}&sortOrder=${sort.sortOrder}` : ""
+    }${
+      filter
+        ? `${filter.number ? `&number=${filter.number}` : ""}${
+            filter.startDate ? `&startDate=${filter.startDate}` : ""
+          }${filter.endDate ? `&endDate=${filter.endDate}` : ""}`
+        : ""
+    }`
+  );
+
+  return response.data;
+};
+
+export const getOutboundLoadingCount = async () => {
+  const response = await noAuthAxios.get<Count>(`/api/outbound/loading/count`);
+
+  return response.data;
+};
+
+export const getOutboundLoadings = async () => {
+  const response = await noAuthAxios.get<
+    PageResponse<OutboundLoadingResponseDto>
+  >(`api/outbound/loading/no-page`);
+
+  return response.data;
+};
+
+export const getOutboundLoadingsPaged = async (
+  page: number,
+  sort?: Sort,
+  filter?: OutboundFilter
+) => {
+  const response = await noAuthAxios.get<
+    PageResponse<OutboundLoadingResponseDto>
+  >(
+    `api/outbound/loading?page=${page}${
       sort ? `&sortField=${sort.sortField}&sortOrder=${sort.sortOrder}` : ""
     }${
       filter
