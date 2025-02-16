@@ -1,11 +1,28 @@
 pipeline {
     agent any
 
+    environment {
+        NODE_HOME = tool name: 'NodeJS 21.7.1', type: 'NodeJS'
+        PATH = "${NODE_HOME}/bin:${env.PATH}"
+    }
+
     stages {
         stage('Cleanup') {
             steps {
                 sh "rm -f ./packages/wms/front_0.1.0.tar ./packages/worker/front_0.1.0.tar ./packages/shared/front_0.1.0.tar"
-                echo 'Cleanup success !'
+                echo 'Cleanup success!'
+            }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                // 최상위에서 모든 의존성 설치 (노드, 타입스크립트, 리액트 관련)
+                nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
+                    sh 'npm install'
+                    sh 'npm install typescript --save-dev'
+                    sh 'npm install react react-dom @types/react-dom --save'
+                }
+                echo 'Dependencies installed successfully!'
             }
         }
 
@@ -15,13 +32,10 @@ pipeline {
                     steps {
                         dir("./packages/wms") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'npm install'
-                                sh 'npm install typescript --save-dev'
-                                sh 'npm install react react-dom @types/react-dom --save'
                                 sh 'npm run build'
                             }
                         }
-                        echo "wms Build success !"
+                        echo "wms Build success!"
                     }
                 }
 
@@ -29,13 +43,10 @@ pipeline {
                     steps {
                         dir("./packages/worker") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'npm install'
-                                sh 'npm install typescript --save-dev'
-                                sh 'npm install react react-dom @types/react-dom --save'
                                 sh 'npm run build'
                             }
                         }
-                        echo "worker Build success !"
+                        echo "worker Build success!"
                     }
                 }
 
@@ -43,13 +54,10 @@ pipeline {
                     steps {
                         dir("./packages/shared") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'npm install'
-                                sh 'npm install typescript --save-dev'
-                                sh 'npm install react react-dom @types/react-dom --save'
                                 sh 'npm run build'
                             }
                         }
-                        echo "shared Build success !"
+                        echo "shared Build success!"
                     }
                 }
             }
@@ -66,7 +74,7 @@ pipeline {
                 dir("./packages/shared/dist") {
                     sh 'tar -czvf ../front_0.1.0.tar .'
                 }
-                echo 'Compression success !'
+                echo 'Compression success!'
             }
         }
 
@@ -81,26 +89,23 @@ pipeline {
                                 sshTransfer(
                                     sourceFiles: "./packages/wms/front_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
-                                    removePrefix: "wms",
                                     execCommand: "sudo sh /home/ec2-user/frontend/wms/deploy_fe.sh"
                                 ),
                                 sshTransfer(
                                     sourceFiles: "./packages/worker/front_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
-                                    removePrefix: "worker",
                                     execCommand: "sudo sh /home/ec2-user/frontend/worker/deploy_fe.sh"
                                 ),
                                 sshTransfer(
                                     sourceFiles: "./packages/shared/front_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
-                                    removePrefix: "shared",
                                     execCommand: "sudo sh /home/ec2-user/frontend/shared/deploy_fe.sh"
                                 )
                             ]
                         )
-                    ] )
+                    ])
                 }
-                echo 'Deploy success !'
+                echo 'Deploy success!'
             }
         }
     }
