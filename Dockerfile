@@ -1,7 +1,6 @@
 # Nginx 이미지 사용
 FROM nginx:alpine
 
-# Docker 설치를 위한 패키지 추가
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
@@ -16,7 +15,6 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Docker 소켓 마운트 설정 (DooD)
 VOLUME /var/run/docker.sock:/var/run/docker.sock
 
 # 사용자 추가 및 권한 설정
@@ -27,10 +25,6 @@ RUN groupadd -g 998 docker && \
 # Docker 명령어 실행을 위한 유저 설정
 USER jenkins
 
-# Docker 설치 확인
-RUN docker --version
-
-# Nginx에서 사용할 디렉토리 생성
 RUN mkdir -p /home/ec2-user/frontend/wms /home/ec2-user/frontend/worker
 
 # 빌드된 wms, worker 디렉토리의 dist 폴더를 Nginx에 복사
