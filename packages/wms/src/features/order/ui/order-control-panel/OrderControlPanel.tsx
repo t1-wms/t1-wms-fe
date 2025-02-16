@@ -1,4 +1,4 @@
-import styles from "./OutboundControlPanel.module.css";
+import styles from "./OrderControlPanel.module.css";
 import { MainButton, MainDateRangePicker, MainInput } from "@/shared";
 import { useSearchOrderForm } from "../../model";
 

@@ -1,4 +1,5 @@
 import { ProductListDto } from "@/entities";
+import { ModalInfoBase } from "@/shared";
 
 export interface OrderResponseDto {
   orderId: number;
@@ -11,6 +12,11 @@ export interface OrderResponseDto {
   isReturnOrder: boolean;
   deliveryDeadline: string;
   orderProductList: ProductListDto[];
+}
+
+export interface CreateOrderModalInfo extends ModalInfoBase {
+  key: "createOrder";
+  order?: OrderResponseDto;
 }
 
 export interface OrderFilter {
