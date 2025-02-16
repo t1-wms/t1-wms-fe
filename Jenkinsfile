@@ -65,7 +65,7 @@ pipeline {
 
                                         # 새로 Docker 컨테이너 실행
                                         docker build -f /home/ec2-user/frontend/Dockerfile -t ${DOCKER_TAG} /home/ec2-user/frontend
-                                        docker run -d -p 80:80 --name frontend_container ${DOCKER_TAG}
+                                        docker run -d -p 8081:80 --name frontend_container ${DOCKER_TAG}
 
                                         echo 'Deployment completed!'
                                     """
