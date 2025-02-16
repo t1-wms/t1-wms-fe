@@ -100,7 +100,7 @@ export const OutboundLoadingDrawer = ({
             disabled
           />
         </div>
-        <p className={`font-b-md ${styles.header}}`}>출고패킹 품목</p>
+        <p className={`font-b-md ${styles.header}}`}>출하상차 품목</p>
         <OutboundProductTable data={productList} />
         <div className={styles["button-box"]}>
           <MainButton size="sm" padding="sm" onClick={handleClickUpdate}>
