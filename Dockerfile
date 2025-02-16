@@ -8,6 +8,7 @@ RUN apk update && apk add --no-cache \
     gnupg \
     sudo \
     bash \
+    shadow \
     docker-cli
 
 # Docker 소켓 마운트 설정
