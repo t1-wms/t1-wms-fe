@@ -1,3 +1,13 @@
+# Node.js 21을 기반으로 리액트 빌드를 먼저 실행
+FROM node:21 AS build
+
+# 리액트 프로젝트 복사
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . ./
+RUN npm run build
+
 # Nginx 이미지 사용
 FROM nginx:alpine
 
@@ -15,8 +25,8 @@ RUN apk update && apk add --no-cache \
 # Docker 소켓 마운트 설정
 VOLUME /var/run/docker.sock:/var/run/docker.sock
 
-# 리액트 빌드 파일 복사 (./build 폴더)
-COPY ./build /usr/share/nginx/html
+# 빌드된 리액트 파일을 nginx의 html 디렉토리로 복사
+COPY --from=build /app/build /usr/share/nginx/html
 
 EXPOSE 8081
 

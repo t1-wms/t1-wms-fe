@@ -52,9 +52,9 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./packages/dist/**/*",  // 빌드된 결과물만 전송
-                                    remoteDirectory: "/home/ec2-user/frontend",  // EC2로 복사될 위치
-                                    removePrefix: "packages",  // /packages 앞 경로 삭제
+                                    sourceFiles: "./packages/dist/**/*",
+                                    remoteDirectory: "/home/ec2-user/frontend",
+                                    removePrefix: "packages",
                                     execCommand: """
                                         echo 'Deploying to EC2...'
 
@@ -64,6 +64,9 @@ pipeline {
 
                                         # 새로 Docker 컨테이너 실행
                                         docker run -d -v /home/ec2-user/frontend:/usr/share/nginx/html -p 8081:80 --name frontend_container ${DOCKER_TAG}
+
+                                        # Nginx 재시작 (필요시)
+                                        docker exec frontend_container nginx -s reload
 
                                         echo 'Deployment completed!'
                                     """
