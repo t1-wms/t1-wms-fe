@@ -9,8 +9,8 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import { useOutboundTable } from "../../model/useOutboundTable";
 
 interface OutboundPickingTableProps {
-  columnFilters: ColumnFiltersState;
-  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
+  columnFilters?: ColumnFiltersState;
+  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
   onChangeSelectedRow: (row: OutboundPickingResponseDto | null) => void;
 }

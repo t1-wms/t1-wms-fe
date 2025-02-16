@@ -70,3 +70,8 @@ export interface CreateOutboundPickingModalInfo extends ModalInfoBase {
   key: "createOutboundPicking";
   outbound: OutboundAssignResponseDto | OutboundPickingResponseDto;
 }
+
+export interface CreateOutboundPackingModalInfo extends ModalInfoBase {
+  key: "createOutboundPacking";
+  outbound: OutboundPickingResponseDto | OutboundPackingResponseDto;
+}

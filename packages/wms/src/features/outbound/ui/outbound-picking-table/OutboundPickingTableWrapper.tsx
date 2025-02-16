@@ -8,8 +8,8 @@ import { ColumnFiltersState } from "@tanstack/react-table";
 import { minCountForServerSide, Spinner } from "@/shared";
 
 interface OutboundPickingTableWrapperProps {
-  columnFilters: ColumnFiltersState;
-  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
+  columnFilters?: ColumnFiltersState;
+  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   onChangeSelectedRow: (row: OutboundPickingResponseDto | null) => void;
 }
 
