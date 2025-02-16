@@ -15,8 +15,9 @@ pipeline {
                     steps {
                         dir("./packages/wms") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'CI=false npm install'
-                                sh 'CI=false npm run build'
+                                sh 'npm install'
+                                sh 'npm install typescript --save-dev'
+                                sh 'npm run build'
                             }
                         }
                         echo "wms Build success !"
@@ -27,8 +28,9 @@ pipeline {
                     steps {
                         dir("./packages/worker") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'CI=false npm install'
-                                sh 'CI=false npm run build'
+                                sh 'npm install'
+                                sh 'npm install typescript --save-dev'
+                                sh 'npm run build'
                             }
                         }
                         echo "worker Build success !"
@@ -71,7 +73,7 @@ pipeline {
                                 )
                             ]
                         )
-                    ])
+                    ] )
                 }
                 echo 'Deploy success !'
             }
