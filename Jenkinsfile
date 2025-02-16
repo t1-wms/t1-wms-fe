@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Cleanup') {
             steps {
-                sh "rm -f ./packages/wms/front_0.1.0.tar ./packages/worker/front_0.1.0.tar"
+                sh "rm -f ./packages/wms/wms_front_0.1.0.tar ./packages/worker/worker_front_0.1.0.tar"
                 echo 'Cleanup success!'
             }
         }
@@ -14,14 +14,12 @@ pipeline {
                 nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh 'rm -rf node_modules package-lock.json'
                     sh 'npm install'
-
                     sh 'npm install typescript@~5.6.2 --save-dev'
                     sh 'npm install react@^18.3.1 react-dom@^18.3.1 @types/react-dom@^18.3.5 --save'
                 }
                 echo 'Dependencies installed successfully!'
             }
         }
-
 
         stage('Build') {
             parallel {
@@ -52,10 +50,10 @@ pipeline {
         stage('Compression') {
             steps {
                 dir("./packages/wms/dist") {
-                    sh 'tar -czvf ../front_0.1.0.tar .'
+                    sh 'tar -czvf ../wms_front_0.1.0.tar .'
                 }
                 dir("./packages/worker/dist") {
-                    sh 'tar -czvf ../front_0.1.0.tar .'
+                    sh 'tar -czvf ../worker_front_0.1.0.tar .'
                 }
                 echo 'Compression success!'
             }
@@ -70,16 +68,25 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./packages/wms/front_0.1.0.tar",
+                                    sourceFiles: "./packages/wms/wms_front_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
-                                    execCommand: "sudo sh /home/ec2-user/frontend/wms/deploy_fe.sh"
+                                    execCommand: """
+                                        tar -xvzf /home/ec2-user/frontend/wms_front_0.1.0.tar &&
+                                        sudo rm -rf /home/ec2-user/frontend/wms/* &&
+                                        mv /home/ec2-user/frontend/wms/dist/* /usr/share/nginx/html/ &&
+                                        sudo nginx -s reload
+                                    """
                                 ),
                                 sshTransfer(
-                                    sourceFiles: "./packages/worker/front_0.1.0.tar",
+                                    sourceFiles: "./packages/worker/worker_front_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
-                                    execCommand: "sudo sh /home/ec2-user/frontend/worker/deploy_fe.sh"
+                                    execCommand: """
+                                        tar -xvzf /home/ec2-user/frontend/worker_front_0.1.0.tar &&
+                                        sudo rm -rf /home/ec2-user/frontend/worker/* &&
+                                        mv /home/ec2-user/frontend/worker/dist/* /usr/share/nginx/html/ &&
+                                        sudo nginx -s reload
+                                    """
                                 ),
-                                // shared 폴더의 style.css 파일 반영
                                 sshTransfer(
                                     sourceFiles: "./packages/shared/style.css",
                                     remoteDirectory: "/home/ec2-user/frontend/static/css/",
