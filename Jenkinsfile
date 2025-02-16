@@ -44,9 +44,6 @@ pipeline {
                 dir("./packages/wms/dist") {
                     sh 'tar -czvf ../front_0.1.0.tar .'
                 }
-                dir("./packages/worker/dist") {
-                    sh 'tar -czvf ../front_0.1.0.tar .'
-                }
                 echo 'Compression success !'
             }
         }
@@ -62,18 +59,11 @@ pipeline {
                                 sshTransfer(
                                     sourceFiles: "./packages/wms/front_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
-                                    removePrefix: "wms",
-                                    execCommand: "sudo sh /home/ec2-user/frontend/wms/deploy_fe.sh"
-                                ),
-                                sshTransfer(
-                                    sourceFiles: "./packages/worker/front_0.1.0.tar",
-                                    remoteDirectory: "/home/ec2-user/frontend",
-                                    removePrefix: "worker",
-                                    execCommand: "sudo sh /home/ec2-user/frontend/worker/deploy_fe.sh"
+                                    execCommand: "sudo sh /home/ec2-user/frontend/deploy_fe.sh"
                                 )
                             ]
                         )
-                    ] )
+                    ])
                 }
                 echo 'Deploy success !'
             }
