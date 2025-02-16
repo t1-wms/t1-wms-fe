@@ -52,11 +52,12 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./packages/dist/**/*",  // 빌드된 결과물만 전송
-                                    remoteDirectory: "/home/ec2-user/frontend/packages/dist",  // 수정된 경로
-                                    removePrefix: "packages",  // 빌드된 결과물에 대해 "packages" 접두어 제거
+                                 sourceFiles: "./packages/dist/**/*",  // 빌드된 결과물만 전송
+                                    remoteDirectory: "/home/ec2-user/frontend",
+                                    removePrefix: "packages",  // /packages 앞 경로 삭제
                                     execCommand: """
                                         echo 'Deploying to EC2...'
+
 
                                         # 기존 컨테이너가 있다면 중지하고 삭제
                                         docker stop frontend_container || true
