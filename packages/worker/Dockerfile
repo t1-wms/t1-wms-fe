@@ -27,7 +27,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 RUN sed -i 's/^user nginx;/#user nginx;/' /etc/nginx/nginx.conf
 
 # 포트 노출
-EXPOSE 8081
+EXPOSE 8082
 
 # Nginx 실행
 CMD ["nginx", "-g", "daemon off;"]
