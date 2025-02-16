@@ -7,8 +7,8 @@ docker build -t frontend:latest .
 docker stop frontend_container || true
 docker rm frontend_container || true
 
-# 새로 Docker 컨테이너 실행
-docker run -d -p 80:80 --name frontend_container frontend:latest
+# 새로 Docker 컨테이너 실행 (8081번 포트 사용)
+docker run -d -p 8081:80 --name frontend_container frontend:latest
 
 # 빌드 후 불필요한 이미지 제거
 docker image prune -f
