@@ -13,10 +13,30 @@ pipeline {
             }
         }
 
+        stage('Install dependencies') {
+            steps {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
+                    sh 'rm -rf node_modules package-lock.json'
+                    sh 'npm install'
+                    sh 'npm install typescript@~5.6.2 --save-dev'
+                    sh 'npm install react@^18.3.1 react-dom@^18.3.1 @types/react-dom@^18.3.5 --save'
+                }
+            }
+        }
+
+        stage('Build React Project') {
+            steps {
+                dir("./packages") {
+                    nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
+                        sh 'npm run build'
+                    }
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Docker 이미지를 빌드하면서 의존성 설치와 빌드도 처리
                     sh "docker build -f ./Dockerfile -t ${DOCKER_IMAGE} ."
                     sh "docker tag ${DOCKER_IMAGE} ${DOCKER_TAG}"
                 }
@@ -53,7 +73,7 @@ pipeline {
                                 )
                             ]
                         )
-                    ]))
+                    ])
                 }
             }
         }
