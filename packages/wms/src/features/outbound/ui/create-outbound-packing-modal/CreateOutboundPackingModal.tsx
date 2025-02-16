@@ -41,7 +41,9 @@ export const CreateOutboundPackingModal = ({
   const { closeModal } = useModalStore();
   // const queryClient = useQueryClient();
 
-  const handleSubmitValid = () => {};
+  const handleSubmitValid = (outboundPackingDate: string) => {
+    console.log(outboundPackingDate);
+  };
 
   return (
     <BasicModal

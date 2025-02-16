@@ -1,9 +1,12 @@
 import { MainInput } from "@/shared";
 import styles from "./CreateOutboundPickingForm.module.css";
-import { OutboundPickingResponseDto } from "../../model";
+import {
+  OutboundPickingResponseDto,
+  useCreateOutboundPickingForm,
+} from "../../model";
 
 interface CreateOutboundPickingFormProps {
-  onSubmitValid: () => void;
+  onSubmitValid: (outboundPickingDate: string) => void;
   defaultValues: OutboundPickingResponseDto;
 }
 
@@ -13,11 +16,13 @@ export const CreateOutboundPickingForm = ({
   onSubmitValid,
   defaultValues,
 }: CreateOutboundPickingFormProps) => {
+  const { inputProps, onSubmit } = useCreateOutboundPickingForm(onSubmitValid);
+
   return (
     <form
-      id="createOutboundPlan"
+      id="createOutboundPicking"
       className={styles.container}
-      onSubmit={onSubmitValid}
+      onSubmit={onSubmit}
     >
       <div>
         <MainInput
@@ -50,9 +55,9 @@ export const CreateOutboundPickingForm = ({
         <MainInput
           label="출고피킹 날짜"
           width={inputWidth}
-          disabled
           type="date"
           defaultValue={defaultValues.outboundPickingDate}
+          {...inputProps.outboundPickingDate}
         />
       </div>
     </form>

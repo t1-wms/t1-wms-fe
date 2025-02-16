@@ -1,9 +1,12 @@
 import { MainInput } from "@/shared";
 import styles from "./CreateOutboundAssignForm.module.css";
-import { OutboundAssignResponseDto } from "../../model";
+import {
+  OutboundAssignResponseDto,
+  useCreateOutboundAssignForm,
+} from "../../model";
 
 interface CreateOutboundAssignFormProps {
-  onSubmitValid: () => void;
+  onSubmitValid: (outboundAssignDate: string) => void;
   defaultValues: OutboundAssignResponseDto;
 }
 
@@ -13,11 +16,13 @@ export const CreateOutboundAssignForm = ({
   onSubmitValid,
   defaultValues,
 }: CreateOutboundAssignFormProps) => {
+  const { inputProps, onSubmit } = useCreateOutboundAssignForm(onSubmitValid);
+
   return (
     <form
-      id="createOutboundPlan"
+      id="createOutboundAssign"
       className={styles.container}
-      onSubmit={onSubmitValid}
+      onSubmit={onSubmit}
     >
       <MainInput
         label="주문 번호"
@@ -41,9 +46,9 @@ export const CreateOutboundAssignForm = ({
       <MainInput
         label="출고지시 날짜"
         width={inputWidth}
-        disabled
         type="date"
         defaultValue={defaultValues.outboundAssignDate}
+        {...inputProps.outboundAssignDate}
       />
     </form>
   );

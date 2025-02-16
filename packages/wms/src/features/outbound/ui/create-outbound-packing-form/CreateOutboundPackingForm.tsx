@@ -1,9 +1,12 @@
 import { MainInput } from "@/shared";
 import styles from "./CreateOutboundPackingForm.module.css";
-import { OutboundPackingResponseDto } from "../../model";
+import {
+  OutboundPackingResponseDto,
+  useCreateOutboundPackingForm,
+} from "../../model";
 
 interface CreateOutboundPackingFormProps {
-  onSubmitValid: () => void;
+  onSubmitValid: (outboundPackingDate: string) => void;
   defaultValues: OutboundPackingResponseDto;
 }
 
@@ -13,11 +16,13 @@ export const CreateOutboundPackingForm = ({
   onSubmitValid,
   defaultValues,
 }: CreateOutboundPackingFormProps) => {
+  const { inputProps, onSubmit } = useCreateOutboundPackingForm(onSubmitValid);
+
   return (
     <form
       id="createOutboundPacking"
       className={styles.container}
-      onSubmit={onSubmitValid}
+      onSubmit={onSubmit}
     >
       <div>
         <MainInput
@@ -56,9 +61,9 @@ export const CreateOutboundPackingForm = ({
         <MainInput
           label="출고패킹 날짜"
           width={inputWidth}
-          disabled
           type="date"
           defaultValue={defaultValues.outboundPackingDate}
+          {...inputProps.outboundPackingDate}
         />
       </div>
     </form>

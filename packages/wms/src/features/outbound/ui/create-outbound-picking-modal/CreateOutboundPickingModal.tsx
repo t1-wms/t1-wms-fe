@@ -41,7 +41,9 @@ export const CreateOutboundPickingModal = ({
   const { closeModal } = useModalStore();
   // const queryClient = useQueryClient();
 
-  const handleSubmitValid = () => {};
+  const handleSubmitValid = (outboundPickingDate: string) => {
+    console.log(outboundPickingDate);
+  };
 
   return (
     <BasicModal

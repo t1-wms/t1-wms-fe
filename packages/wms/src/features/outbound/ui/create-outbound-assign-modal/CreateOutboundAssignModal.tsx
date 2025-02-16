@@ -41,7 +41,9 @@ export const CreateOutboundAssignModal = ({
   const { closeModal } = useModalStore();
   // const queryClient = useQueryClient();
 
-  const handleSubmitValid = () => {};
+  const handleSubmitValid = (outboundAssignDate: string) => {
+    console.log(outboundAssignDate);
+  };
 
   return (
     <BasicModal
