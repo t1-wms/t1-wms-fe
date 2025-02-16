@@ -1,27 +1,27 @@
 import { BaseDrawer, Spinner, useModalStore } from "@/shared";
 import { Suspense, useCallback, useEffect, useState } from "react";
-import { OutboundAssignTableWrapper } from "../../outbound-assign-table";
+import { OutboundPickingTableWrapper } from "../../outbound-picking-table";
 import {
-  CreateOutboundPickingModalInfo,
-  OutboundAssignResponseDto,
+  CreateOutboundPackingModalInfo,
+  OutboundPickingResponseDto,
 } from "@/features";
 
-interface OutboundAssignListDrawerProps {
+interface OutboundPickingListDrawerProps {
   onClose: () => void;
 }
 
-export const OutboundAssignListDrawer = ({
+export const OutboundPickingListDrawer = ({
   onClose,
-}: OutboundAssignListDrawerProps) => {
+}: OutboundPickingListDrawerProps) => {
   const [selectedRow, setSelectedRow] =
-    useState<OutboundAssignResponseDto | null>(null);
+    useState<OutboundPickingResponseDto | null>(null);
 
   const { openModal } = useModalStore();
 
   useEffect(() => {
     if (selectedRow) {
-      const modalInfo: CreateOutboundPickingModalInfo = {
-        key: "createOutboundPicking",
+      const modalInfo: CreateOutboundPackingModalInfo = {
+        key: "createOutboundPacking",
         outbound: selectedRow,
       };
 
@@ -30,16 +30,16 @@ export const OutboundAssignListDrawer = ({
   }, [selectedRow, openModal]);
 
   const handleChangeSelectedRow = useCallback(
-    (row: OutboundAssignResponseDto | null) => {
+    (row: OutboundPickingResponseDto | null) => {
       setSelectedRow(row);
     },
     [setSelectedRow]
   );
 
   return (
-    <BaseDrawer title="출고지시 선택" onClose={onClose}>
-      <Suspense fallback={<Spinner message="출고지시 개수를 가져오는 중" />}>
-        <OutboundAssignTableWrapper
+    <BaseDrawer title="출고피킹 선택" onClose={onClose}>
+      <Suspense fallback={<Spinner message="출고피킹 개수를 가져오는 중" />}>
+        <OutboundPickingTableWrapper
           onChangeSelectedRow={handleChangeSelectedRow}
         />
       </Suspense>

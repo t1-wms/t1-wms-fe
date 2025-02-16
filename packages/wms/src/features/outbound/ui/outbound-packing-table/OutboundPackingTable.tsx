@@ -1,5 +1,5 @@
 import { BaseTable } from "@/shared";
-import { OutboundPickingResponseDto, useOutboundPickings } from "../../model";
+import { OutboundPackingResponseDto, useOutboundPackings } from "../../model";
 import {
   ColumnFiltersState,
   createColumnHelper,
@@ -8,16 +8,16 @@ import {
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useOutboundTable } from "../../model/useOutboundTable";
 
-interface OutboundPickingTableProps {
+interface OutboundPackingTableProps {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
-  onChangeSelectedRow: (row: OutboundPickingResponseDto | null) => void;
+  onChangeSelectedRow: (row: OutboundPackingResponseDto | null) => void;
 }
 
-const columnHelper = createColumnHelper<OutboundPickingResponseDto>();
+const columnHelper = createColumnHelper<OutboundPackingResponseDto>();
 
-const dateFilterFn: FilterFn<OutboundPickingResponseDto> = (
+const dateFilterFn: FilterFn<OutboundPackingResponseDto> = (
   row,
   columnId,
   filterValue: string
@@ -46,10 +46,14 @@ const defaultColumns = [
   columnHelper.accessor("outboundPickingNumber", {
     header: "출고피킹번호",
     cell: (row) => row.getValue(),
+  }),
+  columnHelper.accessor("outboundPackingNumber", {
+    header: "출고패킹번호",
+    cell: (row) => row.getValue(),
     filterFn: "includesString",
   }),
-  columnHelper.accessor("outboundPickingDate", {
-    header: "출고피킹날짜",
+  columnHelper.accessor("outboundPackingDate", {
+    header: "출고패킹날짜",
     cell: (row) => row.getValue(),
     filterFn: dateFilterFn,
   }),
@@ -67,12 +71,12 @@ const defaultColumns = [
   }),
 ];
 
-export const OutboundPickingTable = ({
+export const OutboundPackingTable = ({
   columnFilters,
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
-}: OutboundPickingTableProps) => {
+}: OutboundPackingTableProps) => {
   const {
     pagination,
     setPagination,
@@ -84,9 +88,9 @@ export const OutboundPickingTable = ({
   } = useOutboundTable({
     columnFilters,
     isServerSide,
-    outboundNumberKey: "outboundPickingNumber",
-    outboundDateKey: "outboundPickingDate",
-    useData: useOutboundPickings,
+    outboundNumberKey: "outboundPackingNumber",
+    outboundDateKey: "outboundPackingDate",
+    useData: useOutboundPackings,
   });
 
   useEffect(() => {

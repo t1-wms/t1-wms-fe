@@ -1,26 +1,26 @@
 import { MainInput } from "@/shared";
-import styles from "./CreateOutboundPickingForm.module.css";
+import styles from "./CreateOutboundPackingForm.module.css";
 import {
-  OutboundPickingResponseDto,
-  useCreateOutboundPickingForm,
+  OutboundPackingResponseDto,
+  useCreateOutboundPackingForm,
 } from "../../model";
 
-interface CreateOutboundPickingFormProps {
-  onSubmitValid: (outboundPickingDate: string) => void;
-  defaultValues: OutboundPickingResponseDto;
+interface CreateOutboundPackingFormProps {
+  onSubmitValid: (outboundPackingDate: string) => void;
+  defaultValues: OutboundPackingResponseDto;
 }
 
 const inputWidth = "200px";
 
-export const CreateOutboundPickingForm = ({
+export const CreateOutboundPackingForm = ({
   onSubmitValid,
   defaultValues,
-}: CreateOutboundPickingFormProps) => {
-  const { inputProps, onSubmit } = useCreateOutboundPickingForm(onSubmitValid);
+}: CreateOutboundPackingFormProps) => {
+  const { inputProps, onSubmit } = useCreateOutboundPackingForm(onSubmitValid);
 
   return (
     <form
-      id="createOutboundPicking"
+      id="createOutboundPacking"
       className={styles.container}
       onSubmit={onSubmit}
     >
@@ -38,14 +38,14 @@ export const CreateOutboundPickingForm = ({
           defaultValue={defaultValues.planDate}
           disabled
         />
-      </div>
-      <div>
         <MainInput
           label="출고예정 번호"
           width={inputWidth}
           defaultValue={defaultValues.outboundScheduleNumber}
           disabled
         />
+      </div>
+      <div>
         <MainInput
           label="출고지시 번호"
           width={inputWidth}
@@ -53,11 +53,17 @@ export const CreateOutboundPickingForm = ({
           disabled
         />
         <MainInput
-          label="출고피킹 날짜"
+          label="출고피킹 번호"
+          width={inputWidth}
+          defaultValue={defaultValues.outboundPickingNumber}
+          disabled
+        />
+        <MainInput
+          label="출고패킹 날짜"
           width={inputWidth}
           type="date"
-          defaultValue={defaultValues.outboundPickingDate}
-          {...inputProps.outboundPickingDate}
+          defaultValue={defaultValues.outboundPackingDate}
+          {...inputProps.outboundPackingDate}
         />
       </div>
     </form>
