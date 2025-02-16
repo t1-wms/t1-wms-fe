@@ -27,7 +27,7 @@ USER jenkins
 
 RUN mkdir -p /home/ec2-user/frontend/wms /home/ec2-user/frontend/worker
 
-# 빌드된 wms, worker 디렉토리의 dist 폴더를 Nginx에 복사
+# 빌드된 wms, worker 디렉토리 폴더를 Nginx에 복사
 COPY ./frontend/packages/wms/dist /home/ec2-user/frontend/wms
 COPY ./frontend/packages/worker/dist /home/ec2-user/frontend/worker
 
