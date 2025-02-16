@@ -1,54 +1,84 @@
 pipeline {
-
     agent any
 
     stages {
-
         stage('Cleanup') {
             steps {
-                sh 'rm -f ./frontend/front_0.1.0.tar'
+                sh "rm -f ./packages/wms/front_0.1.0.tar ./packages/worker/front_0.1.0.tar"
                 echo 'Cleanup success !'
             }
         }
 
-
         stage('Build') {
-            steps {
-                dir("./frontend") {
-                    nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                        sh 'rm -rf node_modules'
-                        sh 'rm -rf package-lock.json'
-                        sh 'CI=false yarn install'
-                        sh 'CI=false yarn build'
+            parallel {
+                stage('Build wms') {
+                    steps {
+                        dir("./packages/wms") {
+                            nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
+                                sh 'rm -rf node_modules'
+                                sh 'rm -rf package-lock.json'
+                                sh 'CI=false yarn install'
+                                sh 'CI=false yarn build'
+                            }
+                        }
+                        echo "wms Build success !"
                     }
                 }
-                echo 'FE Build success !'
+
+                stage('Build worker') {
+                    steps {
+                        dir("./packages/worker") {
+                            nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
+                                sh 'rm -rf node_modules'
+                                sh 'rm -rf package-lock.json'
+                                sh 'CI=false yarn install'
+                                sh 'CI=false yarn build'
+                            }
+                        }
+                        echo "worker Build success !"
+                    }
+                }
             }
         }
 
         stage('Compression') {
             steps {
-                dir("./frontend/dist") {
+                // Compress both wms and worker dist directories
+                dir("./packages/wms/dist") {
+                    sh 'tar -czvf ../front_0.1.0.tar .'
+                }
+                dir("./packages/worker/dist") {
                     sh 'tar -czvf ../front_0.1.0.tar .'
                 }
                 echo 'Compression success !'
             }
         }
+
         stage('Deploy') {
             steps {
-                sshagent(credentials: ['my-ssh-credentials']) {
-                    withCredentials([string(credentialsId: 'EC2_SERVER_IP', variable: 'IP')]) {
-                    sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@$IP uptime
-                        ssh ubuntu@$IP 'sudo chmod -R 777 /home/ubuntu/Frontend'
-                        scp /var/jenkins_home/workspace/Ulvan_FE/frontend/front_0.1.0.tar ubuntu@$IP:/home/ubuntu/Frontend
-                        ssh -t ubuntu@$IP sudo sh ./deploy_fe.sh
-                    '''
-                    }
+                script {
+                    def sshServerName = 'FrontendServer'
+                    sshPublisher(publishers: [
+                        sshPublisherDesc(
+                            configName: sshServerName,
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: "./packages/wms/front_0.1.0.tar",
+                                    remoteDirectory: "/home/ec2-user/frontend",
+                                    removePrefix: "wms",
+                                    execCommand: "sudo sh /home/ec2-user/frontend/wms/deploy_fe.sh"
+                                ),
+                                sshTransfer(
+                                    sourceFiles: "./packages/worker/front_0.1.0.tar",
+                                    remoteDirectory: "/home/ec2-user/frontend",
+                                    removePrefix: "worker",
+                                    execCommand: "sudo sh /home/ec2-user/frontend/worker/deploy_fe.sh"
+                                )
+                            ]
+                        )
+                    ])
                 }
-                timeout(time: 30, unit: 'SECONDS') {
-                }
-                 echo 'Deploy success !'
+                echo 'Deploy success !'
             }
         }
     }
