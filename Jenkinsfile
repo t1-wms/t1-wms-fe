@@ -10,7 +10,7 @@ pipeline {
         EC2_USER = 'ec2-user'
         WMS_DIST_PATH = '/home/ec2-user/frontend/wms/dist'
         WORKER_DIST_PATH = '/home/ec2-user/frontend/worker/dist'
-        SHARED_CSS_PATH = '/home/ec2-user/frontend/shared/css'
+        SHARED_CSS_PATH = '/home/ec2-user/frontend/shared/style'
     }
 
     stages {
