@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'wms:latest'
-        DOCKER_TAG = "wms:${BUILD_NUMBER}"
+        DOCKER_IMAGE = 'frontend:latest'
+        DOCKER_TAG = "frontend:${BUILD_NUMBER}"
     }
 
     stages {
@@ -63,21 +63,28 @@ pipeline {
                     sshPublisher(publishers: [
                         sshPublisherDesc(
                             configName: sshServerName,
-                            execCommand: """
-                                echo 'Deploying to EC2...'
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: "./Dockerfile, ./packages/wms/build/**/*, ./packages/worker/build/**/*",
+                                    remoteDirectory: "/home/ec2-user/frontend",
+                                    removePrefix: "packages",
+                                    execCommand: """
+                                        echo 'Deploying to EC2...'
 
-                                # 기존 컨테이너가 있다면 중지하고 삭제
-                                docker stop frontend_container || true
-                                docker rm frontend_container || true
+                                        # 기존 컨테이너가 있다면 중지하고 삭제
+                                        docker stop frontend_container || true
+                                        docker rm frontend_container || true
 
-                                # 새로 Docker 컨테이너 실행 (덮어씌우기)
-                                docker build -f /home/ec2-user/frontend/Dockerfile -t ${DOCKER_TAG} /home/ec2-user/frontend
-                                docker run -d -p 80:80 --name frontend_container ${DOCKER_TAG}
+                                        # 새로 Docker 컨테이너 실행 (덮어씌우기)
+                                        docker build -f /home/ec2-user/frontend/Dockerfile -t ${DOCKER_TAG} /home/ec2-user/frontend
+                                        docker run -d -p 80:80 --name frontend_container ${DOCKER_TAG}
 
-                                echo 'Deployment completed!'
-                            """
+                                        echo 'Deployment completed!'
+                                    """
+                                )
+                            ]
                         )
-                    ])
+                    ]))
                 }
             }
         }
