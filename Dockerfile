@@ -30,7 +30,7 @@ RUN groupadd -g 998 docker && \
     usermod -aG docker jenkins
 
 # Docker 명령어 실행을 위한 유저 설정
-USER jenkins
+USER root  # root 사용자로 설정하여 권한 변경
 
 # 빌드된 파일들을 Nginx html 디렉토리로 복사
 COPY --from=build /app/dist /usr/share/nginx/html
@@ -39,9 +39,12 @@ COPY --from=build /app/dist /usr/share/nginx/html
 RUN chmod -R 755 /usr/share/nginx/html
 
 # 필요에 따라 다른 디렉토리 권한 설정
-RUN chown -R nginx:nginx /usr/share/nginx/htm
+RUN chown -R nginx:nginx /usr/share/nginx/html
+
+# Nginx 사용자로 전환
+USER nginx
 
 EXPOSE 8081
 
-# Nginx 실행 (root 사용자 유지)
+# Nginx 실행
 CMD ["nginx", "-g", "daemon off;"]
