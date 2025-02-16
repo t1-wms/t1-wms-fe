@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Cleanup') {
             steps {
-                sh "rm -f ./packages/wms/front_0.1.0.tar ./packages/worker/front_0.1.0.tar ./packages/shared/front_0.1.0.tar"
+                sh "rm -f ./packages/wms/front_0.1.0.tar ./packages/worker/front_0.1.0.tar"
                 echo 'Cleanup success!'
             }
         }
@@ -43,30 +43,16 @@ pipeline {
                         echo "worker Build success!"
                     }
                 }
-
-                stage('Build shared') {
-                    steps {
-                        dir("./packages/shared") {
-                            nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'npm run build'
-                            }
-                        }
-                        echo "shared Build success!"
-                    }
-                }
             }
         }
 
         stage('Compression') {
             steps {
                 dir("./packages/wms/dist") {
-                    sh 'tar -czvf ../front_wms_0.1.0.tar .'
+                    sh 'tar -czvf ../front_0.1.0.tar .'
                 }
                 dir("./packages/worker/dist") {
-                    sh 'tar -czvf ../front_worker_0.1.0.tar .'
-                }
-                dir("./packages/shared/dist") {
-                    sh 'tar -czvf ../front_shared_0.1.0.tar .'
+                    sh 'tar -czvf ../front_0.1.0.tar .'
                 }
                 echo 'Compression success!'
             }
@@ -81,19 +67,20 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./packages/wms/front_wms_0.1.0.tar",
+                                    sourceFiles: "./packages/wms/front_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
                                     execCommand: "sudo sh /home/ec2-user/frontend/wms/deploy_fe.sh"
                                 ),
                                 sshTransfer(
-                                    sourceFiles: "./packages/worker/front_worker_0.1.0.tar",
+                                    sourceFiles: "./packages/worker/front_0.1.0.tar",
                                     remoteDirectory: "/home/ec2-user/frontend",
                                     execCommand: "sudo sh /home/ec2-user/frontend/worker/deploy_fe.sh"
                                 ),
+                                // shared 폴더의 style.css 파일 반영만
                                 sshTransfer(
-                                    sourceFiles: "./packages/shared/front_shared_0.1.0.tar",
-                                    remoteDirectory: "/home/ec2-user/frontend",
-                                    execCommand: "sudo sh /home/ec2-user/frontend/shared/deploy_fe.sh"
+                                    sourceFiles: "./packages/shared/style.css",
+                                    remoteDirectory: "/home/ec2-user/frontend/static/css/",
+                                    execCommand: "echo 'Shared assets updated successfully!'"
                                 )
                             ]
                         )
