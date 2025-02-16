@@ -76,7 +76,7 @@ export const OutboundAssignDrawer = ({
             disabled
           />
         </div>
-        <p className={`font-b-md ${styles.header}}`}>출고예정 품목</p>
+        <p className={`font-b-md ${styles.header}}`}>출고지시 품목</p>
         <OutboundProductTable data={productList} />
         <div className={styles["button-box"]}>
           <MainButton size="sm" padding="sm" onClick={handleClickUpdate}>

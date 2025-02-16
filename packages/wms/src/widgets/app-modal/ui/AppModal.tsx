@@ -1,6 +1,8 @@
 import {
   CreateOutboundAssignModal,
   CreateOutboundAssignModalInfo,
+  CreateOutboundLoadingModal,
+  CreateOutboundLoadingModalInfo,
   CreateOutboundPackingModal,
   CreateOutboundPackingModalInfo,
   CreateOutboundPickingModal,
@@ -51,6 +53,12 @@ const isCreateOutboundPackingModalInfo = (
   return info.key === "createOutboundPacking";
 };
 
+const isCreateOutboundLoadingModalInfo = (
+  info: ModalInfoBase
+): info is CreateOutboundLoadingModalInfo => {
+  return info.key === "createOutboundLoading";
+};
+
 export const AppModal = () => {
   const { openedModal } = useModalStore();
 
@@ -71,6 +79,8 @@ export const AppModal = () => {
       <CreateOutboundPickingModal modalInfo={openedModal} />
     ) : isCreateOutboundPackingModalInfo(openedModal) ? (
       <CreateOutboundPackingModal modalInfo={openedModal} />
+    ) : isCreateOutboundLoadingModalInfo(openedModal) ? (
+      <CreateOutboundLoadingModal modalInfo={openedModal} />
     ) : (
       <></>
     )

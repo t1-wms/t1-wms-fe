@@ -1,26 +1,28 @@
-import styles from "./OutboundPickingDrawer.module.css";
+import styles from "./OutboundLoadingDrawer.module.css";
 import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
 import {
-  CreateOutboundPickingModalInfo,
-  OutboundPickingResponseDto,
+  CreateOutboundLoadingModalInfo,
+  OutboundLoadingResponseDto,
 } from "../../model";
 import { OutboundProductTable } from "@/features";
 import { useCallback } from "react";
 
-interface OutboundPickingDrawerProps {
-  data: OutboundPickingResponseDto;
+interface OutboundLoadingDrawerProps {
+  data: OutboundLoadingResponseDto;
   onClose: () => void;
 }
 
-export const OutboundPickingDrawer = ({
+export const OutboundLoadingDrawer = ({
   data,
   onClose,
-}: OutboundPickingDrawerProps) => {
+}: OutboundLoadingDrawerProps) => {
   const {
     outboundScheduleNumber,
     outboundAssignNumber,
     outboundPickingNumber,
-    outboundPickingDate,
+    outboundPackingNumber,
+    outboundLoadingNumber,
+    outboundLoadingDate,
     planDate,
     productionPlanNumber,
     productList,
@@ -29,8 +31,8 @@ export const OutboundPickingDrawer = ({
   const { openModal } = useModalStore();
 
   const handleClickUpdate = useCallback(() => {
-    const modalInfo: CreateOutboundPickingModalInfo = {
-      key: "createOutboundPicking",
+    const modalInfo: CreateOutboundLoadingModalInfo = {
+      key: "createOutboundLoading",
       outbound: data,
     };
 
@@ -38,7 +40,7 @@ export const OutboundPickingDrawer = ({
   }, [openModal, data]);
 
   return (
-    <BaseDrawer title={`출고피킹 조회`} onClose={onClose}>
+    <BaseDrawer title={`출하상차 조회`} onClose={onClose}>
       <div className={styles.container}>
         <div className={styles["input-box"]}>
           <MainInput
@@ -63,8 +65,22 @@ export const OutboundPickingDrawer = ({
             disabled
           />
           <MainInput
-            defaultValue={outboundPickingDate}
-            label="출고피킹날짜"
+            defaultValue={outboundPackingNumber}
+            label="출고패킹번호"
+            error={null}
+            width="fullWidth"
+            disabled
+          />
+          <MainInput
+            defaultValue={outboundLoadingNumber}
+            label="출하상차번호"
+            error={null}
+            width="fullWidth"
+            disabled
+          />
+          <MainInput
+            defaultValue={outboundLoadingDate}
+            label="출하상차날짜"
             error={null}
             width="fullWidth"
             disabled
@@ -84,7 +100,7 @@ export const OutboundPickingDrawer = ({
             disabled
           />
         </div>
-        <p className={`font-b-md ${styles.header}}`}>출고피킹 품목</p>
+        <p className={`font-b-md ${styles.header}}`}>출하상차 품목</p>
         <OutboundProductTable data={productList} />
         <div className={styles["button-box"]}>
           <MainButton size="sm" padding="sm" onClick={handleClickUpdate}>
