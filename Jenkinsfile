@@ -25,23 +25,11 @@ pipeline {
         }
 
         stage('Build') {
-            parallel {
-                stage('Build wms') {
-                    steps {
-                        dir("./packages/wms") {
-                            nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
-                                sh 'npm run build'
-                            }
-                        }
-                    }
-                }
-                stage('Build worker') {
-                    steps {
-                        dir("./packages/worker") {
-                            nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
-                                sh 'npm run build'
-                            }
-                        }
+            steps {
+                dir("./packages") {
+                    nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
+                        // 모든 애플리케이션을 하나로 묶어서 빌드
+                        sh 'npm run build'
                     }
                 }
             }
@@ -65,9 +53,9 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./packages/wms/dist/**/*, ./packages/worker/dist/**/*",  // 빌드된 결과물만 전송
+                                    sourceFiles: "./packages/dist/**/*",
                                     remoteDirectory: "/home/ec2-user/frontend",
-                                    removePrefix: "packages",  // /packages 앞 경로 삭제
+                                    removePrefix: "packages",
                                     execCommand: """
                                         echo 'Deploying to EC2...'
 
