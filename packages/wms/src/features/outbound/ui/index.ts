@@ -10,3 +10,4 @@ export * from "./create-outbound-assign-form";
 export * from "./outbound-assign-drawer";
 export * from "./outbound-picking-table";
 export * from "./outbound-assign-list-drawer";
+export * from "./outbound-picking-drawer";
