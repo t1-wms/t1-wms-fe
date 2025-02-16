@@ -37,7 +37,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -f ./Dockerfile -t ${DOCKER_IMAGE} ./packages"
+                    sh "docker build -f ./Dockerfile -t ${DOCKER_IMAGE} ."
                     sh "docker tag ${DOCKER_IMAGE} ${DOCKER_TAG}"
                 }
             }
@@ -53,8 +53,8 @@ pipeline {
                             transfers: [
                                 sshTransfer(
                                     sourceFiles: "./packages/dist/**/*",  // 빌드된 결과물만 전송
-                                    remoteDirectory: "/home/ec2-user/frontend",
-                                    removePrefix: "packages",
+                                    remoteDirectory: "/home/ec2-user/frontend/packages/dist",  // 수정된 경로
+                                    removePrefix: "packages",  // 빌드된 결과물에 대해 "packages" 접두어 제거
                                     execCommand: """
                                         echo 'Deploying to EC2...'
 

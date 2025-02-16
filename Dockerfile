@@ -16,7 +16,7 @@ RUN apk update && apk add --no-cache \
 VOLUME /var/run/docker.sock:/var/run/docker.sock
 
 # 빌드된 결과물만 하나의 디렉토리로 복사
-COPY ./packages/dist /home/ec2-user/frontend/
+COPY /home/ec2-user/frontend/packages/dist /home/ec2-user/frontend/
 
 # Nginx 실행
 CMD ["nginx", "-g", "daemon off;"]
