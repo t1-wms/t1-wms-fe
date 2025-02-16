@@ -65,9 +65,9 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./Dockerfile, ./packages/wms/build/**/*, ./packages/worker/build/**/*",
+                                    sourceFiles: "./packages/wms/dist/**/*, ./packages/worker/dist/**/*",  // 빌드된 결과물만 전송
                                     remoteDirectory: "/home/ec2-user/frontend",
-                                    removePrefix: "packages",
+                                    removePrefix: "packages",  // /packages 앞 경로 삭제
                                     execCommand: """
                                         echo 'Deploying to EC2...'
 
