@@ -11,8 +11,7 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                    // node_modules와 package-lock.json 삭제 후 재설치
+                nodejs(nodeJSInstallationName: 'NodeJS 20.0.0') {
                     sh 'rm -rf node_modules package-lock.json'
                     sh 'npm install'
 
@@ -23,12 +22,13 @@ pipeline {
             }
         }
 
+
         stage('Build') {
             parallel {
                 stage('Build wms') {
                     steps {
                         dir("./packages/wms") {
-                            nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
+                            nodejs(nodeJSInstallationName: 'NodeJS 20.0.0') {
                                 sh 'npm run build'
                             }
                         }
@@ -39,7 +39,7 @@ pipeline {
                 stage('Build worker') {
                     steps {
                         dir("./packages/worker") {
-                            nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
+                            nodejs(nodeJSInstallationName: 'NodeJS 20.0.0') {
                                 sh 'npm run build'
                             }
                         }

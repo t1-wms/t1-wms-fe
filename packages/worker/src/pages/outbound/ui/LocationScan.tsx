@@ -17,7 +17,8 @@ export const LocationScan = ({
         </div>
     );
 
-    const BinCodeDisplay = ({ zone, aisle, rack, shelf }: LocationScanProps) => (
+    // BinCodeDisplay는 더 이상 LocationScanProps를 사용하지 않고, 필요한 props만 전달
+    const BinCodeDisplay = ({ zone, aisle, rack, shelf }: { zone: string, aisle: string, rack: string, shelf: string }) => (
         <div className="flex justify-center text-gray-50 p-2 items-center text-2xl font-bold">
             <span className="bg-purple-700 px-5 py-1 rounded-l-sm">Z{zone}</span>
             <span className="bg-gray-600 px-5 py-1">{aisle}</span>
