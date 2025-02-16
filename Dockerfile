@@ -19,7 +19,6 @@ RUN groupadd -g 998 docker && \
     useradd -u 1000 -g docker -m jenkins && \
     usermod -aG docker jenkins
 
-# Docker 명령어 실행을 위한 유저 설정
 USER jenkins
 
 # 필요한 디렉토리 생성
