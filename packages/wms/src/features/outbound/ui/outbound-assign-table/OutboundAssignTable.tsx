@@ -1,26 +1,23 @@
 import { BaseTable } from "@/shared";
+import { OutboundAssignResponseDto, useOutboundAssigns } from "../../model";
 import {
   ColumnFiltersState,
   createColumnHelper,
   FilterFn,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import {
-  OutboundPlanResponseDto,
-  useOutboundPlans,
-  useOutboundTable,
-} from "../../model";
+import { useOutboundTable } from "../../model/useOutboundTable";
 
-interface OutboundPlanTableProps {
-  columnFilters?: ColumnFiltersState;
-  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
+interface OutboundAssignTableProps {
+  columnFilters: ColumnFiltersState;
+  setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
-  onChangeSelectedRow: (rowId: OutboundPlanResponseDto | null) => void;
+  onChangeSelectedRow: (row: OutboundAssignResponseDto | null) => void;
 }
 
-const columnHelper = createColumnHelper<OutboundPlanResponseDto>();
+const columnHelper = createColumnHelper<OutboundAssignResponseDto>();
 
-const dateFilterFn: FilterFn<OutboundPlanResponseDto> = (
+const dateFilterFn: FilterFn<OutboundAssignResponseDto> = (
   row,
   columnId,
   filterValue: string
@@ -42,7 +39,12 @@ const defaultColumns = [
     header: "출고예정번호",
     cell: (row) => row.getValue(),
   }),
-  columnHelper.accessor("outboundScheduleDate", {
+  columnHelper.accessor("outboundAssignNumber", {
+    header: "출고지시번호",
+    cell: (row) => row.getValue(),
+    filterFn: "includesString",
+  }),
+  columnHelper.accessor("outboundAssignDate", {
     header: "출고예정날짜",
     cell: (row) => row.getValue(),
     filterFn: dateFilterFn,
@@ -61,12 +63,12 @@ const defaultColumns = [
   }),
 ];
 
-export const OutboundPlanTable = ({
+export const OutboundAssignTable = ({
   columnFilters,
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
-}: OutboundPlanTableProps) => {
+}: OutboundAssignTableProps) => {
   const {
     pagination,
     setPagination,
@@ -78,9 +80,9 @@ export const OutboundPlanTable = ({
   } = useOutboundTable({
     columnFilters,
     isServerSide,
-    outboundNumberKey: "outboundPlanNumber",
-    outboundDateKey: "outboundPlanDate",
-    useData: useOutboundPlans,
+    outboundNumberKey: "outboundAssignNumber",
+    outboundDateKey: "outboundAssignDate",
+    useData: useOutboundAssigns,
   });
 
   useEffect(() => {

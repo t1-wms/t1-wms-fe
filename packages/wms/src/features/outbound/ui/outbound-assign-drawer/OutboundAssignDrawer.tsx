@@ -1,24 +1,25 @@
-import styles from "./OutboundPlanDrawer.module.css";
+import styles from "./OutboundAssignDrawer.module.css";
 import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
 import {
-  CreateOutboundPlanModalInfo,
-  OutboundPlanResponseDto,
+  CreateOutboundAssignModalInfo,
+  OutboundAssignResponseDto,
 } from "../../model";
 import { OutboundProductTable } from "@/features";
 import { useCallback } from "react";
 
-interface OutboundPlanDrawerProps {
-  data: OutboundPlanResponseDto;
+interface OutboundAssignDrawerProps {
+  data: OutboundAssignResponseDto;
   onClose: () => void;
 }
 
-export const OutboundPlanDrawer = ({
+export const OutboundAssignDrawer = ({
   data,
   onClose,
-}: OutboundPlanDrawerProps) => {
+}: OutboundAssignDrawerProps) => {
   const {
     outboundScheduleNumber,
-    outboundScheduleDate,
+    outboundAssignNumber,
+    outboundAssignDate,
     planDate,
     productionPlanNumber,
     productList,
@@ -27,16 +28,16 @@ export const OutboundPlanDrawer = ({
   const { openModal } = useModalStore();
 
   const handleClickUpdate = useCallback(() => {
-    const modalInfo: CreateOutboundPlanModalInfo = {
-      key: "createOutboundPlan",
-      outboundPlan: data,
+    const modalInfo: CreateOutboundAssignModalInfo = {
+      key: "createOutboundAssign",
+      outbound: data,
     };
 
     openModal(modalInfo);
   }, [openModal, data]);
 
   return (
-    <BaseDrawer title={`출고예정 조회`} onClose={onClose}>
+    <BaseDrawer title={`출고지시 조회`} onClose={onClose}>
       <div className={styles.container}>
         <div className={styles["input-box"]}>
           <MainInput
@@ -47,8 +48,15 @@ export const OutboundPlanDrawer = ({
             disabled
           />
           <MainInput
-            defaultValue={outboundScheduleDate}
-            label="출고예정날짜"
+            defaultValue={outboundAssignNumber}
+            label="출고지시번호"
+            error={null}
+            width="fullWidth"
+            disabled
+          />
+          <MainInput
+            defaultValue={outboundAssignDate}
+            label="출고지시날짜"
             error={null}
             width="fullWidth"
             disabled

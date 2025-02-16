@@ -56,7 +56,7 @@ export const SideBar = () => {
             label: "출고",
             icon: <OutboundIcon />,
             subItems: [
-              { label: "출고 예정", path: "/outbonud/plan" },
+              { label: "출고 예정", path: "/outbound/plan" },
               { label: "출고 지시", path: "/outbound/assign" },
               { label: "출고 피킹", path: "/outbound/picking" },
               { label: "출고 패킹", path: "/outbound/packing" },
