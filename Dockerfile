@@ -31,7 +31,8 @@ RUN groupadd -g 998 docker && \
     usermod -aG docker jenkins
 
 # Nginx 캐시 디렉토리 생성 및 권한 부여
-RUN mkdir -p /var/cache/nginx/client_temp && \
+RUN mkdir -p /var/cache/nginx/proxy_temp && \
+    mkdir -p /var/cache/nginx/client_temp && \
     chown -R jenkins:docker /var/cache/nginx
 
 # 빌드된 파일들을 Nginx html 디렉토리로 복사
