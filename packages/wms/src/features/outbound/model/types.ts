@@ -40,6 +40,5 @@ export interface CreateOutboundPlanModalInfo extends ModalInfoBase {
 
 export interface CreateOutboundAssignModalInfo extends ModalInfoBase {
   key: "createOutboundAssign";
-  outboundPlan: OutboundPlanResponseDto;
-  outboundAssign?: OutboundAssignResponseDto;
+  outbound: OutboundPlanResponseDto | OutboundAssignResponseDto;
 }

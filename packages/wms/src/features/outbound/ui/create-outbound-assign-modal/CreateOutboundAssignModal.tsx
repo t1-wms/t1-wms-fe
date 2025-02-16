@@ -3,6 +3,7 @@ import { BasicModal, useModalStore } from "@/shared";
 import {
   CreateOutboundAssignModalInfo,
   OutboundAssignResponseDto,
+  OutboundPlanResponseDto,
 } from "../../model";
 import { useMemo } from "react";
 import { CreateOutboundAssignForm } from "../create-outbound-assign-form";
@@ -12,24 +13,30 @@ interface CreateOutboundAssignModalProps {
   modalInfo: CreateOutboundAssignModalInfo;
 }
 
+const isOutboundAssign = (
+  outbound: OutboundPlanResponseDto | OutboundAssignResponseDto
+): outbound is OutboundAssignResponseDto => {
+  return "outboundAssignNumber" in outbound;
+};
+
 export const CreateOutboundAssignModal = ({
   modalInfo,
 }: CreateOutboundAssignModalProps) => {
-  const { outboundAssign, outboundPlan } = modalInfo;
+  const { outbound } = modalInfo;
 
   const defaultValues: OutboundAssignResponseDto = useMemo(() => {
-    return outboundAssign
+    return isOutboundAssign(outbound)
       ? {
-          ...outboundAssign,
+          ...outbound,
         }
       : {
-          ...outboundPlan,
+          ...outbound,
           outboundAssignNumber: "",
           outboundAssignDate: new Date(Date.now())
             .toISOString()
             .substring(0, 10),
         };
-  }, [outboundAssign]);
+  }, [outbound]);
 
   const { closeModal } = useModalStore();
   // const queryClient = useQueryClient();
@@ -40,7 +47,7 @@ export const CreateOutboundAssignModal = ({
     <BasicModal
       modalInfo={{
         key: "basic",
-        title: `출고지시 ${outboundAssign ? "수정" : "추가"}`,
+        title: `출고지시 ${isOutboundAssign(outbound) ? "수정" : "추가"}`,
         buttons: [
           {
             label: "취소",
@@ -58,7 +65,7 @@ export const CreateOutboundAssignModal = ({
         />
         <p className="font-b-md">출고지시 품목</p>
         <div className={styles["table-box"]}>
-          <OutboundProductTable data={outboundPlan.productList} />
+          <OutboundProductTable data={outbound.productList} />
         </div>
       </div>
     </BasicModal>

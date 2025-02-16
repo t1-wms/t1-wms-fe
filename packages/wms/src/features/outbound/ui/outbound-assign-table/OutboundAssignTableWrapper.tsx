@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, Suspense, useMemo } from "react";
-import { useOutboundAssignCount } from "../../model";
+import { OutboundAssignResponseDto, useOutboundAssignCount } from "../../model";
 import { OutboundAssignTable } from "./OutboundAssignTable";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { minCountForServerSide, Spinner } from "@/shared";
@@ -7,11 +7,13 @@ import { minCountForServerSide, Spinner } from "@/shared";
 interface OutboundAssignTableWrapperProps {
   columnFilters: ColumnFiltersState;
   setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
+  onChangeSelectedRow: (row: OutboundAssignResponseDto | null) => void;
 }
 
 export const OutboundAssignTableWrapper = ({
   columnFilters,
   setColumnFilters,
+  onChangeSelectedRow,
 }: OutboundAssignTableWrapperProps) => {
   const { data: countResult } = useOutboundAssignCount();
 
@@ -26,6 +28,7 @@ export const OutboundAssignTableWrapper = ({
           columnFilters={columnFilters}
           setColumnFilters={setColumnFilters}
           isServerSide={isServerSide}
+          onChangeSelectedRow={onChangeSelectedRow}
         />
       </Suspense>
     </>
