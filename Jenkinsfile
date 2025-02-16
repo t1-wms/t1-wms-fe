@@ -11,7 +11,7 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 20.0.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh 'rm -rf node_modules package-lock.json'
                     sh 'npm install'
 
@@ -28,7 +28,7 @@ pipeline {
                 stage('Build wms') {
                     steps {
                         dir("./packages/wms") {
-                            nodejs(nodeJSInstallationName: 'NodeJS 20.0.0') {
+                            nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                                 sh 'npm run build'
                             }
                         }
@@ -39,7 +39,7 @@ pipeline {
                 stage('Build worker') {
                     steps {
                         dir("./packages/worker") {
-                            nodejs(nodeJSInstallationName: 'NodeJS 20.0.0') {
+                            nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                                 sh 'npm run build'
                             }
                         }
