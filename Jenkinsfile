@@ -1,11 +1,15 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = 'wms:latest'
+        DOCKER_TAG = "wms:${BUILD_NUMBER}"
+    }
+
     stages {
-        stage('Cleanup') {
+        stage('Checkout') {
             steps {
-                sh "rm -f ./packages/wms/wms_front_0.1.0.tar ./packages/worker/worker_front_0.1.0.tar"
-                echo 'Cleanup success!'
+                checkout scm
             }
         }
 
@@ -17,7 +21,6 @@ pipeline {
                     sh 'npm install typescript@~5.6.2 --save-dev'
                     sh 'npm install react@^18.3.1 react-dom@^18.3.1 @types/react-dom@^18.3.5 --save'
                 }
-                echo 'Dependencies installed successfully!'
             }
         }
 
@@ -30,10 +33,8 @@ pipeline {
                                 sh 'npm run build'
                             }
                         }
-                        echo "wms Build success!"
                     }
                 }
-
                 stage('Build worker') {
                     steps {
                         dir("./packages/worker") {
@@ -41,45 +42,48 @@ pipeline {
                                 sh 'npm run build'
                             }
                         }
-                        echo "worker Build success!"
                     }
                 }
             }
         }
 
-        stage('Docker Build and Push') {
+        stage('Build Docker Image') {
             steps {
-                dir("./") {
-                    sh 'docker build -t myrepo/frontend:latest .'
-                    sh 'docker push myrepo/frontend:latest'
+                script {
+                    sh "docker build -f ./Dockerfile -t ${DOCKER_IMAGE} ."
+                    sh "docker tag ${DOCKER_IMAGE} ${DOCKER_TAG}"
                 }
-                echo "Docker image pushed successfully!"
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to EC2') {
             steps {
                 script {
+                    // EC2로 파일 전송 및 Docker 컨테이너 실행
                     def sshServerName = 'FrontendServer'
                     sshPublisher(publishers: [
                         sshPublisherDesc(
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./Dockerfile",
+                                    sourceFiles: "./docker/Dockerfile, ./packages/wms/build/**/*, ./packages/worker/build/**/*",
                                     remoteDirectory: "/home/ec2-user/frontend",
                                     execCommand: """
-                                        docker pull myrepo/frontend:latest &&
-                                        docker stop frontend_container || true &&
-                                        docker rm frontend_container || true &&
-                                        docker run -d -p 80:80 --name frontend_container myrepo/frontend:latest
+                                        echo 'Deploying to EC2...'
+                                        # 기존 컨테이너가 있다면 중지하고 삭제
+                                        docker stop frontend_container || true
+                                        docker rm frontend_container || true
+
+                                        # 새로 Docker 컨테이너 실행
+                                        docker build -f /home/ec2-user/frontend/Dockerfile -t ${DOCKER_TAG} /home/ec2-user/frontend
+                                        docker run -d -p 80:80 --name frontend_container ${DOCKER_TAG}
+                                        echo 'Deployment completed!'
                                     """
                                 )
                             ]
                         )
                     ])
                 }
-                echo 'Deploy success!'
             }
         }
     }
