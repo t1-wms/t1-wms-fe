@@ -58,7 +58,6 @@ pipeline {
                                     execCommand: """
                                         echo 'Deploying to EC2...'
 
-
                                         # 기존 컨테이너가 있다면 중지하고 삭제
                                         docker stop frontend_container || true
                                         docker rm frontend_container || true
