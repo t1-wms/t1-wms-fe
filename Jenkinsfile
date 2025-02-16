@@ -79,7 +79,7 @@ pipeline {
                                     remoteDirectory: "/home/ec2-user/frontend",
                                     execCommand: "sudo sh /home/ec2-user/frontend/worker/deploy_fe.sh"
                                 ),
-                                // shared 폴더의 style.css 파일 반영만
+                                // shared 폴더의 style.css 파일 반영
                                 sshTransfer(
                                     sourceFiles: "./packages/shared/style.css",
                                     remoteDirectory: "/home/ec2-user/frontend/static/css/",
