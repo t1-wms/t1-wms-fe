@@ -10,6 +10,9 @@ import {
   getOutboundPickingCount,
   getOutboundPickings,
   getOutboundPickingsPaged,
+  getOutboundPackingCount,
+  getOutboundPackingsPaged,
+  getOutboundPackings,
 } from "../api";
 import { OutboundFilter } from "./types";
 
@@ -142,6 +145,44 @@ export const useOutboundPickings = (
         filter
       ),
       queryFn: () => getOutboundPickings(),
+    });
+  }
+};
+
+export const useOutboundPackingCount = () => {
+  return useSuspenseQuery({
+    queryKey: ["outboundPacking", "count"],
+    queryFn: () => getOutboundPackingCount(),
+  });
+};
+
+export const useOutboundPackings = (
+  isServerSide: boolean,
+  page?: number,
+  sort?: Sort,
+  filter?: OutboundFilter
+) => {
+  if (isServerSide) {
+    return useSuspenseQuery({
+      queryKey: createUseOutboundQueryKey(
+        "outboundPacking",
+        isServerSide,
+        page!,
+        sort,
+        filter
+      ),
+      queryFn: () => getOutboundPackingsPaged(page!, sort, filter),
+    });
+  } else {
+    return useSuspenseQuery({
+      queryKey: createUseOutboundQueryKey(
+        "outboundPacking",
+        isServerSide,
+        page!,
+        sort,
+        filter
+      ),
+      queryFn: () => getOutboundPackings(),
     });
   }
 };

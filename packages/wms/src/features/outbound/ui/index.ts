@@ -13,3 +13,4 @@ export * from "./outbound-assign-list-drawer";
 export * from "./outbound-picking-drawer";
 export * from "./create-outbound-picking-form";
 export * from "./create-outbound-picking-modal";
+export * from "./outbound-packing-table";
