@@ -29,20 +29,15 @@ RUN groupadd -g 998 docker && \
     useradd -u 1000 -g docker -m jenkins && \
     usermod -aG docker jenkins
 
-# Docker 명령어 실행을 위한 유저 설정
-USER root  # root 사용자로 설정하여 권한 변경
+# Nginx 캐시 디렉토리 생성 및 권한 부여
+RUN mkdir -p /var/cache/nginx/client_temp && \
+    chown -R jenkins:docker /var/cache/nginx
+
+# Nginx 실행 사용자 변경 방지 (Nginx는 root로 실행)
+RUN sed -i 's/^user nginx;/#user nginx;/' /etc/nginx/nginx.conf
 
 # 빌드된 파일들을 Nginx html 디렉토리로 복사
 COPY --from=build /app/dist /usr/share/nginx/html
-
-# 권한 변경
-RUN chmod -R 755 /usr/share/nginx/html
-
-# 필요에 따라 다른 디렉토리 권한 설정
-RUN chown -R nginx:nginx /usr/share/nginx/html
-
-# Nginx 사용자로 전환
-USER nginx
 
 EXPOSE 8081
 
