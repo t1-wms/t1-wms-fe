@@ -1,7 +1,7 @@
-# Node.js 21을 기반으로 리액트 빌드를 먼저 실행
+# Node.js 21을 기반으로 React 빌드 실행
 FROM node:21 AS build
 
-# 리액트 프로젝트 복사
+# React 프로젝트 복사 및 빌드
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
@@ -30,12 +30,20 @@ RUN groupadd -g 998 docker && \
     useradd -u 1000 -g docker -m jenkins && \
     usermod -aG docker jenkins
 
-USER jenkins
+# Nginx 캐시 디렉토리 생성 및 권한 부여
+RUN mkdir -p /var/cache/nginx/client_temp && \
+    chown -R jenkins:docker /var/cache/nginx
 
-# 빌드된 리액트 파일을 nginx의 html 디렉토리로 복사
+# Nginx 실행 사용자 변경 방지 (Nginx는 root로 실행)
+RUN sed -i 's/^user nginx;/#user nginx;/' /etc/nginx/nginx.conf
+
+# React 빌드된 파일을 Nginx html 디렉토리로 복사
 COPY ./packages /usr/share/nginx/html
+
+# 권한 변경 (필요한 경우)
+RUN chmod -R 755 /usr/share/nginx/html
 
 EXPOSE 8081
 
-# Nginx 실행
+# Nginx 실행 (root 사용자 유지)
 CMD ["nginx", "-g", "daemon off;"]
