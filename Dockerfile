@@ -1,19 +1,18 @@
 # Nginx 이미지 사용
 FROM nginx:alpine
 
-RUN apt-get update && apt-get install -y \
+# Alpine 패키지 관리자를 이용해 필요한 패키지 설치
+RUN apk update && apk add --no-cache \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg \
     lsb-release \
     sudo \
-    && curl -fsSL https://download.docker.com/linux/debian/gpg | tee /etc/apt/trusted.gpg.d/docker.asc \
-    && echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list \
-    && apt-get update \
-    && apt-get install -y docker-ce-cli docker-compose-plugin containerd.io \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    bash \
+    && curl -fsSL https://download.docker.com/linux/alpine/gpg | tee /etc/apk/keys/docker.asc \
+    && echo "https://download.docker.com/linux/alpine/v3.14/community" | tee /etc/apk/repositories \
+    && apk add --no-cache docker-cli docker-compose
 
 VOLUME /var/run/docker.sock:/var/run/docker.sock
 
