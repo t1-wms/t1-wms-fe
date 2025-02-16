@@ -43,7 +43,6 @@ pipeline {
 
         stage('Compression') {
             steps {
-                // Compress both wms and worker dist directories
                 dir("./packages/wms/dist") {
                     sh 'tar -czvf ../front_0.1.0.tar .'
                 }
