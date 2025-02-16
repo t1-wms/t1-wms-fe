@@ -11,6 +11,7 @@ RUN npm run build
 # Nginx 이미지 사용
 FROM nginx:alpine
 
+# 필수 패키지 설치
 RUN apk update && apk add --no-cache \
     ca-certificates \
     curl \
@@ -33,12 +34,20 @@ RUN groupadd -g 998 docker && \
 RUN mkdir -p /var/cache/nginx/client_temp && \
     chown -R jenkins:docker /var/cache/nginx
 
-# Nginx 실행 사용자 변경 방지 (Nginx는 root로 실행)
-RUN sed -i 's/^user nginx;/#user nginx;/' /etc/nginx/nginx.conf
-
 # 빌드된 파일들을 Nginx html 디렉토리로 복사
 COPY --from=build /app/dist /usr/share/nginx/html
 
+# 권한 설정: root로 권한 변경 후 nginx 사용자로 전환
+RUN chmod -R 755 /usr/share/nginx/html
+RUN chown -R nginx:nginx /usr/share/nginx/html
+
+# Nginx 실행 사용자 변경 방지 (Nginx는 root로 실행)
+RUN sed -i 's/^user nginx;/#user nginx;/' /etc/nginx/nginx.conf
+
+# Nginx 사용자로 전환
+USER nginx
+
+# 포트 노출
 EXPOSE 8081
 
 # Nginx 실행
