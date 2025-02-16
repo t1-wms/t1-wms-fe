@@ -12,9 +12,12 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
+                    // node_modules와 package-lock.json 삭제 후 재설치
+                    sh 'rm -rf node_modules package-lock.json'
                     sh 'npm install'
-                    sh 'npm install typescript --save-dev'
-                    sh 'npm install react react-dom @types/react-dom --save'
+
+                    sh 'npm install typescript@~5.6.2 --save-dev'
+                    sh 'npm install react@^18.3.1 react-dom@^18.3.1 @types/react-dom@^18.3.5 --save'
                 }
                 echo 'Dependencies installed successfully!'
             }
