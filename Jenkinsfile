@@ -38,12 +38,12 @@ pipeline {
             }
         }
 
-        stage('Copy Shared CSS') {
+        stage('Copy Shared Folder') {
             steps {
                 script {
-                    // shared/styles 폴더에서 global.css를 wms 및 worker 디렉토리의 dist로 복사
-                    sh 'cp -r packages/shared/styles/global.css packages/wms/dist/'
-                    sh 'cp -r packages/shared/styles/global.css packages/worker/dist/'
+                    // shared 폴더 전체를 wms 및 worker 디렉토리의 dist로 복사
+                    sh 'cp -r packages/shared/* packages/wms/dist/'
+                    sh 'cp -r packages/shared/* packages/worker/dist/'
                 }
             }
         }
