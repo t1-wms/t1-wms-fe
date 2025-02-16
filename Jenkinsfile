@@ -15,9 +15,7 @@ pipeline {
                     steps {
                         dir("./packages/wms") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'rm -rf node_modules'
-                                sh 'rm -rf package-lock.json'
-                                sh 'CI=false yarn install'
+                                sh 'CI=false yarn install'  // yarn install 실행
                                 sh 'CI=false yarn build'
                             }
                         }
@@ -29,9 +27,7 @@ pipeline {
                     steps {
                         dir("./packages/worker") {
                             nodejs(nodeJSInstallationName: 'NodeJS 21.7.1') {
-                                sh 'rm -rf node_modules'
-                                sh 'rm -rf package-lock.json'
-                                sh 'CI=false yarn install'
+                                sh 'CI=false yarn install'  // yarn install 실행
                                 sh 'CI=false yarn build'
                             }
                         }
