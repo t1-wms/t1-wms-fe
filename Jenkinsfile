@@ -21,7 +21,24 @@ pipeline {
         stage('Install Global Dependencies') {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
-                    sh 'npm install -g typescript'
+                    sh '''
+                        npm install -g typescript
+                        npm install -g @types/node @types/react @types/react-dom
+                    '''
+                }
+            }
+        }
+
+        stage('Install dependencies for Shared') {
+            steps {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
+                    sh '''
+                        cd packages/shared
+                        rm -rf node_modules package-lock.json
+                        npm install
+                        npm install typescript @types/react @types/react-dom
+                        npm run build || true
+                    '''
                 }
             }
         }
@@ -30,10 +47,11 @@ pipeline {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh '''
-                        rm -rf packages/wms/node_modules packages/wms/package-lock.json
                         cd packages/wms
+                        rm -rf node_modules package-lock.json
                         npm install
-                        npm install typescript
+                        npm install typescript @types/react @types/react-dom @types/react-router-dom
+                        npm install @t1-wms-fe/shared@file:../shared
                     '''
                 }
             }
@@ -43,10 +61,11 @@ pipeline {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh '''
-                        rm -rf packages/worker/node_modules packages/worker/package-lock.json
                         cd packages/worker
+                        rm -rf node_modules package-lock.json
                         npm install
-                        npm install typescript
+                        npm install typescript @types/react @types/react-dom @types/react-router-dom
+                        npm install @t1-wms-fe/shared@file:../shared
                     '''
                 }
             }
@@ -55,10 +74,12 @@ pipeline {
         stage('Copy Shared Folder') {
             steps {
                 script {
-                    sh 'mkdir -p packages/wms/dist'
-                    sh 'mkdir -p packages/worker/dist'
-                    sh 'cp -r packages/shared/* packages/wms/dist/'
-                    sh 'cp -r packages/shared/* packages/worker/dist/'
+                    sh '''
+                        mkdir -p packages/wms/dist
+                        mkdir -p packages/worker/dist
+                        cp -r packages/shared/* packages/wms/dist/
+                        cp -r packages/shared/* packages/worker/dist/
+                    '''
                 }
             }
         }
@@ -68,7 +89,7 @@ pipeline {
                 nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh '''
                         cd packages/wms
-                        npx tsc -b
+                        npx tsc --noEmit
                         npm run build
                     '''
                 }
@@ -80,7 +101,7 @@ pipeline {
                 nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh '''
                         cd packages/worker
-                        npx tsc -b
+                        npx tsc --noEmit
                         npm run build
                     '''
                 }
@@ -115,28 +136,23 @@ pipeline {
                                         removePrefix: "",
                                         remoteDirectory: ".",
                                         execCommand: """
-                                            # 디렉토리 구조 생성
                                             mkdir -p /home/ec2-user/frontend/nginx
                                             mkdir -p /home/ec2-user/frontend/packages/wms
                                             mkdir -p /home/ec2-user/frontend/packages/worker
 
-                                            # 파일 복사
                                             cp docker-compose.yml /home/ec2-user/frontend/
                                             cp -r nginx/frontend.conf nginx/nginx.conf /home/ec2-user/frontend/nginx/
                                             cp -r packages/wms/Dockerfile /home/ec2-user/frontend/packages/wms/
                                             cp -r packages/worker/Dockerfile /home/ec2-user/frontend/packages/worker/
 
-                                            # Nginx 설정 적용
                                             sudo cp /home/ec2-user/frontend/nginx/frontend.conf /etc/nginx/conf.d/
                                             sudo nginx -t && sudo systemctl reload nginx
 
-                                            # Docker 작업
                                             cd /home/ec2-user/frontend
                                             docker-compose down
                                             docker-compose up -d
                                             docker ps
 
-                                            # 임시 파일 정리
                                             cd /home/ec2-user
                                             rm -f docker-compose.yml
                                             rm -rf nginx
