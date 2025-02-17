@@ -29,7 +29,7 @@ RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
 RUN npm install lightningcss-linux-x64-gnu --save-dev
 
 # 소스 코드 복사 및 빌드
-COPY packages/wms ./
+COPY packages/wms .
 RUN npm run build:wms  # WMS 빌드 실행
 
 # 프로덕션 스테이지
