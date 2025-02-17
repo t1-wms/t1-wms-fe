@@ -2,8 +2,9 @@
 
 body {
   background: white;
+  font-family: "Pretendard";
 }
-
+ 
 #root {
   position: relative;
   width: 100%;

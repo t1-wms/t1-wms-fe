@@ -1,4 +1,3 @@
-import { Camera } from "@/pages/camera/Camera";
 import { NavigationBar } from "@/shared/ui/navigationbar/NavigaitionBar";
 import { Outlet } from "react-router-dom";
 

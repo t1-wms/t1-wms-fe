@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { ItemScan } from '../ui/ItemScan';
+import { ItemScan } from '@shared/ui/item/ItemScan';
 import { usePickingStore } from '../store/outboundstore';
 
 export const ItemScanPage = () => {
@@ -25,15 +25,15 @@ export const ItemScanPage = () => {
       const nextItemIndex = Number(itemId);
       if (nextItemIndex < pickingList.items.length) {
         setTimeout(() => {
-          moveToNextItem();
+          moveToNextItem(); 
           navigate(`/outbound/location/${nextItemIndex + 1}`, { 
             replace: true 
           });
-        }, 1000);
+        }, 200);
       } else {
         setTimeout(() => {
           navigate('/outbound/complete', { replace: true });
-        }, 1000);
+        }, 200);
       }
     }
   }, [location.state, navigate, setItemScanned, moveToNextItem, itemId]);
@@ -42,7 +42,7 @@ export const ItemScanPage = () => {
     navigate('/camera', {
       state: {
         expectedCode: currentItem.code,
-        returnPath: `/outbound/item/${itemId}` // 수정된 부분
+        returnPath: `/outbound/item/${itemId}`
       }
     });
   };
@@ -54,9 +54,9 @@ export const ItemScanPage = () => {
 
   return (
     <div className="p-4">
-      <div className="mb-4">
+      <div className="mb-2">
         <span className="text-sm text-gray-500">
-          {pickingList.currentItemIndex + 1} / {pickingList.items.length} 번째 물품
+          {Number(itemId)} / {pickingList.items.length} 번째 물품
         </span>
       </div>
       <ItemScan 

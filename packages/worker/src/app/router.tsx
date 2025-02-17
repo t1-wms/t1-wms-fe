@@ -4,6 +4,8 @@ import Home from '@pages/home/Home';
 import { Outbound } from '@/pages/outbound/Outbound';
 import { Camera } from '@/pages/camera/Camera';
 import Chat from '@/pages/chat/Chat';
+import Task from '@/pages/tasklist/Task';
+
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/chat',
         element: <Chat />,
+      },
+      {
+        path: '/task',
+        element: <Task/>,
       }
     ]
   }

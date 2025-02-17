@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { LocationScan } from '../ui/LocationScan';
+import { LocationScan } from '@/shared/ui/location/LocationScan';
 import { usePickingStore } from '../store/outboundstore';
 
 export const LocationScanPage = () => {
@@ -43,14 +43,14 @@ export const LocationScanPage = () => {
 
   // currentItem이 없는 경우 로딩 상태나 빈 화면 표시
   if (!currentItem) {
-    return <div className="p-4">Loading...</div>;
+    return <div className="p-4">로딩중!</div>;
   }
 
   const handleLocationScan = () => {
     navigate('/camera', {
       state: {
         expectedCode: `${currentItem.location.zone}-${currentItem.location.aisle}-${currentItem.location.rack}-${currentItem.location.shelf}`,
-        returnPath: `/outbound/location/${itemId}` // 수정된 부분
+        returnPath: `/outbound/location/${itemId}`
       }
     });
   };
@@ -59,7 +59,7 @@ export const LocationScanPage = () => {
     <div className="p-4">
       <div className="mb-4">
         <span className="text-sm text-gray-500">
-          {pickingList.currentItemIndex + 1} / {pickingList.items.length} 번째 물품
+          {Number(itemId)} / {pickingList.items.length} 번째 물품
         </span>
       </div>
       <LocationScan 
@@ -68,5 +68,5 @@ export const LocationScanPage = () => {
         isLocationScanned={isLocationScanned}
       />
     </div>
-  );
+);
 };

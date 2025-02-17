@@ -24,11 +24,12 @@ export interface Location {
 }
 
 //스캔 작업용 아이템 타입
-export interface ScanningItem extends Pick<Product, 'id' | 'code' | 'name'> {
+export interface ScanningItem extends Pick<Product, 'id' | 'code' | 'name' | 'image'> {
   quantity: number;
   location: Location;
-  scanned?: boolean;        
+  scanned?: boolean;
 }
+
 
 // 스캔 컴포넌트 props
 export interface LocationScanProps extends Location {

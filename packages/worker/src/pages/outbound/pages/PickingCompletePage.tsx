@@ -13,7 +13,7 @@ export const PickingCompletePage = () => {
 
   const handleListClick = () => {
     resetPicking(); // 피킹 상태 초기화
-    navigate('/tasks'); // 작업 목록으로 이동
+    navigate('/task'); // 작업 목록으로 이동
   };
 
   return (
@@ -26,14 +26,14 @@ export const PickingCompletePage = () => {
       <h1 className="text-2xl font-bold text-gray-800 mb-2">
         집품 완료
       </h1>
-      <p className="text-gray-600 mb-6 text-center">
+      <p className="text-gray-800 mb-6 text-center">
         총 {pickingList.items.length}개 물품의 집품이 완료되었습니다.
       </p>
 
       {/* 피킹 결과 요약 */}
-      <div className="bg-white w-full max-w-sm rounded-lg shadow-sm p-4 mb-8">
+      <div className="w-full max-w-sm p-4 mb-8">
         <div className="flex justify-between items-center border-b border-gray-200 py-2">
-          <span className="text-gray-600">피킹 ID</span>
+          <span className="text-gray-800">피킹 ID</span>
           <span className="font-medium">{pickingList.pickingId}</span>
         </div>
         <div className="flex justify-between items-center py-2">
@@ -46,13 +46,13 @@ export const PickingCompletePage = () => {
       <div className="flex flex-col w-full max-w-sm gap-3">
         <button
           onClick={handleHomeClick}
-          className="w-full bg-t1normal text-white py-3 rounded-md font-medium"
+          className="w-full bg-t1normal text-white p-4 rounded-md font-medium"
         >
           홈으로 이동
         </button>
         <button
           onClick={handleListClick}
-          className="w-full bg-gray-200 text-gray-800 py-3 rounded-md font-medium"
+          className="w-full bg-gray-200 text-gray-800 p-4 rounded-md font-medium"
         >
           작업 목록으로 이동
         </button>
