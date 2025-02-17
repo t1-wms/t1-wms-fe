@@ -1,7 +1,6 @@
-import { PageContentBox, Spinner, useModalStore } from "@/shared";
+import { PageContentBox, Spinner } from "@/shared";
 import styles from "./InboundSchedulePage.module.css";
 import {
-  CreateInboundScheduleModalInfo,
   InboundControlPanel,
   InboundScheduleDrawer,
   InboundScheduleResponseDto,
@@ -15,8 +14,6 @@ export const InboundSchedulePage = () => {
   const [selectedRow, setSelectedRow] =
     useState<InboundScheduleResponseDto | null>(null);
 
-  const { openModal } = useModalStore();
-
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
       setColumnFilters([
@@ -26,14 +23,6 @@ export const InboundSchedulePage = () => {
     },
     [setColumnFilters]
   );
-
-  const handleClickCreate = useCallback(() => {
-    const modalInfo: CreateInboundScheduleModalInfo = {
-      key: "createOutboundPlan",
-    };
-
-    openModal(modalInfo);
-  }, [openModal]);
 
   const handleChangeSelectedRow = useCallback(
     (row: InboundScheduleResponseDto | null) => {
@@ -48,7 +37,7 @@ export const InboundSchedulePage = () => {
         <InboundControlPanel
           label="입하예정"
           onSearch={handleSearch}
-          onClickCreate={handleClickCreate}
+          onClickCreate={() => {}}
         />
       </PageContentBox>
       <PageContentBox>
