@@ -72,7 +72,7 @@ pipeline {
                                 configName: 'FrontendServer',
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: "docker-compose.yml,packages/wms/Dockerfile,nginx/frontend.conf,nginx/nginx.conf",
+                                        sourceFiles: "docker-compose.yml,packages/wms/Dockerfile,nginx/frontend.conf,nginx/nginx.conf, packages/wms/tsconfig.json, packages/wms/tsconfig.app.json, packages/wms/tsconfig.node.json",
                                         remoteDirectory: "",
                                         execCommand: '''
                                             # 초기 디렉토리 설정
