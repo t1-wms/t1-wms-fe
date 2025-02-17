@@ -1,4 +1,4 @@
-// OutboundPlanTable 에서 사용
+// OutboundPlanTable, OrderTable 에서 사용
 export interface ProductListDto {
   productId: number;
   productCode: string;
