@@ -19,20 +19,18 @@ pipeline {
        }
 
        stage('Install dependencies') {
-           steps {
-               nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
-                   sh '''
-                       # Clean previous node_modules and package-lock.json
-                       rm -rf node_modules
-                       rm -rf packages/wms/node_modules
-                       rm -rf packages/worker/node_modules
+               steps {
+                   nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
+                    sh '''
+                        # Clean previous installations
+                        rm -rf node_modules
+                        rm -rf packages/*/node_modules
+                        rm -rf packages/*/package-lock.json
 
-                       # Reset npm cache
-                       npm cache clean --force
-
-                       # Install project dependencies using workspace
-                       npm install
-                   '''
+                        # Install project dependencies
+                        npm install
+                        npm install -D @rollup/rollup-linux-x64-gnu @types/react @types/react-dom @tailwindcss/vite
+                    '''
                }
            }
        }
@@ -53,7 +51,13 @@ pipeline {
        stage('Build Projects') {
            steps {
                nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
-                   sh 'npm run build'
+                sh '''
+                    # Ensure all necessary dependencies are installed
+                    npm install
+
+                    # Run build
+                    npm run build
+                '''
                }
            }
        }

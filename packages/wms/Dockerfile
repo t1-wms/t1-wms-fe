@@ -2,14 +2,11 @@
 FROM node:20 AS build
 WORKDIR /app
 
-# 패키지 파일 복사 및 의존성 설치
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
+RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
 
-# 소스 파일 복사
 COPY . .
-
-# 워크스페이스에서 WMS 프로젝트 빌드
 RUN npm run build:wms
 
 # 프로덕션 스테이지
