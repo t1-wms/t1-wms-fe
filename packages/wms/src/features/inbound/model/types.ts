@@ -40,6 +40,25 @@ export interface InboundCheckResponseDto {
   productList: InboundCheckProductListDto[];
 }
 
+export interface InboundCheckDefaultValues {
+  inboundId: number;
+  checkDate: string;
+  scheduleNumber: string;
+  checkedProductList: InboundCheckProductListDto[];
+}
+
+export interface Defective {
+  productId: number;
+  defectiveCount: number;
+}
+
+export interface CreateInboundCheckRequestDto {
+  inboundId: number;
+  checkDate: string;
+  scheduleNumber: string;
+  checkedProductList: Defective[];
+}
+
 export interface CreateInboundCheckModalInfo extends ModalInfoBase {
   key: "createInboundCheck";
   inboundSchedule?: InboundScheduleResponseDto;
