@@ -1,6 +1,15 @@
 import { ProductListDto } from "@/entities";
 import { ModalInfoBase } from "@/shared";
 
+export interface InboundCheckProductListDto {
+  productId: number;
+  productCode: string;
+  productName: string;
+  productCount: number;
+  lotCount: number;
+  defectiveCount: number;
+}
+
 export interface InboundScheduleResponseDto {
   inboundId: number;
   inboundStatus: string;
@@ -28,7 +37,7 @@ export interface InboundCheckResponseDto {
   orderDate: string;
   supplierId: 0;
   supplierName: string;
-  productList: ProductListDto[];
+  productList: InboundCheckProductListDto[];
 }
 
 export interface CreateInboundCheckModalInfo extends ModalInfoBase {
