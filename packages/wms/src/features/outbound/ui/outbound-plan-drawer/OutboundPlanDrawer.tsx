@@ -33,7 +33,8 @@ export const OutboundPlanDrawer = ({
     };
 
     openModal(modalInfo);
-  }, [openModal, data]);
+    onClose();
+  }, [openModal, onClose, data]);
 
   return (
     <BaseDrawer title={`출고예정 조회`} onClose={onClose}>

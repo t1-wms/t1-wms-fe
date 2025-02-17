@@ -210,3 +210,15 @@ export const createOutboundPlan = async (
 
   return response.data;
 };
+
+export const updateOutboundPlan = async (
+  outboundPlanId: number,
+  newOutboundPlan: CreateOutboundPlanRequestDto
+) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outbound/${outboundPlanId}`,
+    newOutboundPlan
+  );
+
+  return response.data;
+};

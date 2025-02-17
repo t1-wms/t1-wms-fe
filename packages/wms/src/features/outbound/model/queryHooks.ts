@@ -21,8 +21,13 @@ import {
   getOutboundLoadingsPaged,
   getOutboundLoadings,
   createOutboundPlan,
+  updateOutboundPlan,
 } from "../api";
-import { CreateOutboundPlanRequestDto, OutboundFilter } from "./types";
+import {
+  OutboundFilter,
+  UseCreateOutboundPlanParams,
+  UseUpdateOutboundPlanParams,
+} from "./types";
 
 export const useOutboundPlanCount = () => {
   return useSuspenseQuery({
@@ -240,8 +245,28 @@ export const useOutboundLoadings = (
 
 export const useCreateOutboundPlan = (queryClient: QueryClient) => {
   return useMutation({
-    mutationFn: (newOutboundPlan: CreateOutboundPlanRequestDto) =>
+    mutationFn: ({ newOutboundPlan }: UseCreateOutboundPlanParams) =>
       createOutboundPlan(newOutboundPlan),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["outboundPlan", "count"],
+      });
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["outboundPlan"],
+        });
+      }, 0);
+    },
+  });
+};
+
+export const useUpdateOutboundPlan = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundPlanId,
+      newOutboundPlan,
+    }: UseUpdateOutboundPlanParams) =>
+      updateOutboundPlan(outboundPlanId, newOutboundPlan),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["outboundPlan", "count"],

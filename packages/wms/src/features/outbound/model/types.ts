@@ -2,6 +2,7 @@ import { ProductListDto } from "@/entities/product";
 import { ModalInfoBase } from "@/shared";
 
 export interface OutboundPlanResponseDto {
+  outboundPlanId: number;
   process: string;
   outboundScheduleNumber: string;
   outboundScheduleDate: string;
@@ -92,4 +93,13 @@ export interface CreateOutboundPackingModalInfo extends ModalInfoBase {
 export interface CreateOutboundLoadingModalInfo extends ModalInfoBase {
   key: "createOutboundLoading";
   outbound: OutboundPackingResponseDto | OutboundLoadingResponseDto;
+}
+
+export interface UseCreateOutboundPlanParams {
+  newOutboundPlan: CreateOutboundPlanRequestDto;
+}
+
+export interface UseUpdateOutboundPlanParams {
+  outboundPlanId: number;
+  newOutboundPlan: CreateOutboundPlanRequestDto;
 }
