@@ -2,9 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_WMS = 'wms:latest'
         DOCKER_TAG_WMS = "wms:${BUILD_NUMBER}"
-        DOCKER_IMAGE_WORKER = 'worker:latest'
         DOCKER_TAG_WORKER = "worker:${BUILD_NUMBER}"
         EC2_DOMAIN = 'stockholmes.store'
         EC2_USER = 'ec2-user'
@@ -64,14 +62,11 @@ pipeline {
             }
         }
 
-        stage('Build Docker Images for WMS and Worker') {
+        stage('Build Docker Images for WMS and Worker with Docker Compose') {
             steps {
                 script {
-                    sh "docker build -f ./packages/wms/Dockerfile -t ${DOCKER_IMAGE_WMS} ./"
-                    sh "docker tag ${DOCKER_IMAGE_WMS} ${DOCKER_TAG_WMS}"
-
-                    sh "docker build -f ./packages/worker/Dockerfile -t ${DOCKER_IMAGE_WORKER} ./"
-                    sh "docker tag ${DOCKER_IMAGE_WORKER} ${DOCKER_TAG_WORKER}"
+                    // docker-compose로 빌드
+                    sh "docker-compose -f docker-compose.yml build"
                 }
             }
         }
@@ -90,10 +85,7 @@ pipeline {
                                     removePrefix: "dist",
                                     execCommand: """
                                         echo 'Deploying WMS to EC2...'
-                                        docker stop wms_container || true
-                                        docker rm wms_container || true
-                                        docker run -d -v ${WMS_DIST_PATH}:/usr/share/nginx/html -p 8081:80 --name wms_container ${DOCKER_TAG_WMS}
-                                        docker exec wms_container nginx -s reload
+                                        docker-compose -f docker-compose.yml up -d wms
                                         echo 'WMS deployment completed!'
                                     """
                                 ),
@@ -103,10 +95,7 @@ pipeline {
                                     removePrefix: "dist",
                                     execCommand: """
                                         echo 'Deploying Worker to EC2...'
-                                        docker stop worker_container || true
-                                        docker rm worker_container || true
-                                        docker run -d -v ${WORKER_DIST_PATH}:/usr/share/nginx/html -p 8082:80 --name worker_container ${DOCKER_TAG_WORKER}
-                                        docker exec worker_container nginx -s reload
+                                        docker-compose -f docker-compose.yml up -d worker
                                         echo 'Worker deployment completed!'
                                     """
                                 )
