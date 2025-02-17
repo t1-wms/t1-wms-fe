@@ -6,22 +6,22 @@ import {
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import {
-  InboundScheduleResponseDto,
-  useInboundSchedules,
+  InboundCheckResponseDto,
+  useInboundChecks,
   useInboundTable,
 } from "../../model";
 
-interface InboundScheduleTableProps {
+interface InboundCheckTableProps {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
-  onChangeSelectedRow: (rowId: InboundScheduleResponseDto | null) => void;
+  onChangeSelectedRow: (rowId: InboundCheckResponseDto | null) => void;
   totalElements: number;
 }
 
-const columnHelper = createColumnHelper<InboundScheduleResponseDto>();
+const columnHelper = createColumnHelper<InboundCheckResponseDto>();
 
-const dateFilterFn: FilterFn<InboundScheduleResponseDto> = (
+const dateFilterFn: FilterFn<InboundCheckResponseDto> = (
   row,
   columnId,
   filterValue: string
@@ -43,8 +43,12 @@ const defaultColumns = [
     header: "입하예정번호",
     cell: (row) => row.getValue(),
   }),
-  columnHelper.accessor("scheduleDate", {
-    header: "입하예정날짜",
+  columnHelper.accessor("checkNumber", {
+    header: "입하검사번호",
+    cell: (row) => row.getValue(),
+  }),
+  columnHelper.accessor("checkDate", {
+    header: "입하검사날짜",
     cell: (row) => row.getValue(),
     filterFn: dateFilterFn,
   }),
@@ -62,13 +66,13 @@ const defaultColumns = [
   }),
 ];
 
-export const InboundScheduleTable = ({
+export const InboundCheckTable = ({
   columnFilters,
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
   totalElements,
-}: InboundScheduleTableProps) => {
+}: InboundCheckTableProps) => {
   const {
     pagination,
     setPagination,
@@ -80,10 +84,10 @@ export const InboundScheduleTable = ({
   } = useInboundTable({
     columnFilters,
     isServerSide,
-    inboundNumberKey: "scheduleNumber",
-    inboundDateKey: "scheduleDate",
+    inboundNumberKey: "checkNumber",
+    inboundDateKey: "checkDate",
     totalElements,
-    useData: useInboundSchedules,
+    useData: useInboundChecks,
   });
 
   useEffect(() => {
