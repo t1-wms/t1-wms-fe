@@ -1,5 +1,5 @@
 # Node.js 21을 기반으로 React 빌드 실행
-FROM node:21 AS build
+FROM node:22 AS build
 
 # React 프로젝트 복사 및 빌드
 WORKDIR /app
