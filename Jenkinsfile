@@ -20,7 +20,7 @@ pipeline {
 
        stage('Install dependencies for WMS and Worker') {
            steps {
-               nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
+               nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
                    sh '''
                        # Clean previous node_modules and package-lock.json
                        rm -rf packages/wms/node_modules packages/wms/package-lock.json
@@ -52,7 +52,7 @@ pipeline {
 
        stage('Build WMS React Project') {
            steps {
-               nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
+               nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
                    sh 'npm run build --prefix packages/wms'
                }
            }
@@ -60,7 +60,7 @@ pipeline {
 
        stage('Build Worker React Project') {
            steps {
-               nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
+               nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
                    sh 'npm run build --prefix packages/worker'
                }
            }
