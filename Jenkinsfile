@@ -127,7 +127,7 @@ pipeline {
                 }
             }
         }
-
+    }
     post {
         always {
             echo "===== Workspace contents after build ====="
