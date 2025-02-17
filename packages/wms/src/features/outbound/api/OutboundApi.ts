@@ -1,6 +1,7 @@
 import { noAuthAxios } from "@shared/api/base";
 import { PageResponse, Sort } from "@shared/model";
 import {
+  CreateOutboundPlanRequestDto,
   OutboundAssignResponseDto,
   OutboundFilter,
   OutboundLoadingResponseDto,
@@ -18,6 +19,8 @@ export const getOutboundPlanCount = async () => {
 };
 
 export const getOutboundPlans = async (size: number) => {
+  console.log("getOutboundPlans");
+  console.log(size);
   const response = await noAuthAxios.get<PageResponse<OutboundPlanResponseDto>>(
     `api/outbound?page=0&size=${size}`
   );
@@ -192,6 +195,17 @@ export const getOutboundLoadingsPaged = async (
           }${filter.endDate ? `&endDate=${filter.endDate}` : ""}`
         : ""
     }`
+  );
+
+  return response.data;
+};
+
+export const createOutboundPlan = async (
+  newOutboundPlan: CreateOutboundPlanRequestDto
+) => {
+  const response = await noAuthAxios.post<void>(
+    `api/outbound/register`,
+    newOutboundPlan
   );
 
   return response.data;

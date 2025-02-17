@@ -23,6 +23,9 @@ export const OutboundPlanTableWrapper = ({
     return totalElements >= minCountForServerSide;
   }, [totalElements]);
 
+  console.log("TableWrapper Render");
+  console.log(totalElements);
+
   return (
     <>
       <Suspense fallback={<Spinner message="출고예정 데이터를 가져오는 중" />}>

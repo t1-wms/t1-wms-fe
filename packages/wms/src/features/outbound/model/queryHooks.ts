@@ -1,5 +1,9 @@
 import { Sort } from "@/shared";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import {
   getOutboundAssignCount,
   getOutboundAssigns,
@@ -16,8 +20,9 @@ import {
   getOutboundLoadingCount,
   getOutboundLoadingsPaged,
   getOutboundLoadings,
+  createOutboundPlan,
 } from "../api";
-import { OutboundFilter } from "./types";
+import { CreateOutboundPlanRequestDto, OutboundFilter } from "./types";
 
 export const useOutboundPlanCount = () => {
   return useSuspenseQuery({
@@ -52,6 +57,9 @@ export const useOutboundPlans = (
   filter?: OutboundFilter,
   size?: number
 ) => {
+  console.log("useOutboundPlans");
+  console.log(size);
+
   const queryKey = createUseOutboundQueryKey(
     "outboundPlan",
     isServerSide,
@@ -228,4 +236,21 @@ export const useOutboundLoadings = (
       queryFn: () => getOutboundLoadings(size!),
     });
   }
+};
+
+export const useCreateOutboundPlan = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (newOutboundPlan: CreateOutboundPlanRequestDto) =>
+      createOutboundPlan(newOutboundPlan),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["outboundPlan", "count"],
+      });
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["outboundPlan"],
+        });
+      }, 0);
+    },
+  });
 };

@@ -4,6 +4,7 @@ import {
   CreateOutboundPlanModalInfo,
   CreateOutboundPlanRequestDto,
   OutboundPlanResponseDto,
+  useCreateOutboundPlan,
 } from "../../model";
 import { CreateOutboundPlanForm } from "../create-outbound-plan-form";
 import { Suspense, useCallback, useMemo, useState } from "react";
@@ -44,6 +45,7 @@ export const CreateOutboundPlanModal = ({
 
   const { closeModal } = useModalStore();
   const queryClient = useQueryClient();
+  const { mutate } = useCreateOutboundPlan(queryClient);
 
   const handleSubmitValid = (
     productionPlanNumber: string,
@@ -64,8 +66,6 @@ export const CreateOutboundPlanModal = ({
       productList,
     };
 
-    console.log(data);
-
     if (outboundPlan) {
       queryClient.invalidateQueries({
         predicate: (q) => {
@@ -77,6 +77,11 @@ export const CreateOutboundPlanModal = ({
           return isOutboundPlan && isNotCount;
         },
       });
+
+      closeModal();
+    } else {
+      // 출고예정 생성
+      mutate(data);
 
       closeModal();
     }
