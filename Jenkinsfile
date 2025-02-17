@@ -86,8 +86,10 @@ pipeline {
                                             nginx/frontend.conf,
                                             nginx/nginx.conf
                                         """,
-                                        remoteDirectory: "frontend",
+                                        remoteDirectory: "",
                                         execCommand: """
+                                            mkdir -p /home/ec2-user/frontend
+                                            cp -r * /home/ec2-user/frontend/
                                             cd /home/ec2-user/frontend
                                             sudo cp nginx/frontend.conf /etc/nginx/conf.d/
                                             sudo nginx -t && sudo systemctl reload nginx
