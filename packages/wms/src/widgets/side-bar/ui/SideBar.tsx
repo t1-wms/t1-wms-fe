@@ -42,6 +42,7 @@ export const SideBar = () => {
             label: "입고",
             icon: <InboundIcon />,
             subItems: [
+              { label: "발주", path: "/order" },
               { label: "입하 예정", path: "/inbound/schedule" },
               { label: "입하 검사", path: "/inbound/check" },
               { label: "입고 적치", path: "/inbound/put-away" },
