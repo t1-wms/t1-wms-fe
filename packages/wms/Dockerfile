@@ -19,7 +19,7 @@ RUN npm install lightningcss-linux-x64-gnu --save-dev
 
 # 소스 코드 복사 및 빌드
 COPY packages/wms ./
-RUN npm run build  # build:wms → build로 변경
+RUN npm run build
 
 # 프로덕션 스테이지
 FROM nginx:alpine
