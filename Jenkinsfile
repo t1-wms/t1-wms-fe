@@ -93,36 +93,31 @@ pipeline {
                                     sshTransfer(
                                         sourceFiles: "nginx/frontend.conf,nginx/nginx.conf,packages/wms/dist/**",
                                         remoteDirectory: "",
-                                        execCommand: "chmod +x /home/ec2-user/frontend/deploy_fe.sh && /home/ec2-user/frontend/deploy_fe.sh",
                                         execCommand: '''
-                                            echo "===== Remote directory contents ====="
-                                            pwd
-                                            ls -la
+                                            echo "===== Cleaning up old directories ====="
+                                            rm -rf ~/frontend/wms/dist/*
+                                            rm -rf ~/frontend/dist
 
-                                            echo "===== Creating directories ====="
-                                            cd ~
-                                            mkdir -p frontend/nginx
-                                            mkdir -p frontend/dist
+                                            echo "===== Creating new directory structure ====="
+                                            mkdir -p ~/frontend/nginx
+                                            mkdir -p ~/frontend/wms/dist
 
-                                            echo "===== Frontend directory structure ====="
-                                            ls -la frontend/
+                                            echo "===== Moving files ====="
+                                            mv packages/wms/dist/* ~/frontend/wms/dist/
+                                            mv nginx/* ~/frontend/nginx/
 
-                                            echo "===== Moving dist files ====="
-                                            mv packages/wms/dist/* frontend/dist/ || echo "Failed to move dist files"
+                                            echo "===== New directory contents ====="
+                                            ls -la ~/frontend/wms/dist/
 
-                                            echo "===== Dist directory contents after move ====="
-                                            ls -la frontend/dist/
-
-                                            echo "===== Nginx configuration ====="
-                                            sudo cp frontend/nginx/frontend.conf /etc/nginx/conf.d/
-                                            sudo nginx -t
-                                            sudo systemctl reload nginx
+                                            echo "===== Updating Nginx configuration ====="
+                                            sudo cp ~/frontend/nginx/frontend.conf /etc/nginx/conf.d/
+                                            sudo nginx -t && sudo systemctl reload nginx
 
                                             echo "===== Final directory structure ====="
-                                            ls -la frontend/
-                                            ls -la frontend/dist/
+                                            ls -la ~/frontend/
+                                            ls -la ~/frontend/wms/dist/
 
-                                            echo "Deployment completed"
+                                            echo "Deployment completed successfully"
                                         '''
                                     )
                                 ]
@@ -132,7 +127,6 @@ pipeline {
                 }
             }
         }
-    }
 
     post {
         always {
