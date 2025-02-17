@@ -2,8 +2,9 @@
 
 body {
   background: white;
+  font-family: "Pretendard";
 }
-
+ 
 #root {
   position: relative;
   width: 100%;
@@ -15,4 +16,12 @@ body {
   --color-t1normal: #024CAA;
   --color-t1light: #0363DE;
   --color-t1dark: #013679;
+}
+
+.seq {
+  @apply text-sm font-medium text-gray-600;
+}
+
+.itemcode {
+  @apply text-base font-bold bg-gray-200 px-3 py-2.5;
 }

@@ -24,19 +24,33 @@ export interface Location {
 }
 
 //스캔 작업용 아이템 타입
-export interface ScanningItem extends Pick<Product, 'id' | 'code' | 'name'> {
+export interface ScanningItem extends Pick<Product, 'id' | 'code' | 'name' | 'image'> {
   quantity: number;
   location: Location;
-  scanned?: boolean;        
+  scanned?: boolean;
 }
+
 
 // 스캔 컴포넌트 props
 export interface LocationScanProps extends Location {
-  onLocationScan: () => void;
-  isLocationScanned: boolean;
+  onLocationScan: () => void;     // 위치 스캔 완료시 실행할 함수
+  isLocationScanned: boolean;      // 위치 스캔 완료 여부
 }
 
 export interface ItemScanProps {
   item: ScanningItem;
   onScanComplete: () => void;
+}
+
+export interface PickingItem extends ScanningItem {
+  pickingSeq: number;  // 집품 순서
+  isLocationScanned: boolean;  // 위치 스캔 완료 여부
+  isItemScanned: boolean;     // 물품 스캔 완료 여부
+  isInspectionComplete?: boolean; // 입하 검사 완료 여부 추가
+}
+
+export interface PickingList {
+  pickingId: string;
+  items: PickingItem[];
+  currentItemIndex: number;
 }
