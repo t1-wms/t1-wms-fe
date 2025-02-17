@@ -11,10 +11,6 @@ FROM nginx:alpine
 RUN apk update && apk add --no-cache ca-certificates curl
 RUN rm -rf /usr/share/nginx/html/*
 
-# Nginx 설정 복사를 위한 ARG
-ARG NGINX_CONF
-COPY ${NGINX_CONF} /etc/nginx/nginx.conf
-
 # WMS의 경우
 COPY --from=build /app/packages/wms/dist /usr/share/nginx/html
 
