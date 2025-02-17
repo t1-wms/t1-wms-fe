@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     environment {
         DOCKER_TAG_WMS = "wms:${BUILD_NUMBER}"
         DOCKER_TAG_WORKER = "worker:${BUILD_NUMBER}"
@@ -39,7 +38,6 @@ pipeline {
         stage('Copy Shared Folder') {
             steps {
                 script {
-                    // shared 폴더 전체를 wms 및 worker 디렉토리의 dist로 복사
                     sh 'cp -r packages/shared/* packages/wms/dist/'
                     sh 'cp -r packages/shared/* packages/worker/dist/'
                 }
@@ -65,7 +63,6 @@ pipeline {
         stage('Build Docker Images for WMS and Worker with Docker Compose') {
             steps {
                 script {
-                    // docker-compose로 빌드
                     sh "docker-compose -f docker-compose.yml build"
                 }
             }
@@ -81,10 +78,18 @@ pipeline {
                                 configName: sshServerName,
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: "docker-compose.yml,packages/wms/Dockerfile,packages/worker/Dockerfile,nginx.conf",
-                                        remoteDirectory: "",
+                                        sourceFiles: """
+                                            docker-compose.yml,
+                                            packages/wms/Dockerfile,
+                                            packages/worker/Dockerfile,
+                                            config/nginx/frontend.conf,
+                                            config/nginx/nginx.conf
+                                        """,
+                                        remoteDirectory: "frontend",
                                         execCommand: """
                                             cd /home/ec2-user/frontend
+                                            sudo cp config/nginx/frontend.conf /etc/nginx/conf.d/
+                                            sudo nginx -t && sudo systemctl reload nginx
                                             docker-compose down
                                             docker-compose up -d
                                             docker ps

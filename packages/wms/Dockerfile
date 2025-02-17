@@ -11,11 +11,11 @@ FROM nginx:alpine
 RUN apk update && apk add --no-cache ca-certificates curl
 RUN rm -rf /usr/share/nginx/html/*
 
+# Nginx 설정 복사 (경로 수정)
+COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
+
 # WMS의 경우
 COPY --from=build /app/packages/wms/dist /usr/share/nginx/html
 
-# nginx 설정
-COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]
