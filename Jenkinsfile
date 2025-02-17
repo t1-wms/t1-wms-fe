@@ -20,7 +20,7 @@ pipeline {
 
         stage('Install dependencies for WMS') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.2.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
                     sh 'rm -rf packages/wms/node_modules packages/wms/package-lock.json'
                     sh 'npm install --prefix packages/wms'
                 }
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Install dependencies for Worker') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.2.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
                     sh 'rm -rf packages/worker/node_modules packages/worker/package-lock.json'
                     sh 'npm install --prefix packages/worker'
                 }
@@ -39,7 +39,8 @@ pipeline {
         stage('Copy Shared Folder') {
             steps {
                 script {
-                    // shared 폴더 전체를 wms 및 worker 디렉토리의 dist로 복사
+                    sh 'mkdir -p packages/wms/dist'
+                    sh 'mkdir -p packages/worker/dist'
                     sh 'cp -r packages/shared/* packages/wms/dist/'
                     sh 'cp -r packages/shared/* packages/worker/dist/'
                 }
@@ -48,7 +49,7 @@ pipeline {
 
         stage('Build WMS React Project') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.2.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
                     sh 'npm run build --prefix packages/wms'
                 }
             }
@@ -56,7 +57,7 @@ pipeline {
 
         stage('Build Worker React Project') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.2.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
                     sh 'npm run build --prefix packages/worker'
                 }
             }
@@ -65,7 +66,6 @@ pipeline {
         stage('Build Docker Images for WMS and Worker with Docker Compose') {
             steps {
                 script {
-                    // docker-compose로 빌드
                     sh "docker-compose -f docker-compose.yml build"
                 }
             }
@@ -80,8 +80,8 @@ pipeline {
                             configName: sshServerName,
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./packages/wms/dist/**/*",  // wms dist 폴더 전송
-                                    remoteDirectory: "${WMS_DIST_PATH}",  // EC2 서버의 wms 폴더
+                                    sourceFiles: "./packages/wms/dist/**/*",
+                                    remoteDirectory: "${WMS_DIST_PATH}",
                                     removePrefix: "dist",
                                     execCommand: """
                                         echo 'Deploying WMS to EC2...'
@@ -104,6 +104,18 @@ pipeline {
                     ])
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        success {
+            echo 'Pipeline succeeded!'
         }
     }
 }
