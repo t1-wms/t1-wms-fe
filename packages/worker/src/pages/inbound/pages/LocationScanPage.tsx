@@ -1,30 +1,35 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { LocationScan } from '@/shared/ui/location/LocationScan';
-import { usePickingStore } from '../store/outboundstore';
+import { useInboundStore } from '../store/inboundstore';
 import Spinner from '@/shared/ui/Spinner';
 
-export const LocationScanPage = () => {
+function LocationScanPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { itemId } = useParams();
   const [isLocationScanned, setIsLocationScanned] = useState(false);
   
-  const { pickingList, setLocationScanned } = usePickingStore();
-  const currentItem = pickingList.items[Number(itemId) - 1]; // URL의 itemId를 인덱스로 변환
+  const { inboundList, setLocationScanned, moveToNextItem } = useInboundStore();
+  const currentItem = inboundList.items[Number(itemId) - 1];
 
   useEffect(() => {
     if (!currentItem) {
-      navigate('/outbound/complete', { replace: true });
+      navigate('/inbound/complete', { replace: true });
       return;
     }
   }, [currentItem, navigate]);
 
   useEffect(() => {
     if (currentItem?.isLocationScanned) {
-      navigate(`/outbound/item/${itemId}`, { replace: true });
+      const nextItemIndex = Number(itemId);
+      if (nextItemIndex < inboundList.items.length) {
+        navigate(`/inbound/inspection/${nextItemIndex + 1}`, { replace: true });
+      } else {
+        navigate('/inbound/complete', { replace: true });
+      }
     }
-  }, [currentItem, navigate, itemId]);
+  }, [currentItem, navigate, itemId, inboundList.items.length]);
 
   useEffect(() => {
     const state = location.state as { scanSuccess?: boolean };
@@ -33,13 +38,22 @@ export const LocationScanPage = () => {
       setLocationScanned();
       
       setTimeout(() => {
-        navigate(`/outbound/item/${itemId}`, { 
-          replace: true,
-          state: {} // 이전 state 초기화
-        });
+        const nextItemIndex = Number(itemId);
+        moveToNextItem();
+        
+        if (nextItemIndex < inboundList.items.length) {
+          navigate(`/inbound/inspection/${nextItemIndex + 1}`, {
+            replace: true,
+            state: {}
+          });
+        } else {
+          navigate('/inbound/complete', { 
+            replace: true 
+          });
+        }
       }, 1000);
     }
-  }, [location.state, navigate, setLocationScanned, itemId]);
+  }, [location.state, navigate, setLocationScanned, moveToNextItem, itemId, inboundList.items.length]);
 
   if (!currentItem) {
     return <Spinner />;
@@ -49,7 +63,7 @@ export const LocationScanPage = () => {
     navigate('/camera', {
       state: {
         expectedCode: `${currentItem.location.zone}-${currentItem.location.aisle}-${currentItem.location.rack}-${currentItem.location.shelf}`,
-        returnPath: `/outbound/location/${itemId}`
+        returnPath: `/inbound/location/${itemId}`
       }
     });
   };
@@ -58,7 +72,7 @@ export const LocationScanPage = () => {
     <div className="p-4">
       <div className="mb-4">
         <span className="seq">
-          {Number(itemId)} / {pickingList.items.length} 번째 물품
+          {Number(itemId)} / {inboundList.items.length} 번째 물품
         </span>
       </div>
       <LocationScan 
@@ -67,5 +81,7 @@ export const LocationScanPage = () => {
         isLocationScanned={isLocationScanned}
       />
     </div>
-);
-};
+  );
+}
+
+export default LocationScanPage;

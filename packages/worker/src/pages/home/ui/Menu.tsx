@@ -7,7 +7,7 @@ export const menuItems: MenuItem[] = [
     id: 1,
     title: '입고 배치',
     description: '입고된 상품을 지정 위치에 배치',
-    path: '/inbound',
+    path: '/inbound/inspection/1',
     icon: <FaBox />
   },
   {

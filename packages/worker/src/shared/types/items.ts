@@ -46,6 +46,7 @@ export interface PickingItem extends ScanningItem {
   pickingSeq: number;  // 집품 순서
   isLocationScanned: boolean;  // 위치 스캔 완료 여부
   isItemScanned: boolean;     // 물품 스캔 완료 여부
+  isInspectionComplete?: boolean; // 입하 검사 완료 여부 추가
 }
 
 export interface PickingList {

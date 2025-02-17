@@ -17,7 +17,7 @@ export const ScanButton: FC<ScanButtonProps> = ({
           className={`w-full p-4 rounded-md ${
             isScanned 
               ? 'bg-green-100 text-green-800' 
-              : 'bg-purple-700 text-white'
+              : 'bg-t1normal text-white'
           }`}
         >
           {isScanned ? `✓ ${completedText}` : scanText}

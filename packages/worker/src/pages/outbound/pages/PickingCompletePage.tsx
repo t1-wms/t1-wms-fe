@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { usePickingStore } from '../store/outboundstore';
-import { BsCheckCircle } from 'react-icons/bs';
+import Success from '@/shared/ui/success';
 
 export const PickingCompletePage = () => {
   const navigate = useNavigate();
@@ -17,9 +17,9 @@ export const PickingCompletePage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 pb-30">
       <div className="mb-6">
-        <BsCheckCircle className="text-green-500 text-6xl" />
+        <Success />
       </div>
 
       {/* 완료 메시지 */}
@@ -43,10 +43,11 @@ export const PickingCompletePage = () => {
       </div>
 
       {/* 버튼 영역 */}
-      <div className="flex flex-col w-full max-w-sm gap-3">
+      <div className="fixed bottom-16 left-0 right-0 px-4 py-2">
+      <div className="max-w-sm mx-auto">
         <button
           onClick={handleHomeClick}
-          className="w-full bg-t1normal text-white p-4 rounded-md font-medium"
+          className="w-full bg-t1normal text-white p-4 mb-3 rounded-md font-medium"
         >
           홈으로 이동
         </button>
@@ -56,6 +57,7 @@ export const PickingCompletePage = () => {
         >
           작업 목록으로 이동
         </button>
+      </div>
       </div>
     </div>
   );

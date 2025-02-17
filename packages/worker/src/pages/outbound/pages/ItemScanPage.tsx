@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ItemScan } from '@shared/ui/item/ItemScan';
 import { usePickingStore } from '../store/outboundstore';
+import Spinner from '@/shared/ui/Spinner';
 
 export const ItemScanPage = () => {
   const navigate = useNavigate();
@@ -47,15 +48,14 @@ export const ItemScanPage = () => {
     });
   };
 
-  // currentItem이 없는 경우 로딩 상태 표시
   if (!currentItem) {
-    return <div className="p-4">Loading...</div>;
+    return <Spinner />;
   }
 
   return (
     <div className="p-4">
       <div className="mb-2">
-        <span className="text-sm text-gray-500">
+        <span className="seq">
           {Number(itemId)} / {pickingList.items.length} 번째 물품
         </span>
       </div>

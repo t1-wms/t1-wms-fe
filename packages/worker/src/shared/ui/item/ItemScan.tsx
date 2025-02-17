@@ -16,7 +16,7 @@ export const ItemScan = ({ item, onScanComplete }: ItemScanProps) => {
   );
 
   return (
-    <div className="flex flex-col min-h-auto space-y-2">
+    <div className="flex flex-col min-h-auto space-y-6">
       {/* 제품 이미지 */}
       <div className="flex justify-center">
         <div className="w-40 h-40 bg-gray-200 rounded-md flex items-center justify-center">
@@ -37,7 +37,7 @@ export const ItemScan = ({ item, onScanComplete }: ItemScanProps) => {
         <div className="py-4">
           <BinCodeDisplay {...item.location} />
         </div>
-        <span className="text-sm font-semibold bg-gray-100 px-3 py-2 rounded">
+        <span className="itemcode">
           {item.code}
         </span>
       </div>
@@ -46,7 +46,7 @@ export const ItemScan = ({ item, onScanComplete }: ItemScanProps) => {
       <h3 className="font-bold text-xl mb-2">{item.name}</h3>
 
       {/* 수량 선택 */}
-      <div className="fixed bottom-35 left-1/2 transform -translate-x-1/2 w-full max-w-md">
+      <div className="fixed bottom-31 left-1/2 transform -translate-x-1/2 w-full max-w-md">
         <div className="flex items-center justify-center space-x-4">
           <button
             onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}

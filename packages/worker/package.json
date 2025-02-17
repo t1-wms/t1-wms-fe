@@ -11,12 +11,15 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
+    "@lottiefiles/dotlottie-react": "^0.13.0",
     "@tailwindcss/vite": "^4.0.6",
     "jsqr": "^1.4.0",
+    "lottie-react": "^2.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
     "react-router-dom": "^6.21.3",
+    "react-spinners": "^0.15.0",
     "tailwindcss": "^4.0.6",
     "zustand": "^5.0.3"
   },
