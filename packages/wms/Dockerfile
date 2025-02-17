@@ -12,7 +12,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
 RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
-RUN npm install lightningcss-linux-x64-gnu --save-dev
 
 # 소스 코드 복사 및 빌드
 COPY . .
