@@ -2,11 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_TAG_WMS = "wms:${BUILD_NUMBER}"
         EC2_DOMAIN = 'stockholmes.store'
         EC2_USER = 'ec2-user'
-        WMS_DIST_PATH = '/home/ec2-user/frontend/wms/dist'
-        SHARED_CSS_PATH = '/home/ec2-user/frontend/shared/style'
     }
 
     stages {
@@ -44,21 +41,12 @@ pipeline {
             }
         }
 
-        stage('Build Projects') {
+        stage('Build WMS') {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
                     sh '''
-                        # Run WMS build only
                         npm run build:wms
                     '''
-                }
-            }
-        }
-
-        stage('Build Docker Images') {
-            steps {
-                script {
-                    sh "docker build -f packages/wms/Dockerfile -t ${DOCKER_TAG_WMS} ."
                 }
             }
         }
@@ -72,29 +60,23 @@ pipeline {
                                 configName: 'FrontendServer',
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: "docker-compose.yml,nginx/frontend.conf,nginx/nginx.conf",
+                                        sourceFiles: "nginx/frontend.conf,nginx/nginx.conf,packages/wms/dist/**/*",
                                         remoteDirectory: "",
                                         execCommand: '''
                                             # 초기 디렉토리 설정
                                             cd ~
-                                            mkdir -p frontend/nginx frontend/dist
+                                            mkdir -p frontend/nginx
+                                            mkdir -p frontend/dist
 
                                             # 파일 이동
-                                            mv docker-compose.yml frontend/
                                             mv nginx/* frontend/nginx/
+                                            mv packages/wms/dist/* frontend/dist/
 
                                             # Nginx 설정
                                             sudo cp frontend/nginx/frontend.conf /etc/nginx/conf.d/
                                             sudo nginx -t && sudo systemctl reload nginx
 
-                                            # Docker 컨테이너 재시작
-                                            cd frontend
-                                            docker container stop wms || true
-                                            docker container rm wms || true
-                                            docker-compose up -d wms
-
                                             # 상태 확인
-                                            docker ps
                                             echo "Deployment completed successfully"
                                         '''
                                     )
