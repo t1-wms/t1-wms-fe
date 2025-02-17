@@ -93,6 +93,7 @@ pipeline {
                                     sshTransfer(
                                         sourceFiles: "nginx/frontend.conf,nginx/nginx.conf,packages/wms/dist/**",
                                         remoteDirectory: "",
+                                        execCommand: "chmod +x /home/ec2-user/frontend/deploy_fe.sh && /home/ec2-user/frontend/deploy_fe.sh",
                                         execCommand: '''
                                             echo "===== Remote directory contents ====="
                                             pwd
