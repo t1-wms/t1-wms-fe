@@ -20,7 +20,7 @@ pipeline {
 
         stage('Install dependencies for WMS') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh 'rm -rf packages/wms/node_modules packages/wms/package-lock.json'
                     sh 'npm install --prefix packages/wms'
                 }
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Install dependencies for Worker') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh 'rm -rf packages/worker/node_modules packages/worker/package-lock.json'
                     sh 'npm install --prefix packages/worker'
                 }
@@ -49,7 +49,7 @@ pipeline {
 
         stage('Build WMS React Project') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh 'npm run build --prefix packages/wms'
                 }
             }
@@ -57,7 +57,7 @@ pipeline {
 
         stage('Build Worker React Project') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh 'npm run build --prefix packages/worker'
                 }
             }
@@ -75,33 +75,41 @@ pipeline {
             steps {
                 script {
                     def sshServerName = 'FrontendServer'
-                    sshPublisher(publishers: [
-                        sshPublisherDesc(
-                            configName: sshServerName,
-                            transfers: [
-                                sshTransfer(
-                                    sourceFiles: "./packages/wms/dist/**/*",
-                                    remoteDirectory: "${WMS_DIST_PATH}",
-                                    removePrefix: "dist",
-                                    execCommand: """
-                                        echo 'Deploying WMS to EC2...'
-                                        docker-compose -f docker-compose.yml up -d wms
-                                        echo 'WMS deployment completed!'
-                                    """
-                                ),
-                                sshTransfer(
-                                    sourceFiles: "./packages/worker/dist/**/*",
-                                    remoteDirectory: "${WORKER_DIST_PATH}",
-                                    removePrefix: "dist",
-                                    execCommand: """
-                                        echo 'Deploying Worker to EC2...'
-                                        docker-compose -f docker-compose.yml up -d worker
-                                        echo 'Worker deployment completed!'
-                                    """
-                                )
-                            ]
-                        )
-                    ])
+                    sshPublisher(
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: sshServerName,
+                                transfers: [
+                                    sshTransfer(
+                                        sourceFiles: "docker-compose.yml,packages/wms/Dockerfile,packages/worker/Dockerfile,nginx/frontend.conf,nginx/nginx.conf",
+                                        remoteDirectory: "",
+                                        execCommand: """
+                                            # 필요한 디렉토리 생성
+                                            mkdir -p /home/ec2-user/frontend/nginx
+                                            mkdir -p /home/ec2-user/frontend/packages/wms
+                                            mkdir -p /home/ec2-user/frontend/packages/worker
+
+                                            # 파일 복사
+                                            cp docker-compose.yml /home/ec2-user/frontend/
+                                            cp -r packages/wms/Dockerfile /home/ec2-user/frontend/packages/wms/
+                                            cp -r packages/worker/Dockerfile /home/ec2-user/frontend/packages/worker/
+                                            cp nginx/* /home/ec2-user/frontend/nginx/
+
+                                            # Nginx 설정
+                                            sudo cp /home/ec2-user/frontend/nginx/frontend.conf /etc/nginx/conf.d/
+                                            sudo nginx -t && sudo systemctl reload nginx
+
+                                            # Docker 컨테이너 재시작
+                                            cd /home/ec2-user/frontend
+                                            docker-compose down
+                                            docker-compose up -d
+                                            docker ps
+                                        """
+                                    )
+                                ]
+                            )
+                        ]
+                    )
                 }
             }
         }
