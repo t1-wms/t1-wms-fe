@@ -39,8 +39,7 @@ pipeline {
         stage('Copy Shared Folder') {
             steps {
                 script {
-                    sh 'mkdir -p packages/wms/dist'
-                    sh 'mkdir -p packages/worker/dist'
+                    // shared 폴더 전체를 wms 및 worker 디렉토리의 dist로 복사
                     sh 'cp -r packages/shared/* packages/wms/dist/'
                     sh 'cp -r packages/shared/* packages/worker/dist/'
                 }
@@ -66,6 +65,7 @@ pipeline {
         stage('Build Docker Images for WMS and Worker with Docker Compose') {
             steps {
                 script {
+                    // docker-compose로 빌드
                     sh "docker-compose -f docker-compose.yml build"
                 }
             }
@@ -75,47 +75,35 @@ pipeline {
             steps {
                 script {
                     def sshServerName = 'FrontendServer'
-                    sshPublisher(
-                        publishers: [
-                            sshPublisherDesc(
-                                configName: sshServerName,
-                                transfers: [
-                                      sshTransfer(
-                                          sourceFiles: """
-                                              docker-compose.yml,
-                                              packages/wms/Dockerfile,
-                                              packages/worker/Dockerfile,
-                                              nginx/frontend.conf,
-                                              nginx/nginx.conf
-                                          """,
-                                          remoteDirectory: "frontend",
-                                          execCommand: """
-                                              cd /home/ec2-user/frontend
-                                              sudo cp nginx/frontend.conf /etc/nginx/conf.d/
-                                              sudo nginx -t && sudo systemctl reload nginx
-                                              docker-compose down
-                                              docker-compose up -d
-                                              docker ps
-                                          """
-                                      )
-                                  ]
-                            )
-                        ]
-                    )
+                    sshPublisher(publishers: [
+                        sshPublisherDesc(
+                            configName: sshServerName,
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: "./packages/wms/dist/**/*",  // wms dist 폴더 전송
+                                    remoteDirectory: "${WMS_DIST_PATH}",  // EC2 서버의 wms 폴더
+                                    removePrefix: "dist",
+                                    execCommand: """
+                                        echo 'Deploying WMS to EC2...'
+                                        docker-compose -f docker-compose.yml up -d wms
+                                        echo 'WMS deployment completed!'
+                                    """
+                                ),
+                                sshTransfer(
+                                    sourceFiles: "./packages/worker/dist/**/*",
+                                    remoteDirectory: "${WORKER_DIST_PATH}",
+                                    removePrefix: "dist",
+                                    execCommand: """
+                                        echo 'Deploying Worker to EC2...'
+                                        docker-compose -f docker-compose.yml up -d worker
+                                        echo 'Worker deployment completed!'
+                                    """
+                                )
+                            ]
+                        )
+                    ])
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            cleanWs()
-        }
-        failure {
-            echo 'Pipeline failed!'
-        }
-        success {
-            echo 'Pipeline succeeded!'
         }
     }
 }

@@ -1,28 +1,32 @@
-# 빌드 스테이지
+# Node.js 21을 기반으로 React 빌드 실행
 FROM node:21 AS build
+
+# React 프로젝트 복사 및 빌드
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . ./
+RUN npm run build
 
-# 패키지 파일 복사 및 의존성 설치
-COPY package*.json ./
-COPY ./packages/wms/package*.json ./packages/wms/
-COPY ./packages/shared/package*.json ./packages/shared/
-
-# 의존성 설치
-RUN npm install --legacy-peer-deps
-
-# 소스 파일 복사
-COPY . .
-
-# 워크스페이스에서 WMS 프로젝트 빌드
-RUN npm run build:wms
-
-# 프로덕션 스테이지
+# Nginx 이미지를 사용
 FROM nginx:alpine
-RUN apk update && apk add --no-cache ca-certificates curl
+
+# 필수 패키지 설치 (최소화)
+RUN apk update && apk add --no-cache \
+    ca-certificates \
+    curl \
+ && rm -rf /var/cache/apk/*
+
+# Nginx의 기본 HTML 파일 삭제 (Nginx의 기본 페이지를 제거)
 RUN rm -rf /usr/share/nginx/html/*
 
-# 빌드된 파일 복사
+# 앱의 빌드된 파일을 Nginx의 HTML 디렉토리에 복사
 COPY --from=build /app/packages/wms/dist /usr/share/nginx/html
 
-EXPOSE 80
+# Nginx 설정 변경 (사용자 변경 방지)
+RUN sed -i 's/^user nginx;/#user nginx;/' /etc/nginx/nginx.conf
+
+EXPOSE 80 443
+
+# Nginx 실행
 CMD ["nginx", "-g", "daemon off;"]
