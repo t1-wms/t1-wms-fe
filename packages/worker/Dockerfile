@@ -1,5 +1,5 @@
 # 빌드 스테이지
-FROM node:21 AS build
+FROM node:22.0.0 AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
