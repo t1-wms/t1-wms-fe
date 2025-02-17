@@ -18,22 +18,20 @@ pipeline {
            }
        }
 
-       stage('Install dependencies for WMS and Worker') {
+       stage('Install dependencies') {
            steps {
                nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
                    sh '''
                        # Clean previous node_modules and package-lock.json
-                       rm -rf packages/wms/node_modules packages/wms/package-lock.json
-                       rm -rf packages/worker/node_modules packages/worker/package-lock.json
+                       rm -rf node_modules
+                       rm -rf packages/wms/node_modules
+                       rm -rf packages/worker/node_modules
 
                        # Reset npm cache
                        npm cache clean --force
 
-                       # Install global dev dependencies
-                       npm install -g @types/react@^19.0.8 @types/react-dom@^19.0.3 @types/react-router-dom@^5.3.3 @vitejs/plugin-react@^4.3.4
-
-                       # Install project dependencies
-                       npm install --prefix packages/worker
+                       # Install project dependencies using workspace
+                       npm install
                    '''
                }
            }
@@ -43,20 +41,19 @@ pipeline {
            steps {
                script {
                    sh '''
+                       mkdir -p packages/wms/dist
                        mkdir -p packages/worker/dist
+                       cp -r packages/shared/* packages/wms/dist/
                        cp -r packages/shared/* packages/worker/dist/
                    '''
                }
            }
        }
 
-       stage('Build Worker React Project') {
+       stage('Build Projects') {
            steps {
                nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
-                   sh '''
-                       cd packages/worker
-                       npm run build
-                   '''
+                   sh 'npm run build'
                }
            }
        }
@@ -79,15 +76,17 @@ pipeline {
                                configName: sshServerName,
                                transfers: [
                                    sshTransfer(
-                                       sourceFiles: "docker-compose.yml,packages/worker/Dockerfile,nginx/frontend.conf,nginx/nginx.conf",
+                                       sourceFiles: "docker-compose.yml,packages/wms/Dockerfile,packages/worker/Dockerfile,nginx/frontend.conf,nginx/nginx.conf",
                                        remoteDirectory: "/home/ec2-user/frontend/",
                                        execCommand: """
                                            # 필요한 디렉토리 생성
                                            mkdir -p /home/ec2-user/frontend/nginx
+                                           mkdir -p /home/ec2-user/frontend/packages/wms
                                            mkdir -p /home/ec2-user/frontend/packages/worker
 
                                            # 파일 복사
                                            cp docker-compose.yml /home/ec2-user/frontend/
+                                           cp -r packages/wms/Dockerfile /home/ec2-user/frontend/packages/wms/
                                            cp -r packages/worker/Dockerfile /home/ec2-user/frontend/packages/worker/
                                            cp nginx/* /home/ec2-user/frontend/nginx/
 
