@@ -8,9 +8,11 @@ import {
 } from "@/features";
 import { Suspense, useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { SupplierListDrawer } from "@/features/order/ui/supplier-list-drawer";
 
 export default function OrderPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<OrderResponseDto | null>(null);
 
   const handleSearch = useCallback(
@@ -23,7 +25,9 @@ export default function OrderPage() {
     [setColumnFilters]
   );
 
-  const handleClickCreate = useCallback(() => {}, []);
+  const handleClickCreate = useCallback(() => {
+    setDrawerOpen(true);
+  }, [setDrawerOpen]);
 
   const handleChangeSelectedRow = useCallback(
     (row: OrderResponseDto | null) => {
@@ -49,6 +53,9 @@ export default function OrderPage() {
           />
         </Suspense>
       </PageContentBox>
+      {isDrawerOpen && (
+        <SupplierListDrawer onClose={() => setDrawerOpen(false)} />
+      )}
       {selectedRow && (
         <OrderDrawer data={selectedRow} onClose={() => setSelectedRow(null)} />
       )}

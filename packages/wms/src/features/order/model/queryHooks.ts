@@ -1,7 +1,14 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getOrderCount, getOrders, getOrdersPaged } from "../api";
+import {
+  getOrderCount,
+  getOrders,
+  getOrdersPaged,
+  getSupplierCount,
+  getSuppliers,
+  getSuppliersPaged,
+} from "../api";
 import { Sort } from "@/shared";
-import { OrderFilter } from "./types";
+import { OrderFilter, SupplierFilter } from "./types";
 
 export const createUseOrderQueryKey = (
   key: string,
@@ -20,6 +27,57 @@ export const createUseOrderQueryKey = (
           : "not-filtering",
       ]
     : [key];
+};
+
+export const createUseSupplierQueryKey = (
+  key: string,
+  isServerSide: boolean,
+  page?: number,
+  sort?: Sort,
+  filter?: SupplierFilter
+) => {
+  return isServerSide
+    ? [
+        key,
+        page!,
+        sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
+        filter ? `${filter.businessNumber}` : "not-filtering",
+      ]
+    : [key];
+};
+
+export const useSupplierCount = () => {
+  return useSuspenseQuery({
+    queryKey: ["supplier", "count"],
+    queryFn: () => getSupplierCount(),
+  });
+};
+
+export const useSuppliers = (
+  isServerSide: boolean,
+  page?: number,
+  sort?: Sort,
+  filter?: SupplierFilter
+) => {
+  const queryKey = createUseSupplierQueryKey(
+    "supplier",
+    isServerSide,
+    page!,
+    sort,
+    filter
+  );
+
+  if (isServerSide) {
+    return useSuspenseQuery({
+      queryKey,
+      queryFn: () => getSuppliersPaged(page!, sort, filter),
+    });
+  } else {
+    return useSuspenseQuery({
+      queryKey,
+      queryFn: () => getSuppliers(),
+    });
+  }
 };
 
 export const useOrderCount = () => {

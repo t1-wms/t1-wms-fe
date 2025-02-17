@@ -1,4 +1,5 @@
 import {
+  CreateOrderModalInfo,
   CreateOutboundAssignModal,
   CreateOutboundAssignModalInfo,
   CreateOutboundLoadingModal,
@@ -12,6 +13,7 @@ import {
   CreateUserModal,
   CreateUserModalInfo,
 } from "@/features";
+import { CreateOrderModal } from "@/features/order/ui/create-order-modal";
 import {
   ModalInfoBase,
   useModalStore,
@@ -59,6 +61,12 @@ const isCreateOutboundLoadingModalInfo = (
   return info.key === "createOutboundLoading";
 };
 
+const isCreateOrderModalInfo = (
+  info: ModalInfoBase
+): info is CreateOrderModalInfo => {
+  return info.key === "createOrder";
+};
+
 export const AppModal = () => {
   const { openedModal } = useModalStore();
 
@@ -81,6 +89,8 @@ export const AppModal = () => {
       <CreateOutboundPackingModal modalInfo={openedModal} />
     ) : isCreateOutboundLoadingModalInfo(openedModal) ? (
       <CreateOutboundLoadingModal modalInfo={openedModal} />
+    ) : isCreateOrderModalInfo(openedModal) ? (
+      <CreateOrderModal modalInfo={openedModal} />
     ) : (
       <></>
     )
