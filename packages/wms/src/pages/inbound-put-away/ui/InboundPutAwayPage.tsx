@@ -1,26 +1,26 @@
 import { PageContentBox, Spinner } from "@/shared";
-import styles from "./InboundCheckPage.module.css";
+import styles from "./InboundPutAwayPage.module.css";
 import {
   InboundControlPanel,
-  InboundCheckDrawer,
-  InboundCheckResponseDto,
-  InboundCheckTableWrapper,
-  InboundScheduleListDrawer,
+  InboundPutAwayDrawer,
+  InboundPutAwayResponseDto,
+  InboundPutAwayTableWrapper,
+  InboundCheckListDrawer,
 } from "@/features";
 import { Suspense, useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
-export const InboundCheckPage = () => {
+export const InboundPutAwayPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [selectedRow, setSelectedRow] =
-    useState<InboundCheckResponseDto | null>(null);
+    useState<InboundPutAwayResponseDto | null>(null);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
       setColumnFilters([
-        { id: "checkDate", value: `${startDate},${endDate}` },
-        { id: "checkNumber", value: number },
+        { id: "putAwayDate", value: `${startDate},${endDate}` },
+        { id: "putAwayNumber", value: number },
       ]);
     },
     [setColumnFilters]
@@ -31,7 +31,7 @@ export const InboundCheckPage = () => {
   }, [setDrawerOpen]);
 
   const handleChangeSelectedRow = useCallback(
-    (row: InboundCheckResponseDto | null) => {
+    (row: InboundPutAwayResponseDto | null) => {
       setSelectedRow(row);
     },
     [setSelectedRow]
@@ -41,14 +41,14 @@ export const InboundCheckPage = () => {
     <div className={styles.container}>
       <PageContentBox>
         <InboundControlPanel
-          label="입하검사"
+          label="입고적치"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
         />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="입하검사 품목을 세는 중" />}>
-          <InboundCheckTableWrapper
+        <Suspense fallback={<Spinner message="입고적치 품목을 세는 중" />}>
+          <InboundPutAwayTableWrapper
             columnFilters={columnFilters}
             setColumnFilters={setColumnFilters}
             onChangeSelectedRow={handleChangeSelectedRow}
@@ -56,10 +56,10 @@ export const InboundCheckPage = () => {
         </Suspense>
       </PageContentBox>
       {isDrawerOpen && (
-        <InboundScheduleListDrawer onClose={() => setDrawerOpen(false)} />
+        <InboundCheckListDrawer onClose={() => setDrawerOpen(false)} />
       )}
       {selectedRow && (
-        <InboundCheckDrawer
+        <InboundPutAwayDrawer
           data={selectedRow}
           onClose={() => setSelectedRow(null)}
         />

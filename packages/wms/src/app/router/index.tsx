@@ -11,6 +11,7 @@ import OrderPage from "@/pages/order";
 import ReceivedOrder from "@/pages/received-order";
 import { InboundSchedulePage } from "@/pages/inbound-schedule";
 import { InboundCheckPage } from "@/pages/inbound-check";
+import { InboundPutAwayPage } from "@/pages/inbound-put-away";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/inbound/check",
         element: <InboundCheckPage />,
+      },
+      {
+        path: "/inbound/put-away",
+        element: <InboundPutAwayPage />,
       },
       {
         path: "/outbound/plan",
