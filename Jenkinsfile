@@ -36,7 +36,7 @@ pipeline {
                         cd packages/shared
                         rm -rf node_modules package-lock.json
                         npm install
-                        npm install typescript @types/react @types/react-dom
+                        npm install typescript@~5.6.2 @types/react@^18.3.18 @types/react-dom@^18.3.5
                         npm run build || true
                     '''
                 }
@@ -50,7 +50,9 @@ pipeline {
                         cd packages/wms
                         rm -rf node_modules package-lock.json
                         npm install
-                        npm install typescript @types/react @types/react-dom @types/react-router-dom
+                        npm install typescript@~5.6.2 @types/react@^18.3.18 @types/react-dom@^18.3.5
+                        npm install @types/react-router@^5.1.20 @types/react-router-dom@^5.3.3
+                        npm install react-router@7.1.5 react-router-dom@7.1.5
                         npm install @t1-wms-fe/shared@file:../shared
                     '''
                 }
@@ -64,7 +66,9 @@ pipeline {
                         cd packages/worker
                         rm -rf node_modules package-lock.json
                         npm install
-                        npm install typescript @types/react @types/react-dom @types/react-router-dom
+                        npm install typescript@~5.6.2 @types/react@^18.3.18 @types/react-dom@^18.3.5
+                        npm install @types/react-router@^5.1.20 @types/react-router-dom@^5.3.3
+                        npm install react-router@7.1.5 react-router-dom@7.1.5
                         npm install @t1-wms-fe/shared@file:../shared
                     '''
                 }
@@ -77,8 +81,22 @@ pipeline {
                     sh '''
                         mkdir -p packages/wms/dist
                         mkdir -p packages/worker/dist
-                        cp -r packages/shared/* packages/wms/dist/
-                        cp -r packages/shared/* packages/worker/dist/
+
+                        # 필요한 파일만 선택적으로 복사
+                        if [ -d "packages/shared/dist" ]; then
+                            cp -r packages/shared/dist/* packages/wms/dist/
+                            cp -r packages/shared/dist/* packages/worker/dist/
+                        fi
+
+                        # 필요한 경우 추가 파일 복사
+                        cp -r packages/shared/package.json packages/wms/dist/
+                        cp -r packages/shared/package.json packages/worker/dist/
+
+                        # 스타일 파일 복사 (필요한 경우)
+                        if [ -d "packages/shared/styles" ]; then
+                            cp -r packages/shared/styles packages/wms/dist/
+                            cp -r packages/shared/styles packages/worker/dist/
+                        fi
                     '''
                 }
             }
