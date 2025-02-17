@@ -1,27 +1,25 @@
 import { PageContentBox, Spinner } from "@/shared";
-import styles from "./OutboundPackingPage.module.css";
+import styles from "./ReceivedOrderPage.module.css";
 import {
-  OutboundPackingDrawer,
-  OutboundPackingResponseDto,
-  OutboundPackingTableWrapper,
-  OutboundControlPanel,
-  OutboundPickingListDrawer,
+  OrderDrawer,
+  OrderResponseDto,
+  OrderTableWrapper,
+  OrderControlPanel,
 } from "@/features";
 import { Suspense, useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { SupplierListDrawer } from "@/features/order/ui/supplier-list-drawer";
 
-export const OutboundPackingPage = () => {
+export default function ReceivedOrderPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [selectedRow, setSelectedRow] =
-    useState<OutboundPackingResponseDto | null>(null);
+  const [selectedRow, setSelectedRow] = useState<OrderResponseDto | null>(null);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
-      console.log("asdf");
       setColumnFilters([
-        { id: "outboundPackingDate", value: `${startDate},${endDate}` },
-        { id: "outboundPackingNumber", value: number },
+        { id: "orderDate", value: `${startDate},${endDate}` },
+        { id: "orderNumber", value: number },
       ]);
     },
     [setColumnFilters]
@@ -32,7 +30,7 @@ export const OutboundPackingPage = () => {
   }, [setDrawerOpen]);
 
   const handleChangeSelectedRow = useCallback(
-    (row: OutboundPackingResponseDto | null) => {
+    (row: OrderResponseDto | null) => {
       setSelectedRow(row);
     },
     [setSelectedRow]
@@ -41,15 +39,14 @@ export const OutboundPackingPage = () => {
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <OutboundControlPanel
-          label="출고패킹"
+        <OrderControlPanel
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
         />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="출고패킹 품목을 세는 중" />}>
-          <OutboundPackingTableWrapper
+        <Suspense fallback={<Spinner message="발주 품목을 세는 중" />}>
+          <OrderTableWrapper
             columnFilters={columnFilters}
             setColumnFilters={setColumnFilters}
             onChangeSelectedRow={handleChangeSelectedRow}
@@ -57,14 +54,11 @@ export const OutboundPackingPage = () => {
         </Suspense>
       </PageContentBox>
       {isDrawerOpen && (
-        <OutboundPickingListDrawer onClose={() => setDrawerOpen(false)} />
+        <SupplierListDrawer onClose={() => setDrawerOpen(false)} />
       )}
       {selectedRow && (
-        <OutboundPackingDrawer
-          data={selectedRow}
-          onClose={() => setSelectedRow(null)}
-        />
+        <OrderDrawer data={selectedRow} onClose={() => setSelectedRow(null)} />
       )}
     </div>
   );
-};
+}

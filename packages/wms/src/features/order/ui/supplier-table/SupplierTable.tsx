@@ -16,6 +16,7 @@ interface SupplierTableProps {
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
   onChangeSelectedRow: (rowId: SupplierResponseDto | null) => void;
+  totalElements: number;
 }
 
 const columnHelper = createColumnHelper<SupplierResponseDto>();
@@ -66,6 +67,7 @@ export const SupplierTable = ({
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
+  totalElements,
 }: SupplierTableProps) => {
   const {
     pagination,
@@ -79,6 +81,7 @@ export const SupplierTable = ({
     columnFilters,
     isServerSide,
     useData: useSuppliers,
+    totalElements,
   });
 
   useEffect(() => {
@@ -87,7 +90,7 @@ export const SupplierTable = ({
         ? parseInt(Object.keys(rowSelection)[0])
         : null;
 
-    onChangeSelectedRow(rowId || rowId === 0 ? data.data[rowId] : null);
+    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
   }, [rowSelection, onChangeSelectedRow]);
 
   return (

@@ -57,7 +57,8 @@ export const useSuppliers = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: SupplierFilter
+  filter?: SupplierFilter,
+  size?: number
 ) => {
   const queryKey = createUseSupplierQueryKey(
     "supplier",
@@ -75,7 +76,7 @@ export const useSuppliers = (
   } else {
     return useSuspenseQuery({
       queryKey,
-      queryFn: () => getSuppliers(),
+      queryFn: () => getSuppliers(size!),
     });
   }
 };
@@ -91,7 +92,8 @@ export const useOrders = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OrderFilter
+  filter?: OrderFilter,
+  size?: number
 ) => {
   const queryKey = createUseOrderQueryKey(
     "order",
@@ -109,7 +111,7 @@ export const useOrders = (
   } else {
     return useSuspenseQuery({
       queryKey,
-      queryFn: () => getOrders(),
+      queryFn: () => getOrders(size!),
     });
   }
 };

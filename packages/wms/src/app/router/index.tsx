@@ -8,6 +8,7 @@ import { OutboundPickingPage } from "@/pages/outbound-picking";
 import { OutboundPackingPage } from "@/pages/outbound-packing";
 import { OutboundLoadingPage } from "@/pages/outbound-loading";
 import OrderPage from "@/pages/order";
+import ReceivedOrder from "@/pages/received-order";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/order",
         element: <OrderPage />,
+      },
+      {
+        path: "/received-order",
+        element: <ReceivedOrder />,
       },
       {
         path: "/outbound/plan",

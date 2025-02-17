@@ -1,16 +1,18 @@
 import { noAuthAxios } from "@shared/api/base";
-import { Count, PageResponse, Sort } from "@shared/model";
+import { PageResponse, Sort } from "@shared/model";
 import { UpdateActiveResDto, UserFilter, UserListDto } from "../model/types";
 
 export const getUserCount = async () => {
-  const response = await noAuthAxios.get<Count>(`/api/users/count`);
+  const response = await noAuthAxios.get<PageResponse<UserListDto>>(
+    `/api/user/list?page=0&size=1`
+  );
 
   return response.data;
 };
 
-export const getUsers = async () => {
+export const getUsers = async (size: number) => {
   const response = await noAuthAxios.get<PageResponse<UserListDto>>(
-    `api/users/no-page`
+    `api/user/list?page=0&size${size}`
   );
 
   return response.data;
@@ -22,8 +24,8 @@ export const getUsersPaged = async (
   filter?: UserFilter
 ) => {
   const response = await noAuthAxios.get<PageResponse<UserListDto>>(
-    `api/users?page=${page}${
-      sort ? `&sortField=${sort.sortField}&sortOrder=${sort.sortOrder}` : ""
+    `api/user/list?page=${page}${
+      sort ? `&sort=${sort.sortField},${sort.sortOrder}` : ""
     }${
       filter
         ? `${filter.staffNumber ? `&staffNumber=${filter.staffNumber}` : ""}`

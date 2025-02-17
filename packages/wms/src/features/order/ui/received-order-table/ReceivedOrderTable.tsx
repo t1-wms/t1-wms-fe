@@ -1,24 +1,22 @@
 import { BaseTable } from "@/shared";
-import { OutboundPackingResponseDto, useOutboundPackings } from "../../model";
 import {
   ColumnFiltersState,
   createColumnHelper,
   FilterFn,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { useOutboundTable } from "../../model/useOutboundTable";
+import { OrderResponseDto, useOrders, useOrderTable } from "../../model";
 
-interface OutboundPackingTableProps {
+interface OrderTableProps {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
-  onChangeSelectedRow: (row: OutboundPackingResponseDto | null) => void;
-  totalElements: number;
+  onChangeSelectedRow: (rowId: OrderResponseDto | null) => void;
 }
 
-const columnHelper = createColumnHelper<OutboundPackingResponseDto>();
+const columnHelper = createColumnHelper<OrderResponseDto>();
 
-const dateFilterFn: FilterFn<OutboundPackingResponseDto> = (
+const dateFilterFn: FilterFn<OrderResponseDto> = (
   row,
   columnId,
   filterValue: string
@@ -36,49 +34,39 @@ const dateFilterFn: FilterFn<OutboundPackingResponseDto> = (
 };
 
 const defaultColumns = [
-  columnHelper.accessor("outboundScheduleNumber", {
-    header: "출고예정번호",
+  columnHelper.accessor("orderNumber", {
+    header: "발주번호",
     cell: (row) => row.getValue(),
   }),
-  columnHelper.accessor("outboundAssignNumber", {
-    header: "출고지시번호",
-    cell: (row) => row.getValue(),
-  }),
-  columnHelper.accessor("outboundPickingNumber", {
-    header: "출고피킹번호",
-    cell: (row) => row.getValue(),
-  }),
-  columnHelper.accessor("outboundPackingNumber", {
-    header: "출고패킹번호",
-    cell: (row) => row.getValue(),
-    filterFn: "includesString",
-  }),
-  columnHelper.accessor("outboundPackingDate", {
-    header: "출고패킹날짜",
+  columnHelper.accessor("orderDate", {
+    header: "발주날짜",
     cell: (row) => row.getValue(),
     filterFn: dateFilterFn,
   }),
-  columnHelper.accessor("process", {
-    header: "진헹상태",
+  columnHelper.accessor("orderStatus", {
+    header: "발주상태",
     cell: (row) => row.getValue(),
   }),
-  columnHelper.accessor("productionPlanNumber", {
-    header: "주문번호",
+  columnHelper.accessor("supplierName", {
+    header: "납품업체",
     cell: (row) => row.getValue(),
   }),
-  columnHelper.accessor("planDate", {
-    header: "주문날짜",
+  columnHelper.accessor("deliveryDeadline", {
+    header: "납품기한",
     cell: (row) => row.getValue(),
+  }),
+  columnHelper.accessor("isReturnOrder", {
+    header: "재발주 여부",
+    cell: (row) => (row.getValue() ? "Y" : "N"),
   }),
 ];
 
-export const OutboundPackingTable = ({
+export const OrderTable = ({
   columnFilters,
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
-  totalElements,
-}: OutboundPackingTableProps) => {
+}: OrderTableProps) => {
   const {
     pagination,
     setPagination,
@@ -87,13 +75,10 @@ export const OutboundPackingTable = ({
     rowSelection,
     setRowSelection,
     data,
-  } = useOutboundTable({
+  } = useOrderTable({
     columnFilters,
     isServerSide,
-    outboundNumberKey: "outboundPackingNumber",
-    outboundDateKey: "outboundPackingDate",
-    useData: useOutboundPackings,
-    totalElements,
+    useData: useOrders,
   });
 
   useEffect(() => {

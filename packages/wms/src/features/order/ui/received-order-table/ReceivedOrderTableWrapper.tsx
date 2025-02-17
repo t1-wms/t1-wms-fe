@@ -1,37 +1,34 @@
 import { Dispatch, SetStateAction, Suspense, useMemo } from "react";
-import { OutboundPlanResponseDto, useOutboundPlanCount } from "../../model";
-import { OutboundPlanTable } from "./OutboundPlanTable";
+import { OrderResponseDto, useReceivedOrderCount } from "../../model";
+import { ReceivedOrderTable } from "./ReceivedOrderTable";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { minCountForServerSide, Spinner } from "@/shared";
 
-interface OutboundPlanTableWrapperProps {
+interface OrderTableWrapperProps {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
-  onChangeSelectedRow: (row: OutboundPlanResponseDto | null) => void;
+  onChangeSelectedRow: (row: OrderResponseDto | null) => void;
 }
 
-export const OutboundPlanTableWrapper = ({
+export const OrderTableWrapper = ({
   columnFilters,
   setColumnFilters,
   onChangeSelectedRow,
-}: OutboundPlanTableWrapperProps) => {
-  const {
-    data: { totalElements },
-  } = useOutboundPlanCount();
+}: OrderTableWrapperProps) => {
+  const { data: countResult } = useOrderCount();
 
   const isServerSide = useMemo(() => {
-    return totalElements >= minCountForServerSide;
-  }, [totalElements]);
+    return countResult.count >= minCountForServerSide;
+  }, [countResult]);
 
   return (
     <>
-      <Suspense fallback={<Spinner message="출고예정 데이터를 가져오는 중" />}>
-        <OutboundPlanTable
+      <Suspense fallback={<Spinner message="발주 데이터를 가져오는 중" />}>
+        <OrderTable
           columnFilters={columnFilters}
           setColumnFilters={setColumnFilters}
           isServerSide={isServerSide}
           onChangeSelectedRow={onChangeSelectedRow}
-          totalElements={totalElements}
         />
       </Suspense>
     </>

@@ -2,13 +2,32 @@ import { PageResponse } from "@/shared/model";
 
 export const createPageResponse = <T extends unknown>(data: T[]) => {
   const pageResponse: PageResponse<T> = {
-    data,
-    pagination: {
-      currentPage: 1,
-      itemsPerPage: data.length,
-      totalItems: data.length,
-      totalPages: 1,
+    content: data,
+    pageable: {
+      sort: {
+        empty: false,
+        unsorted: false,
+        sorted: true,
+      },
+      offset: 0,
+      pageSize: 0,
+      pageNumber: 1,
+      paged: true,
+      unpaged: false,
     },
+    last: true,
+    totalPages: 1,
+    totalElements: data.length,
+    size: 1,
+    number: 0, // 현재 페이지 번호
+    sort: {
+      empty: false,
+      unsorted: false,
+      sorted: true,
+    },
+    first: true,
+    numberOfElements: data.length,
+    empty: false,
   };
 
   return pageResponse;

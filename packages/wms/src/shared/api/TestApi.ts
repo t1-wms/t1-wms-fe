@@ -26,7 +26,7 @@ export const getTestPageNoPage = async () => {
 export const getTestPage = async (page: number, sort?: Sort) => {
   const response = await noAuthAxios.get<PageResponse<TestUser>>(
     `api/users?page=${page}${
-      sort ? `&sortField=${sort.sortField}&sortOrder=${sort.sortOrder}` : ""
+      sort ? `&sort=${sort.sortField},${sort.sortOrder}` : ""
     }`
   );
 

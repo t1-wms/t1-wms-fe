@@ -1,13 +1,30 @@
+interface PageableSort {
+  empty: boolean;
+  unsorted: boolean;
+  sorted: boolean;
+}
+
+interface Pageable {
+  sort: PageableSort;
+  offset: number;
+  pageSize: number;
+  pageNumber: number;
+  paged: boolean;
+  unpaged: boolean;
+}
+
 export interface PageResponse<T> {
-  data: T[];
-  pagination: {
-    currentPage: number;
-    itemsPerPage: number;
-    nextPage?: number;
-    previousPage?: number;
-    totalItems: number;
-    totalPages: number;
-  };
+  content: T[];
+  pageable: Pageable;
+  last: boolean;
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number; // 현재 페이지 번호
+  sort: PageableSort;
+  first: boolean;
+  numberOfElements: number;
+  empty: boolean;
 }
 
 export interface Count {

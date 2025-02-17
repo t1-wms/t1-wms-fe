@@ -1,4 +1,4 @@
-import { Count, PageResponse, Sort } from "@/shared";
+import { PageResponse, Sort } from "@/shared";
 import { noAuthAxios } from "@/shared/api/base";
 import {
   OrderFilter,
@@ -8,14 +8,16 @@ import {
 } from "../model";
 
 export const getSupplierCount = async () => {
-  const response = await noAuthAxios.get<Count>(`/api/supplier/count`);
+  const response = await noAuthAxios.get<PageResponse<SupplierResponseDto>>(
+    `/api/supplier?page=0&size=1`
+  );
 
   return response.data;
 };
 
-export const getSuppliers = async () => {
+export const getSuppliers = async (size: number) => {
   const response = await noAuthAxios.get<PageResponse<SupplierResponseDto>>(
-    `api/supplier/no-page`
+    `api/supplier?page=0&size=${size}`
   );
 
   return response.data;
@@ -28,7 +30,7 @@ export const getSuppliersPaged = async (
 ) => {
   const response = await noAuthAxios.get<PageResponse<SupplierResponseDto>>(
     `api/supplier?page=${page}${
-      sort ? `&sortField=${sort.sortField}&sortOrder=${sort.sortOrder}` : ""
+      sort ? `&sort=${sort.sortField},${sort.sortOrder}` : ""
     }${
       filter
         ? `${filter.businessNumber ? `&number=${filter.businessNumber}` : ""}`
@@ -40,14 +42,16 @@ export const getSuppliersPaged = async (
 };
 
 export const getOrderCount = async () => {
-  const response = await noAuthAxios.get<Count>(`/api/order/count`);
+  const response = await noAuthAxios.get<PageResponse<OrderResponseDto>>(
+    `/api/order?page=0&size=1`
+  );
 
   return response.data;
 };
 
-export const getOrders = async () => {
+export const getOrders = async (size: number) => {
   const response = await noAuthAxios.get<PageResponse<OrderResponseDto>>(
-    `api/order/no-page`
+    `api/order?page=0&size=${size}`
   );
 
   return response.data;
@@ -60,7 +64,7 @@ export const getOrdersPaged = async (
 ) => {
   const response = await noAuthAxios.get<PageResponse<OrderResponseDto>>(
     `api/order?page=${page}${
-      sort ? `&sortField=${sort.sortField}&sortOrder=${sort.sortOrder}` : ""
+      sort ? `&sort=${sort.sortField},${sort.sortOrder}` : ""
     }${
       filter
         ? `${filter.number ? `&number=${filter.number}` : ""}${

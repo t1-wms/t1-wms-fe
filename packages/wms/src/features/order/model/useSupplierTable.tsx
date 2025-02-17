@@ -11,14 +11,17 @@ interface UseSupplierTableParams {
     isServerSide: boolean,
     page?: number,
     sort?: Sort,
-    filter?: SupplierFilter
+    filter?: SupplierFilter,
+    totalElements?: number
   ) => UseSuspenseQueryResult<PageResponse<SupplierResponseDto>>;
+  totalElements: number;
 }
 
 export const useSupplierTable = ({
   columnFilters,
   isServerSide,
   useData,
+  totalElements,
 }: UseSupplierTableParams) => {
   // 서버사이드 필터링에서만 사용
   const filter: SupplierFilter | undefined = useMemo(() => {
@@ -43,9 +46,10 @@ export const useSupplierTable = ({
 
   const { data } = useData(
     isServerSide,
-    pagination.pageIndex + 1,
+    pagination.pageIndex,
     sort,
-    filter
+    filter,
+    totalElements
   );
 
   return {
