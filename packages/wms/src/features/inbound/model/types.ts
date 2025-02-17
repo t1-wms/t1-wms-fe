@@ -81,6 +81,11 @@ export interface CreateInboundCheckModalInfo extends ModalInfoBase {
   inboundCheck?: InboundCheckResponseDto;
 }
 
+export interface CreateInboundPutAwayModalInfo extends ModalInfoBase {
+  key: "createInboundPutAway";
+  inboundCheck: InboundCheckResponseDto;
+}
+
 export interface InboundFilter {
   number?: string;
   startDate?: string;

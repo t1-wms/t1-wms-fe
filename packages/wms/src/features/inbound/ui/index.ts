@@ -5,3 +5,5 @@ export * from "./inbound-check-table";
 export * from "./inbound-schedule-list-drawer";
 export * from "./inbound-check-product-table";
 export * from "./inbound-check-drawer";
+export * from "./inbound-put-away-table";
+export * from "./inbound-check-list-drawer";
