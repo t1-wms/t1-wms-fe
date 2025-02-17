@@ -40,6 +40,22 @@ export interface InboundCheckResponseDto {
   productList: InboundCheckProductListDto[];
 }
 
+export interface InboundPutAwayResponseDto {
+  inboundId: number;
+  process: string;
+  createdAt: string;
+  scheduleNumber: string;
+  checkNumber: string;
+  putAwayNumber: string;
+  putAwayDate: string;
+  orderId: number;
+  orderNumber: string;
+  orderDate: string;
+  supplierId: number;
+  supplierName: string;
+  productList: ProductListDto[];
+}
+
 export interface InboundCheckDefaultValues {
   inboundId: number;
   checkDate: string;

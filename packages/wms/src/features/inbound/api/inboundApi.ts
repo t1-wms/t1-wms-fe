@@ -3,6 +3,7 @@ import { noAuthAxios } from "@/shared/api/base";
 import {
   InboundCheckResponseDto,
   InboundFilter,
+  InboundPutAwayResponseDto,
   InboundScheduleResponseDto,
 } from "../model";
 
@@ -67,6 +68,44 @@ export const getInboundChecksPaged = async (
 ) => {
   const response = await noAuthAxios.get<PageResponse<InboundCheckResponseDto>>(
     `api/inboundCheck?page=${page}${
+      sort ? `&sort=${sort.sortField},${sort.sortOrder}` : ""
+    }${
+      filter
+        ? `${filter.number ? `&number=${filter.number}` : ""}${
+            filter.startDate ? `&startDate=${filter.startDate}` : ""
+          }${filter.endDate ? `&endDate=${filter.endDate}` : ""}`
+        : ""
+    }`
+  );
+
+  return response.data;
+};
+
+export const getInboundPutAwayCount = async () => {
+  const response = await noAuthAxios.get<
+    PageResponse<InboundPutAwayResponseDto>
+  >(`api/inboundPutAway?page=0&size=1`);
+
+  return response.data;
+};
+
+export const getInboundPutAways = async (size: number) => {
+  const response = await noAuthAxios.get<
+    PageResponse<InboundPutAwayResponseDto>
+  >(`api/inboundPutAway?page=0&size=${size}`);
+
+  return response.data;
+};
+
+export const getInboundPutAwaysPaged = async (
+  page: number,
+  sort?: Sort,
+  filter?: InboundFilter
+) => {
+  const response = await noAuthAxios.get<
+    PageResponse<InboundPutAwayResponseDto>
+  >(
+    `api/inboundPutAway?page=${page}${
       sort ? `&sort=${sort.sortField},${sort.sortOrder}` : ""
     }${
       filter
