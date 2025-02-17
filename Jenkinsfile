@@ -75,33 +75,25 @@ pipeline {
             steps {
                 script {
                     def sshServerName = 'FrontendServer'
-                    sshPublisher(publishers: [
-                        sshPublisherDesc(
-                            configName: sshServerName,
-                            transfers: [
-                                sshTransfer(
-                                    sourceFiles: "./packages/wms/dist/**/*",  // wms dist 폴더 전송
-                                    remoteDirectory: "${WMS_DIST_PATH}",  // EC2 서버의 wms 폴더
-                                    removePrefix: "dist",
-                                    execCommand: """
-                                        echo 'Deploying WMS to EC2...'
-                                        docker-compose -f docker-compose.yml up -d wms
-                                        echo 'WMS deployment completed!'
-                                    """
-                                ),
-                                sshTransfer(
-                                    sourceFiles: "./packages/worker/dist/**/*",
-                                    remoteDirectory: "${WORKER_DIST_PATH}",
-                                    removePrefix: "dist",
-                                    execCommand: """
-                                        echo 'Deploying Worker to EC2...'
-                                        docker-compose -f docker-compose.yml up -d worker
-                                        echo 'Worker deployment completed!'
-                                    """
-                                )
-                            ]
-                        )
-                    ])
+                    sshPublisher(
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: sshServerName,
+                                transfers: [
+                                    sshTransfer(
+                                        sourceFiles: "docker-compose.yml,packages/wms/Dockerfile,packages/worker/Dockerfile,nginx.conf",
+                                        remoteDirectory: "",
+                                        execCommand: """
+                                            cd /home/ec2-user/frontend
+                                            docker-compose down
+                                            docker-compose up -d
+                                            docker ps
+                                        """
+                                    )
+                                ]
+                            )
+                        ]
+                    )
                 }
             }
         }
