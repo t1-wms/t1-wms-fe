@@ -10,6 +10,7 @@ import { OutboundLoadingPage } from "@/pages/outbound-loading";
 import OrderPage from "@/pages/order";
 import ReceivedOrder from "@/pages/received-order";
 import { InboundSchedulePage } from "@/pages/inbound-schedule";
+import { InboundCheckPage } from "@/pages/inbound-check";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/inbound/schedule",
         element: <InboundSchedulePage />,
+      },
+      {
+        path: "/inbound/check",
+        element: <InboundCheckPage />,
       },
       {
         path: "/outbound/plan",

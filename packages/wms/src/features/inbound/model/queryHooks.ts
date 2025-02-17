@@ -2,6 +2,9 @@ import { Sort } from "@/shared";
 import { InboundFilter } from "./types";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
+  getInboundCheckCount,
+  getInboundChecks,
+  getInboundChecksPaged,
   getInboundScheduleCount,
   getInboundSchedules,
   getInboundSchedulesPaged,
@@ -57,6 +60,41 @@ export const useInboundSchedules = (
     return useSuspenseQuery({
       queryKey,
       queryFn: () => getInboundSchedules(size!),
+    });
+  }
+};
+
+export const useInboundCheckCount = () => {
+  return useSuspenseQuery({
+    queryKey: ["inboundCheck", "count"],
+    queryFn: () => getInboundCheckCount(),
+  });
+};
+
+export const useInboundChecks = (
+  isServerSide: boolean,
+  page?: number,
+  sort?: Sort,
+  filter?: InboundFilter,
+  size?: number
+) => {
+  const queryKey = createUseInboundQueryKey(
+    "inboundCheck",
+    isServerSide,
+    page!,
+    sort,
+    filter
+  );
+
+  if (isServerSide) {
+    return useSuspenseQuery({
+      queryKey,
+      queryFn: () => getInboundChecksPaged(page!, sort, filter),
+    });
+  } else {
+    return useSuspenseQuery({
+      queryKey,
+      queryFn: () => getInboundChecks(size!),
     });
   }
 };
