@@ -15,11 +15,13 @@ export const OutboundPlanTableWrapper = ({
   setColumnFilters,
   onChangeSelectedRow,
 }: OutboundPlanTableWrapperProps) => {
-  const { data: countResult } = useOutboundPlanCount();
+  const {
+    data: { totalElements },
+  } = useOutboundPlanCount();
 
   const isServerSide = useMemo(() => {
-    return countResult.count >= minCountForServerSide;
-  }, [countResult]);
+    return totalElements >= minCountForServerSide;
+  }, [totalElements]);
 
   return (
     <>
@@ -29,6 +31,7 @@ export const OutboundPlanTableWrapper = ({
           setColumnFilters={setColumnFilters}
           isServerSide={isServerSide}
           onChangeSelectedRow={onChangeSelectedRow}
+          totalElements={totalElements}
         />
       </Suspense>
     </>

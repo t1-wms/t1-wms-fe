@@ -31,7 +31,7 @@ export const Pagination = memo(
       const start = Math.max(1, currentPage - size);
       const end = Math.min(maxPage, currentPage + size);
 
-      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i - 1);
     }, [currentPage, size, maxPage]);
 
     return (
@@ -40,11 +40,11 @@ export const Pagination = memo(
           {hasPrev && <button onClick={onClickPrev}>{"<"}</button>}
           {pages.map((page) => (
             <button
-              className={currentPage === page ? styles.current : ""}
+              className={currentPage - 1 === page ? styles.current : ""}
               key={page}
               onClick={() => onClickPage(page)}
             >
-              {page}
+              {page + 1}
             </button>
           ))}
           {hasNext && <button onClick={onClickNext}>{">"}</button>}

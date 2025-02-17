@@ -15,11 +15,13 @@ export const SupplierTableWrapper = ({
   setColumnFilters,
   onChangeSelectedRow,
 }: SupplierTableWrapperProps) => {
-  const { data: countResult } = useSupplierCount();
+  const {
+    data: { totalElements },
+  } = useSupplierCount();
 
   const isServerSide = useMemo(() => {
-    return countResult.count >= minCountForServerSide;
-  }, [countResult]);
+    return totalElements >= minCountForServerSide;
+  }, [totalElements]);
 
   return (
     <>
@@ -29,6 +31,7 @@ export const SupplierTableWrapper = ({
           setColumnFilters={setColumnFilters}
           isServerSide={isServerSide}
           onChangeSelectedRow={onChangeSelectedRow}
+          totalElements={totalElements}
         />
       </Suspense>
     </>

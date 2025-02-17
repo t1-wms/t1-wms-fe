@@ -16,6 +16,7 @@ interface OutboundPlanTableProps {
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
   onChangeSelectedRow: (rowId: OutboundPlanResponseDto | null) => void;
+  totalElements: number;
 }
 
 const columnHelper = createColumnHelper<OutboundPlanResponseDto>();
@@ -66,6 +67,7 @@ export const OutboundPlanTable = ({
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
+  totalElements,
 }: OutboundPlanTableProps) => {
   const {
     pagination,
@@ -78,8 +80,9 @@ export const OutboundPlanTable = ({
   } = useOutboundTable({
     columnFilters,
     isServerSide,
-    outboundNumberKey: "outboundPlanNumber",
-    outboundDateKey: "outboundPlanDate",
+    outboundNumberKey: "outboundScheduleNumber",
+    outboundDateKey: "outboundScheduleDate",
+    totalElements,
     useData: useOutboundPlans,
   });
 
@@ -89,7 +92,7 @@ export const OutboundPlanTable = ({
         ? parseInt(Object.keys(rowSelection)[0])
         : null;
 
-    onChangeSelectedRow(rowId || rowId === 0 ? data.data[rowId] : null);
+    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
   }, [rowSelection, onChangeSelectedRow]);
 
   return (

@@ -19,7 +19,8 @@ const columnHelper = createColumnHelper<UserListDto>();
 
 export const useUserTable = (
   columnFilters: ColumnFiltersState,
-  isServerSide: boolean
+  isServerSide: boolean,
+  totalElements: number
 ) => {
   const filter: UserFilter | undefined = useMemo(() => {
     if (!columnFilters || columnFilters.length === 0) return undefined;
@@ -43,22 +44,23 @@ export const useUserTable = (
 
   const { data } = useUsers(
     isServerSide,
-    pagination.pageIndex + 1,
+    pagination.pageIndex,
     sort,
-    filter
+    filter,
+    totalElements
   );
 
   const queryClient = useQueryClient();
 
   const { mutate } = useUpdateActive((userId: number) => {
     queryClient.setQueryData<PageResponse<UserListDto>>(
-      createUseUsersQueryKey(isServerSide, pagination.pageIndex + 1, sort),
+      createUseUsersQueryKey(isServerSide, pagination.pageIndex, sort),
       (oldData) => {
         if (!oldData) return oldData;
 
         return {
           ...oldData,
-          data: oldData.data.map((user) =>
+          data: oldData.content.map((user) =>
             user.userId === userId
               ? { ...user, isActive: !user.isActive }
               : user

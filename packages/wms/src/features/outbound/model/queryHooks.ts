@@ -49,29 +49,26 @@ export const useOutboundPlans = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter
+  filter?: OutboundFilter,
+  size?: number
 ) => {
+  const queryKey = createUseOutboundQueryKey(
+    "outboundPlan",
+    isServerSide,
+    page!,
+    sort,
+    filter
+  );
+
   if (isServerSide) {
     return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundPlan",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
+      queryKey,
       queryFn: () => getOutboundPlansPaged(page!, sort, filter),
     });
   } else {
     return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundPlan",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
-      queryFn: () => getOutboundPlans(),
+      queryKey,
+      queryFn: () => getOutboundPlans(size!),
     });
   }
 };
@@ -87,7 +84,8 @@ export const useOutboundAssigns = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter
+  filter?: OutboundFilter,
+  size?: number
 ) => {
   if (isServerSide) {
     return useSuspenseQuery({
@@ -109,7 +107,7 @@ export const useOutboundAssigns = (
         sort,
         filter
       ),
-      queryFn: () => getOutboundAssigns(),
+      queryFn: () => getOutboundAssigns(size!),
     });
   }
 };
@@ -125,7 +123,8 @@ export const useOutboundPickings = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter
+  filter?: OutboundFilter,
+  size?: number
 ) => {
   if (isServerSide) {
     return useSuspenseQuery({
@@ -147,7 +146,7 @@ export const useOutboundPickings = (
         sort,
         filter
       ),
-      queryFn: () => getOutboundPickings(),
+      queryFn: () => getOutboundPickings(size!),
     });
   }
 };
@@ -163,8 +162,10 @@ export const useOutboundPackings = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter
+  filter?: OutboundFilter,
+  size?: number
 ) => {
+  console.log(filter);
   if (isServerSide) {
     return useSuspenseQuery({
       queryKey: createUseOutboundQueryKey(
@@ -185,7 +186,7 @@ export const useOutboundPackings = (
         sort,
         filter
       ),
-      queryFn: () => getOutboundPackings(),
+      queryFn: () => getOutboundPackings(size!),
     });
   }
 };
@@ -201,7 +202,8 @@ export const useOutboundLoadings = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter
+  filter?: OutboundFilter,
+  size?: number
 ) => {
   if (isServerSide) {
     return useSuspenseQuery({
@@ -223,7 +225,7 @@ export const useOutboundLoadings = (
         sort,
         filter
       ),
-      queryFn: () => getOutboundLoadings(),
+      queryFn: () => getOutboundLoadings(size!),
     });
   }
 };

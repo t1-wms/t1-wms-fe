@@ -9,11 +9,13 @@ interface UseOutboundTableParams<OutboundResponseDto> {
   isServerSide: boolean;
   outboundNumberKey: string;
   outboundDateKey: string;
+  totalElements: number;
   useData: (
     isServerSide: boolean,
     page?: number,
     sort?: Sort,
-    filter?: OutboundFilter
+    filter?: OutboundFilter,
+    size?: number
   ) => UseSuspenseQueryResult<OutboundResponseDto>;
 }
 
@@ -22,23 +24,27 @@ export const useOutboundTable = <OutboundResponseDto extends unknown>({
   isServerSide,
   outboundDateKey,
   outboundNumberKey,
+  totalElements,
   useData,
 }: UseOutboundTableParams<OutboundResponseDto>) => {
   // 서버사이드 필터링에서만 사용
   const filter: OutboundFilter | undefined = useMemo(() => {
     if (!columnFilters || columnFilters.length === 0) return undefined;
 
+    console.log(columnFilters);
+
     const outboundNumber = getFilterValue(columnFilters, outboundNumberKey);
     const outboundDate = getFilterValue(columnFilters, outboundDateKey);
-    const startDate = outboundNumber?.split(",")[0];
+    const startDate = outboundDate?.split(",")[0];
     const endDate = outboundDate?.split(",")[1];
 
     return {
-      outboundNumber,
+      number: outboundNumber,
       startDate,
       endDate,
     };
-  }, [columnFilters]);
+  }, [columnFilters, outboundNumberKey, outboundDateKey]);
+  console.log(filter);
 
   const {
     pagination,
@@ -52,9 +58,10 @@ export const useOutboundTable = <OutboundResponseDto extends unknown>({
 
   const { data } = useData(
     isServerSide,
-    pagination.pageIndex + 1,
+    pagination.pageIndex,
     sort,
-    filter
+    filter,
+    totalElements
   );
 
   return {

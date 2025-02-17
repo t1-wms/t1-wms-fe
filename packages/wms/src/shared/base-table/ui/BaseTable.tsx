@@ -49,7 +49,7 @@ export const BaseTable = <TData extends unknown>({
   hasMinHeight,
 }: BaseTableProps<TData>) => {
   const table = useReactTable<TData>({
-    data: data ? data.data : [],
+    data: data ? data.content : [],
     columns,
     manualPagination: serverSide,
     manualSorting: serverSide,
@@ -58,8 +58,8 @@ export const BaseTable = <TData extends unknown>({
     getPaginationRowModel: !serverSide ? getPaginationRowModel() : undefined,
     getSortedRowModel: !serverSide ? getSortedRowModel() : undefined,
     getFilteredRowModel: !serverSide ? getFilteredRowModel() : undefined,
-    rowCount: serverSide ? data.pagination.totalItems : undefined,
-    pageCount: serverSide ? data.pagination.totalPages : undefined,
+    rowCount: serverSide ? data.totalElements : undefined,
+    pageCount: serverSide ? data.totalPages : undefined,
     state: {
       pagination,
       sorting,
@@ -73,6 +73,8 @@ export const BaseTable = <TData extends unknown>({
     autoResetPageIndex: false,
     enableMultiRowSelection: false,
   });
+
+  console.log(pagination);
 
   return (
     <div className={styles.container}>
@@ -135,7 +137,7 @@ export const BaseTable = <TData extends unknown>({
         maxPage={table.getPageCount()}
         onClickPrev={() => table.previousPage()}
         onClickNext={() => table.nextPage()}
-        onClickPage={(page: number) => table.setPageIndex(page - 1)}
+        onClickPage={(page: number) => table.setPageIndex(page)}
       />
     </div>
   );

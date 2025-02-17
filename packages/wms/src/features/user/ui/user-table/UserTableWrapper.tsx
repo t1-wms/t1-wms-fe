@@ -12,11 +12,13 @@ export const UserTableWrapper = ({
   columnFilters,
   setColumnFilters,
 }: UserTableWrapperProps) => {
-  const { data: countResult } = useUserCount();
+  const {
+    data: { totalElements },
+  } = useUserCount();
 
   const isServerSide = useMemo(() => {
-    return countResult.count >= minCountForServerSide;
-  }, [countResult]);
+    return totalElements >= minCountForServerSide;
+  }, [totalElements]);
 
   return (
     <>
@@ -25,6 +27,7 @@ export const UserTableWrapper = ({
           columnFilters={columnFilters}
           setColumnFilters={setColumnFilters}
           isServerSide={isServerSide}
+          totalElements={totalElements}
         />
       </Suspense>
     </>

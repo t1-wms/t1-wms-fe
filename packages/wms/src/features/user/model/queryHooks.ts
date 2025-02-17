@@ -36,7 +36,8 @@ export const useUsers = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: UserFilter
+  filter?: UserFilter,
+  size?: number
 ) => {
   if (isServerSide) {
     return useSuspenseQuery({
@@ -46,7 +47,7 @@ export const useUsers = (
   } else {
     return useSuspenseQuery({
       queryKey: ["user"],
-      queryFn: () => getUsers(),
+      queryFn: () => getUsers(size!),
     });
   }
 };

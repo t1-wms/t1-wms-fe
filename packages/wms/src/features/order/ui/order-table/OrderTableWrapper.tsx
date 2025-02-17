@@ -15,11 +15,13 @@ export const OrderTableWrapper = ({
   setColumnFilters,
   onChangeSelectedRow,
 }: OrderTableWrapperProps) => {
-  const { data: countResult } = useOrderCount();
+  const {
+    data: { totalElements },
+  } = useOrderCount();
 
   const isServerSide = useMemo(() => {
-    return countResult.count >= minCountForServerSide;
-  }, [countResult]);
+    return totalElements >= minCountForServerSide;
+  }, [totalElements]);
 
   return (
     <>
@@ -29,6 +31,7 @@ export const OrderTableWrapper = ({
           setColumnFilters={setColumnFilters}
           isServerSide={isServerSide}
           onChangeSelectedRow={onChangeSelectedRow}
+          totalElements={totalElements}
         />
       </Suspense>
     </>

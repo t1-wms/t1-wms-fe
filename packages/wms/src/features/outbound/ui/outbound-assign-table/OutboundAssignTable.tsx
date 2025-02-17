@@ -13,6 +13,7 @@ interface OutboundAssignTableProps {
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
   onChangeSelectedRow: (row: OutboundAssignResponseDto | null) => void;
+  totalElements: number;
 }
 
 const columnHelper = createColumnHelper<OutboundAssignResponseDto>();
@@ -68,6 +69,7 @@ export const OutboundAssignTable = ({
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
+  totalElements,
 }: OutboundAssignTableProps) => {
   const {
     pagination,
@@ -83,6 +85,7 @@ export const OutboundAssignTable = ({
     outboundNumberKey: "outboundAssignNumber",
     outboundDateKey: "outboundAssignDate",
     useData: useOutboundAssigns,
+    totalElements,
   });
 
   useEffect(() => {
@@ -91,7 +94,7 @@ export const OutboundAssignTable = ({
         ? parseInt(Object.keys(rowSelection)[0])
         : null;
 
-    onChangeSelectedRow(rowId || rowId === 0 ? data.data[rowId] : null);
+    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
   }, [rowSelection, onChangeSelectedRow]);
 
   return (

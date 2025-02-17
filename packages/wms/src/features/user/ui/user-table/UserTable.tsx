@@ -7,12 +7,14 @@ interface UserTableProps {
   isServerSide: boolean;
   columnFilters: ColumnFiltersState;
   setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>;
+  totalElements: number;
 }
 
 export const UserTable = ({
   isServerSide,
   columnFilters,
   setColumnFilters,
+  totalElements,
 }: UserTableProps) => {
   const {
     pagination,
@@ -23,7 +25,7 @@ export const UserTable = ({
     setRowSelection,
     data,
     defaultColumns,
-  } = useUserTable(columnFilters, isServerSide);
+  } = useUserTable(columnFilters, isServerSide, totalElements);
 
   return (
     <>

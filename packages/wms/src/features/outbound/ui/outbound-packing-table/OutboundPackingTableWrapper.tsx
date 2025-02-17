@@ -18,11 +18,13 @@ export const OutboundPackingTableWrapper = ({
   setColumnFilters,
   onChangeSelectedRow,
 }: OutboundPackingTableWrapperProps) => {
-  const { data: countResult } = useOutboundPackingCount();
+  const {
+    data: { totalElements },
+  } = useOutboundPackingCount();
 
   const isServerSide = useMemo(() => {
-    return countResult.count >= minCountForServerSide;
-  }, [countResult]);
+    return totalElements >= 0;
+  }, [totalElements]);
 
   return (
     <>
@@ -32,6 +34,7 @@ export const OutboundPackingTableWrapper = ({
           setColumnFilters={setColumnFilters}
           isServerSide={isServerSide}
           onChangeSelectedRow={onChangeSelectedRow}
+          totalElements={totalElements}
         />
       </Suspense>
     </>
