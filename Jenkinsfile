@@ -10,6 +10,12 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                sh '''
+                    echo "===== Workspace contents ====="
+                    ls -la
+                    echo "===== Project root contents ====="
+                    pwd
+                '''
             }
         }
 
@@ -17,6 +23,9 @@ pipeline {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
                     sh '''
+                        echo "===== Before cleanup ====="
+                        ls -la
+
                         # Clean previous installations
                         rm -rf node_modules
                         rm -rf packages/*/node_modules
@@ -25,6 +34,13 @@ pipeline {
                         # Install project dependencies
                         npm install
                         npm install -D @rollup/rollup-linux-x64-gnu @types/react @types/react-dom @tailwindcss/vite
+
+                        echo "===== After dependencies installation ====="
+                        ls -la
+                        echo "===== Packages directory ====="
+                        ls -la packages/
+                        echo "===== WMS package contents ====="
+                        ls -la packages/wms/
                     '''
                 }
             }
@@ -34,8 +50,14 @@ pipeline {
             steps {
                 script {
                     sh '''
+                        echo "===== Before copy shared folder ====="
+                        ls -la packages/wms/
+
                         mkdir -p packages/wms/dist
                         cp -r packages/shared/* packages/wms/dist/
+
+                        echo "===== After copy shared folder ====="
+                        ls -la packages/wms/dist/
                     '''
                 }
             }
@@ -45,7 +67,16 @@ pipeline {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
                     sh '''
+                        echo "===== Before build ====="
+                        ls -la packages/wms/
+
                         npm run build:wms
+
+                        echo "===== After build ====="
+                        echo "WMS dist directory contents:"
+                        ls -la packages/wms/dist/
+                        echo "Assets directory contents:"
+                        ls -la packages/wms/dist/assets/
                     '''
                 }
             }
@@ -60,24 +91,37 @@ pipeline {
                                 configName: 'FrontendServer',
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: "nginx/frontend.conf,nginx/nginx.conf,packages/wms/dist/**/*",
+                                        sourceFiles: "nginx/frontend.conf,nginx/nginx.conf,packages/wms/dist/**",
                                         remoteDirectory: "",
                                         execCommand: '''
-                                            # 초기 디렉토리 설정
+                                            echo "===== Remote directory contents ====="
+                                            pwd
+                                            ls -la
+
+                                            echo "===== Creating directories ====="
                                             cd ~
                                             mkdir -p frontend/nginx
                                             mkdir -p frontend/dist
 
-                                            # 파일 이동
-                                            mv nginx/* frontend/nginx/
-                                            mv packages/wms/dist/* frontend/dist/
+                                            echo "===== Frontend directory structure ====="
+                                            ls -la frontend/
 
-                                            # Nginx 설정
+                                            echo "===== Moving dist files ====="
+                                            mv packages/wms/dist/* frontend/dist/ || echo "Failed to move dist files"
+
+                                            echo "===== Dist directory contents after move ====="
+                                            ls -la frontend/dist/
+
+                                            echo "===== Nginx configuration ====="
                                             sudo cp frontend/nginx/frontend.conf /etc/nginx/conf.d/
-                                            sudo nginx -t && sudo systemctl reload nginx
+                                            sudo nginx -t
+                                            sudo systemctl reload nginx
 
-                                            # 상태 확인
-                                            echo "Deployment completed successfully"
+                                            echo "===== Final directory structure ====="
+                                            ls -la frontend/
+                                            ls -la frontend/dist/
+
+                                            echo "Deployment completed"
                                         '''
                                     )
                                 ]
@@ -91,6 +135,8 @@ pipeline {
 
     post {
         always {
+            echo "===== Workspace contents after build ====="
+            sh 'ls -la'
             cleanWs()
         }
         success {
