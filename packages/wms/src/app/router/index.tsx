@@ -11,6 +11,7 @@ import OrderPage from "@/pages/order";
 import ReceivedOrder from "@/pages/received-order";
 import { InboundSchedulePage } from "@/pages/inbound-schedule";
 import { InboundCheckPage } from "@/pages/inbound-check";
+import ProductPage from "@/pages/product";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/user",
         element: <UserPage />,
+      },
+      {
+        path: "/master/product",
+        element: <ProductPage />,
       },
       {
         path: "/order",
