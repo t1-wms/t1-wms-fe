@@ -21,10 +21,13 @@ pipeline {
                 nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
                     sh '''
                         # Clean previous installations
-                        rm -rf node_modules packages/*/node_modules packages/*/package-lock.json
+                        rm -rf node_modules
+                        rm -rf packages/*/node_modules
+                        rm -rf packages/*/package-lock.json
 
-                        # Install dependencies (only required ones)
+                        # Install project dependencies
                         npm install
+                        npm install -D @rollup/rollup-linux-x64-gnu @types/react @types/react-dom @tailwindcss/vite
                     '''
                 }
             }
@@ -41,21 +44,21 @@ pipeline {
             }
         }
 
-        stage('Build WMS') {
+        stage('Build Projects') {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
                     sh '''
-                        # Build only WMS
+                        # Run WMS build only
                         npm run build:wms
                     '''
                 }
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Docker Images') {
             steps {
                 script {
-                    sh "docker build -f Dockerfile -t ${DOCKER_TAG_WMS} ."
+                    sh "docker build -f packages/wms/Dockerfile -t ${DOCKER_TAG_WMS} ."
                 }
             }
         }
@@ -69,29 +72,26 @@ pipeline {
                                 configName: 'FrontendServer',
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: "docker-compose.yml, Dockerfile, nginx/frontend.conf, nginx/nginx.conf, packages/shared/*",
+                                        sourceFiles: "docker-compose.yml,packages/wms/Dockerfile,nginx/frontend.conf,nginx/nginx.conf, packages/wms/tsconfig.json, packages/wms/tsconfig.app.json, packages/wms/tsconfig.node.json",
                                         remoteDirectory: "",
                                         execCommand: '''
                                             # 초기 디렉토리 설정
                                             cd ~
-                                            mkdir -p frontend/nginx frontend/shared
+                                            mkdir -p frontend/nginx frontend/packages/wms
 
                                             # 파일 이동
                                             mv docker-compose.yml frontend/
-                                            mv Dockerfile frontend/
+                                            mv packages/wms/Dockerfile frontend/packages/wms/
                                             mv nginx/* frontend/nginx/
-                                            mv packages/shared/* frontend/shared/
 
-                                            # Nginx 설정 반영
+                                            # Nginx 설정
                                             sudo cp frontend/nginx/frontend.conf /etc/nginx/conf.d/
                                             sudo nginx -t && sudo systemctl reload nginx
 
-                                            # 기존 컨테이너 중지 및 제거
+                                            # Docker 컨테이너 재시작
                                             cd frontend
                                             docker container stop wms || true
                                             docker container rm wms || true
-
-                                            # 새 컨테이너 실행
                                             docker-compose up -d wms
 
                                             # 상태 확인

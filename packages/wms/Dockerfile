@@ -15,11 +15,10 @@ COPY packages/wms/package.json packages/wms/package-lock.json ./packages/wms/
 WORKDIR /app/packages/wms
 RUN npm install --legacy-peer-deps
 RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
-RUN npm install lightningcss-linux-x64-gnu --save-dev
 
 # 소스 코드 복사 및 빌드
 COPY packages/wms ./
-RUN npm run build
+RUN npm run build:wms
 
 # 프로덕션 스테이지
 FROM nginx:alpine
@@ -36,3 +35,6 @@ COPY --from=build /app/packages/wms/dist /usr/share/nginx/html
 # nginx 설정
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
+# 빌드 스테이지
+
+
