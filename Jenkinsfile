@@ -18,22 +18,18 @@ pipeline {
             }
         }
 
-        stage('Install dependencies for WMS') {
+        stage('Install dependencies for WMS and Worker') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh 'rm -rf packages/wms/node_modules packages/wms/package-lock.json'
-                    sh 'npm install react-dom react-router --prefix packages/wms'
-                    sh 'npm install --prefix packages/wms'
-                }
-            }
-        }
-
-        stage('Install dependencies for Worker') {
-            steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
                     sh 'rm -rf packages/worker/node_modules packages/worker/package-lock.json'
+                    sh 'npm install react-dom react-router --prefix packages/wms'
                     sh 'npm install react-dom react-router --prefix packages/worker'
-                    sh 'npm install --prefix packages/worker'
+                    sh 'npm install --prefix packages/wms'  // WMS 의존성 설치
+                    sh 'npm install --prefix packages/worker'  // Worker 의존성 설치
+                    sh 'npm install typescript@~5.6.2 --save-dev --prefix packages/wms'  // typescript 설치
+                    sh 'npm install react@^18.3.1 react-dom@^18.3.1 @types/react-dom@^18.3.5 --save --prefix packages/wms'  // React 설치
+                    sh 'npm install react@^18.3.1 react-dom@^18.3.1 @types/react-dom@^18.3.5 --save --prefix packages/worker'  // React 설치
                 }
             }
         }
@@ -51,7 +47,7 @@ pipeline {
 
         stage('Build WMS React Project') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh 'npm run build --prefix packages/wms'
                 }
             }
@@ -59,7 +55,7 @@ pipeline {
 
         stage('Build Worker React Project') {
             steps {
-                nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
+                nodejs(nodeJSInstallationName: 'NodeJS 21.1.0') {
                     sh 'npm run build --prefix packages/worker'
                 }
             }
