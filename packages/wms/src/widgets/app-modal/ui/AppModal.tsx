@@ -1,4 +1,5 @@
 import {
+  CreateInboundCheckModalInfo,
   CreateOrderModalInfo,
   CreateOutboundAssignModal,
   CreateOutboundAssignModalInfo,
@@ -13,6 +14,7 @@ import {
   CreateUserModal,
   CreateUserModalInfo,
 } from "@/features";
+import { CreateInboundCheckModal } from "@/features/inbound/ui/create-inbound-check-modal";
 import { CreateOrderModal } from "@/features/order/ui/create-order-modal";
 import {
   ModalInfoBase,
@@ -67,6 +69,12 @@ const isCreateOrderModalInfo = (
   return info.key === "createOrder";
 };
 
+const isCreateInboundCheckModalInfo = (
+  info: ModalInfoBase
+): info is CreateInboundCheckModalInfo => {
+  return info.key === "createInboundCheck";
+};
+
 export const AppModal = () => {
   const { openedModal } = useModalStore();
 
@@ -91,6 +99,8 @@ export const AppModal = () => {
       <CreateOutboundLoadingModal modalInfo={openedModal} />
     ) : isCreateOrderModalInfo(openedModal) ? (
       <CreateOrderModal modalInfo={openedModal} />
+    ) : isCreateInboundCheckModalInfo(openedModal) ? (
+      <CreateInboundCheckModal modalInfo={openedModal} />
     ) : (
       <></>
     )
