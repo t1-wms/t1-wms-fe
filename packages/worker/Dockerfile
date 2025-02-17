@@ -11,10 +11,11 @@ FROM nginx:alpine
 RUN apk update && apk add --no-cache ca-certificates curl
 RUN rm -rf /usr/share/nginx/html/*
 
-# Nginx 설정 복사 (경로 수정)
-COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
+# Nginx 설정 복사를 위한 ARG
+ARG NGINX_CONF
+COPY ${NGINX_CONF} /etc/nginx/nginx.conf
 
-# Worker의 경우
+# worker의 경우
 COPY --from=build /app/packages/worker/dist /usr/share/nginx/html
 
 EXPOSE 80
