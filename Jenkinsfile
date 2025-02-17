@@ -72,16 +72,15 @@ pipeline {
                                 configName: 'FrontendServer',
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: "docker-compose.yml,packages/wms/Dockerfile,nginx/frontend.conf,nginx/nginx.conf, packages/wms/tsconfig.json, packages/wms/tsconfig.app.json, packages/wms/tsconfig.node.json",
+                                        sourceFiles: "docker-compose.yml,nginx/frontend.conf,nginx/nginx.conf",
                                         remoteDirectory: "",
                                         execCommand: '''
                                             # 초기 디렉토리 설정
                                             cd ~
-                                            mkdir -p frontend/nginx frontend/packages/wms
+                                            mkdir -p frontend/nginx frontend/dist
 
                                             # 파일 이동
                                             mv docker-compose.yml frontend/
-                                            mv packages/wms/Dockerfile frontend/packages/wms/
                                             mv nginx/* frontend/nginx/
 
                                             # Nginx 설정

@@ -1,40 +1,30 @@
 # 빌드 스테이지
 FROM node:20 AS build
 
-# C++ 빌드 도구 설치 (node-gyp 및 네이티브 모듈 빌드용)
 RUN apt-get update && apt-get install -y \
     g++ \
     build-essential
 
 WORKDIR /app
 
-# WMS 폴더의 package.json과 lock 파일 복사
-COPY packages/wms/package.json packages/wms/package-lock.json ./packages/wms/
-
-# 의존성 설치 (최상위 package.json이 아닌 wms 기준)
-WORKDIR /app/packages/wms
+# 루트 package.json만 복사 및 설치
+COPY package*.json ./
 RUN npm install --legacy-peer-deps
 RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
 
-# 소스 코드 복사 및 빌드
-COPY packages/wms ./
+# WMS 폴더만 복사
+COPY packages/wms ./packages/wms
+
+# WMS 빌드
 RUN npm run build:wms
 
 # 프로덕션 스테이지
 FROM nginx:alpine
 
-# SSL 인증서 관련 패키지 설치
 RUN apk update && apk add --no-cache ca-certificates curl
-
-# nginx의 기본 콘텐츠 제거
 RUN rm -rf /usr/share/nginx/html/*
 
-# 빌드된 파일 복사
 COPY --from=build /app/packages/wms/dist /usr/share/nginx/html
 
-# nginx 설정
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
-# 빌드 스테이지
-
-
