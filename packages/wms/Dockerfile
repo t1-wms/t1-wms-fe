@@ -8,14 +8,18 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# 패키지 설치
-COPY package*.json ./
+# WMS 폴더의 package.json과 lock 파일 복사
+COPY packages/wms/package.json packages/wms/package-lock.json ./packages/wms/
+
+# 의존성 설치 (최상위 package.json이 아닌 wms 기준)
+WORKDIR /app/packages/wms
 RUN npm install --legacy-peer-deps
 RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
+RUN npm install lightningcss-linux-x64-gnu --save-dev
 
 # 소스 코드 복사 및 빌드
-COPY . .
-RUN npm run build:wms
+COPY packages/wms ./
+RUN npm run build  # build:wms → build로 변경
 
 # 프로덕션 스테이지
 FROM nginx:alpine
