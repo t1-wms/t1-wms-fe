@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     environment {
         DOCKER_TAG_WMS = "wms:${BUILD_NUMBER}"
         DOCKER_TAG_WORKER = "worker:${BUILD_NUMBER}"
@@ -82,13 +83,13 @@ pipeline {
                                             docker-compose.yml,
                                             packages/wms/Dockerfile,
                                             packages/worker/Dockerfile,
-                                            config/nginx/frontend.conf,
-                                            config/nginx/nginx.conf
+                                            nginx/frontend.conf,
+                                            nginx/nginx.conf
                                         """,
                                         remoteDirectory: "frontend",
                                         execCommand: """
                                             cd /home/ec2-user/frontend
-                                            sudo cp config/nginx/frontend.conf /etc/nginx/conf.d/
+                                            sudo cp nginx/frontend.conf /etc/nginx/conf.d/
                                             sudo nginx -t && sudo systemctl reload nginx
                                             docker-compose down
                                             docker-compose up -d

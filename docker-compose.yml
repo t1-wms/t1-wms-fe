@@ -4,12 +4,11 @@ services:
     build:
       context: .
       dockerfile: packages/wms/Dockerfile
-      args:
-        - NGINX_CONF=config/nginx/nginx.conf
     image: ${DOCKER_TAG_WMS}
     container_name: wms
     volumes:
       - ./packages/wms/dist:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - frontend
     ports:
@@ -19,12 +18,11 @@ services:
     build:
       context: .
       dockerfile: packages/worker/Dockerfile
-      args:
-        - NGINX_CONF=config/nginx/nginx.conf
     image: ${DOCKER_TAG_WORKER}
     container_name: worker
     volumes:
       - ./packages/worker/dist:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - frontend
     ports:
