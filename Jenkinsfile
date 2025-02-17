@@ -22,6 +22,7 @@ pipeline {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
                     sh 'rm -rf packages/wms/node_modules packages/wms/package-lock.json'
+                    sh 'npm install react-dom react-router --prefix packages/wms'
                     sh 'npm install --prefix packages/wms'
                 }
             }
@@ -31,6 +32,7 @@ pipeline {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 22.0.0') {
                     sh 'rm -rf packages/worker/node_modules packages/worker/package-lock.json'
+                    sh 'npm install react-dom react-router --prefix packages/worker'
                     sh 'npm install --prefix packages/worker'
                 }
             }
