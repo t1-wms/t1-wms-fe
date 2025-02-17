@@ -8,15 +8,29 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# 패키지 설치
+# 최상위 package.json 파일 복사
 COPY package*.json ./
+
+# wms 하위의 package.json과 tsconfig 관련 파일 복사
+COPY packages/wms/package*.json ./packages/wms/
+COPY packages/wms/tsconfig*.json ./packages/wms/
+
+# 기타 필요한 파일들 복사
+COPY packages/wms/.eslint.config.js ./packages/wms/
+COPY packages/wms/Dockerfile ./packages/wms/
+COPY packages/wms/index.html ./packages/wms/
+COPY packages/wms/vite.config.ts ./packages/wms/
+COPY packages/wms/src ./packages/wms/src
+COPY packages/wms/public ./packages/wms/public
+
+# 패키지 설치
 RUN npm install --legacy-peer-deps
 RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
 RUN npm install lightningcss-linux-x64-gnu --save-dev
 
 # 소스 코드 복사 및 빌드
-COPY . .
-RUN npm run build:wms
+COPY packages/wms .
+RUN npm run build:wms  # WMS 빌드 실행
 
 # 프로덕션 스테이지
 FROM nginx:alpine
