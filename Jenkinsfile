@@ -81,29 +81,42 @@ pipeline {
                                 configName: sshServerName,
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: "docker-compose.yml,packages/wms/Dockerfile,packages/worker/Dockerfile,nginx/frontend.conf,nginx/nginx.conf",
-                                        remoteDirectory: "",
+                                        sourceFiles: """
+                                            docker-compose.yml,
+                                            packages/wms/Dockerfile,
+                                            packages/worker/Dockerfile,
+                                            nginx/frontend.conf,
+                                            nginx/nginx.conf
+                                        """,
+                                        removePrefix: "",
+                                        remoteDirectory: ".",
                                         execCommand: """
-                                            # 필요한 디렉토리 생성
+                                            # 디렉토리 구조 생성 (jenkins 사용자로)
                                             mkdir -p /home/ec2-user/frontend/nginx
                                             mkdir -p /home/ec2-user/frontend/packages/wms
                                             mkdir -p /home/ec2-user/frontend/packages/worker
 
-                                            # 파일 복사
+                                            # 현재 위치의 파일들을 frontend 디렉토리로 복사
                                             cp docker-compose.yml /home/ec2-user/frontend/
+                                            cp -r nginx/frontend.conf nginx/nginx.conf /home/ec2-user/frontend/nginx/
                                             cp -r packages/wms/Dockerfile /home/ec2-user/frontend/packages/wms/
                                             cp -r packages/worker/Dockerfile /home/ec2-user/frontend/packages/worker/
-                                            cp nginx/* /home/ec2-user/frontend/nginx/
 
-                                            # Nginx 설정
+                                            # Nginx 설정 적용 (sudo 권한 필요)
                                             sudo cp /home/ec2-user/frontend/nginx/frontend.conf /etc/nginx/conf.d/
                                             sudo nginx -t && sudo systemctl reload nginx
 
-                                            # Docker 컨테이너 재시작
+                                            # Docker 작업
                                             cd /home/ec2-user/frontend
                                             docker-compose down
                                             docker-compose up -d
                                             docker ps
+
+                                            # 작업 완료 후 임시 파일 정리
+                                            cd /home/ec2-user
+                                            rm -f docker-compose.yml
+                                            rm -rf nginx
+                                            rm -rf packages
                                         """
                                     )
                                 ]
@@ -119,11 +132,11 @@ pipeline {
         always {
             cleanWs()
         }
-        failure {
-            echo 'Pipeline failed!'
-        }
         success {
             echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
