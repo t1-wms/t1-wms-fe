@@ -1,4 +1,5 @@
 import { ProductListDto } from "@/entities";
+import { ModalInfoBase } from "@/shared";
 
 export interface InboundScheduleResponseDto {
   inboundId: number;
@@ -28,6 +29,12 @@ export interface InboundCheckResponseDto {
   supplierId: 0;
   supplierName: string;
   productList: ProductListDto[];
+}
+
+export interface CreateInboundCheckModalInfo extends ModalInfoBase {
+  key: "createInboundCheck";
+  inboundSchedule?: InboundScheduleResponseDto;
+  inboundCheck?: InboundCheckResponseDto;
 }
 
 export interface InboundFilter {

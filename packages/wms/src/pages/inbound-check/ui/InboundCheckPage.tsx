@@ -5,12 +5,14 @@ import {
   InboundCheckDrawer,
   InboundCheckResponseDto,
   InboundCheckTableWrapper,
+  InboundScheduleListDrawer,
 } from "@/features";
 import { Suspense, useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
 export const InboundCheckPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [selectedRow, setSelectedRow] =
     useState<InboundCheckResponseDto | null>(null);
 
@@ -23,6 +25,10 @@ export const InboundCheckPage = () => {
     },
     [setColumnFilters]
   );
+
+  const handleClickCreate = useCallback(() => {
+    setDrawerOpen(true);
+  }, [setDrawerOpen]);
 
   const handleChangeSelectedRow = useCallback(
     (row: InboundCheckResponseDto | null) => {
@@ -37,7 +43,7 @@ export const InboundCheckPage = () => {
         <InboundControlPanel
           label="입하검사"
           onSearch={handleSearch}
-          onClickCreate={() => {}}
+          onClickCreate={handleClickCreate}
         />
       </PageContentBox>
       <PageContentBox>
@@ -49,6 +55,9 @@ export const InboundCheckPage = () => {
           />
         </Suspense>
       </PageContentBox>
+      {isDrawerOpen && (
+        <InboundScheduleListDrawer onClose={() => setDrawerOpen(false)} />
+      )}
       {selectedRow && (
         <InboundCheckDrawer
           data={selectedRow}
