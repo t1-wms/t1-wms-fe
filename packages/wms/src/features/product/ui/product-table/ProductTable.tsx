@@ -7,7 +7,7 @@ interface ProductTableProps {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
-  onChangeSelectedRow: (rowId: ProductResponseDto | null) => void;
+  onChangeSelectedRow?: (rowId: ProductResponseDto | null) => void;
   totalElements: number;
 }
 
@@ -64,6 +64,7 @@ export const ProductTable = ({
   });
 
   useEffect(() => {
+    if (!onChangeSelectedRow) return;
     const rowId =
       Object.keys(rowSelection).length > 0
         ? parseInt(Object.keys(rowSelection)[0])
