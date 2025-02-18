@@ -15,7 +15,7 @@ interface SupplierTableProps {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
-  onChangeSelectedRow: (rowId: SupplierResponseDto | null) => void;
+  onChangeSelectedRow?: (rowId: SupplierResponseDto | null) => void;
   totalElements: number;
 }
 
@@ -40,7 +40,7 @@ const dateFilterFn: FilterFn<SupplierResponseDto> = (
 
 const defaultColumns = [
   columnHelper.accessor("businessNumber", {
-    header: "납품업체번호",
+    header: "사업자등록번호",
     cell: (row) => row.getValue(),
     filterFn: dateFilterFn,
   }),
@@ -85,6 +85,7 @@ export const SupplierTable = ({
   });
 
   useEffect(() => {
+    if (!onChangeSelectedRow) return;
     const rowId =
       Object.keys(rowSelection).length > 0
         ? parseInt(Object.keys(rowSelection)[0])

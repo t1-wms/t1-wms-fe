@@ -1,4 +1,4 @@
-import styles from "./OrderControlPanel.module.css";
+import styles from "./SupplierControlPanel.module.css";
 import { MainButton, MainInput } from "@/shared";
 import { useSearchSupplierForm } from "../../model";
 

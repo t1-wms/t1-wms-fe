@@ -1,5 +1,5 @@
 import { PageContentBox, Spinner } from "@/shared";
-import styles from "./ProductPage.module.css";
+import styles from "./SupplierPage.module.css";
 import { SupplierTableWrapper, SupplierControlPanel } from "@/features";
 import { Suspense, useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";

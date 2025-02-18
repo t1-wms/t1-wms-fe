@@ -7,7 +7,7 @@ import { minCountForServerSide, Spinner } from "@/shared";
 interface SupplierTableWrapperProps {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
-  onChangeSelectedRow: (row: SupplierResponseDto | null) => void;
+  onChangeSelectedRow?: (row: SupplierResponseDto | null) => void;
 }
 
 export const SupplierTableWrapper = ({
