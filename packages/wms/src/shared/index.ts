@@ -12,3 +12,4 @@ export * from "./main-select";
 export * from "./main-date-range-picker";
 export * from "./base-drawer";
 export * from "./spinner";
+export * from "./pie-chart";
