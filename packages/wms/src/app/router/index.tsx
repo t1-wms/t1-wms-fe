@@ -12,6 +12,7 @@ import ReceivedOrder from "@/pages/received-order";
 import { InboundSchedulePage } from "@/pages/inbound-schedule";
 import { InboundCheckPage } from "@/pages/inbound-check";
 import ProductPage from "@/pages/product";
+import SupplierPage from "@/pages/supplier";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/master/product",
         element: <ProductPage />,
+      },
+      {
+        path: "/master/supplier",
+        element: <SupplierPage />,
       },
       {
         path: "/order",
