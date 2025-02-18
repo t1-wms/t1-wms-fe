@@ -1,28 +1,46 @@
 import "chart.js/auto";
-import { Pie } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import styles from "./PieChart.module.css";
-import { ChartData } from "chart.js";
+import { ChartData, ChartOptions } from "chart.js";
 
-export const PieChart = () => {
-  const data: ChartData<"pie"> = {
-    labels: ["Red", "Blue", "Yellow"],
+const colors = ["#392061", "#F6AE2D", "#E54F6D", "#86BBD8", "#B7F0AD"];
+
+interface PieChartProps {
+  title: string;
+  labels: string[];
+  dataLabel: string;
+  data: number[];
+}
+
+export const PieChart = ({ title, labels, dataLabel, data }: PieChartProps) => {
+  const chartData: ChartData<"doughnut"> = {
+    labels,
     datasets: [
       {
-        label: "My First Dataset",
-        data: [300, 50, 100],
-        backgroundColor: [
-          "rgb(255, 99, 132)",
-          "rgb(54, 162, 235)",
-          "rgb(255, 205, 86)",
-        ],
+        label: dataLabel,
+        data,
+        backgroundColor: colors,
         hoverOffset: 4,
       },
     ],
   };
 
+  const options: ChartOptions<"doughnut"> = {
+    layout: {
+      padding: 16,
+    },
+    cutout: "20%",
+    plugins: {
+      legend: {
+        display: true,
+      },
+    },
+  };
+
   return (
     <div className={styles.container}>
-      <Pie data={data} />
+      <h1 className="font-h4">{title}</h1>
+      <Doughnut data={chartData} options={options} />
     </div>
   );
 };
