@@ -1,10 +1,17 @@
 import { PageResponse, Sort } from "@/shared";
 import { noAuthAxios } from "@/shared/api/base";
 import {
+  InboundChartData,
   InboundCheckResponseDto,
   InboundFilter,
   InboundScheduleResponseDto,
 } from "../model";
+
+export const getInboundChart = async () => {
+  const response = await noAuthAxios.get<InboundChartData>(`api/inbound/chart`);
+
+  return response.data;
+};
 
 export const getInboundScheduleCount = async () => {
   const response = await noAuthAxios.get<

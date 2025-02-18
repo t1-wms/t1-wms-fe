@@ -16,8 +16,16 @@ import {
   getOutboundLoadingCount,
   getOutboundLoadingsPaged,
   getOutboundLoadings,
+  getOutboundChart,
 } from "../api";
 import { OutboundFilter } from "./types";
+
+export const useOutboundChart = () => {
+  return useSuspenseQuery({
+    queryKey: ["outboundChart"],
+    queryFn: () => getOutboundChart(),
+  });
+};
 
 export const useOutboundPlanCount = () => {
   return useSuspenseQuery({

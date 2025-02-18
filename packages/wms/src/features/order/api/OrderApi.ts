@@ -1,11 +1,18 @@
 import { PageResponse, Sort } from "@/shared";
 import { noAuthAxios } from "@/shared/api/base";
 import {
+  OrderChartData,
   OrderFilter,
   OrderResponseDto,
   SupplierFilter,
   SupplierResponseDto,
 } from "../model";
+
+export const getOrderChart = async () => {
+  const response = await noAuthAxios.get<OrderChartData>(`/api/order/chart`);
+
+  return response.data;
+};
 
 export const getSupplierCount = async () => {
   const response = await noAuthAxios.get<PageResponse<SupplierResponseDto>>(

@@ -1,6 +1,12 @@
 import { ProductListDto } from "@/entities";
 import { ModalInfoBase } from "@/shared";
 
+export interface InboundChartData {
+  inboundSchedule: number;
+  inboundCheck: number;
+  inboundPutAway: number;
+}
+
 export interface InboundCheckProductListDto {
   productId: number;
   productCode: string;
