@@ -13,3 +13,7 @@ export interface ProductResponseDto {
   locationBinCode: string;
   abcGrade: string;
 }
+
+export interface ProductFilter {
+  productCode?: string;
+}
