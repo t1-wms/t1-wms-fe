@@ -5,10 +5,12 @@ import {
   CreateOrderModalInfo,
   CreateOrderRequestDto,
   SupplierProductDto,
+  useCreateOrder,
 } from "../../model";
 import { CreateOrderForm } from "../create-order-form";
 import { useCallback, useMemo, useState } from "react";
 import { OutboundProductTable } from "@/features/product/ui";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateOrderModalProps {
   modalInfo: CreateOrderModalInfo;
@@ -29,7 +31,7 @@ export const CreateOrderModal = ({ modalInfo }: CreateOrderModalProps) => {
 
   const defaultValues: CreateOrderDefaultValues = useMemo(() => {
     const productList = order
-      ? order.orderProductList.map((product) => ({
+      ? order.productList.map((product) => ({
           productId: product.productId,
           productCode: product.productCode,
           productName: product.productName,
@@ -56,7 +58,9 @@ export const CreateOrderModal = ({ modalInfo }: CreateOrderModalProps) => {
   >(defaultValues.productList);
 
   const { closeModal } = useModalStore();
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+
+  const { mutate: createOrder } = useCreateOrder(queryClient);
 
   const handleSubmitValid = () => {
     const productList: SupplierProductDto[] = [];
@@ -72,6 +76,12 @@ export const CreateOrderModal = ({ modalInfo }: CreateOrderModalProps) => {
     };
 
     console.log(data);
+
+    if (!order) {
+      // 발주 생성
+      createOrder(data);
+      closeModal();
+    }
 
     // if (outboundPlan) {
     //   queryClient.invalidateQueries({

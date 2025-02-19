@@ -53,6 +53,7 @@ export interface OrderResponseDto {
 
 export interface CreateOrderRequestDto {
   supplierId: number;
+  outboundPlanId?: number;
   productList: SupplierProductDto[];
 }
 

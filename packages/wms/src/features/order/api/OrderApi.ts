@@ -1,6 +1,7 @@
 import { PageResponse, Sort } from "@/shared";
 import { noAuthAxios } from "@/shared/api/base";
 import {
+  CreateOrderRequestDto,
   OrderChartData,
   OrderFilter,
   OrderResponseDto,
@@ -83,5 +84,10 @@ export const getOrdersPaged = async (
     }`
   );
 
+  return response.data;
+};
+
+export const createOrder = async (newOrder: CreateOrderRequestDto) => {
+  const response = await noAuthAxios.post<void>(`api/order`, newOrder);
   return response.data;
 };

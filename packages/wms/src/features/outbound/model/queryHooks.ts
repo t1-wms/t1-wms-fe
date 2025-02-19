@@ -1,4 +1,4 @@
-import { Sort } from "@/shared";
+import { afterMutate, Sort } from "@/shared";
 import {
   QueryClient,
   useMutation,
@@ -266,17 +266,6 @@ export const useOutboundLoadings = (
       queryFn: () => getOutboundLoadings(size!),
     });
   }
-};
-
-const afterMutate = (queryClient: QueryClient, key: string) => async () => {
-  await queryClient.invalidateQueries({
-    queryKey: [key, "count"],
-  });
-  setTimeout(() => {
-    queryClient.invalidateQueries({
-      queryKey: [key],
-    });
-  }, 0);
 };
 
 export const useCreateOutboundPlan = (queryClient: QueryClient) => {

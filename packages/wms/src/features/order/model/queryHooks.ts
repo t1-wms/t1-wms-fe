@@ -1,5 +1,10 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
 import {
+  QueryClient,
+  useMutation,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import {
+  createOrder,
   getOrderChart,
   getOrderCount,
   getOrders,
@@ -8,8 +13,8 @@ import {
   getSuppliers,
   getSuppliersPaged,
 } from "../api";
-import { Sort } from "@/shared";
-import { OrderFilter, SupplierFilter } from "./types";
+import { afterMutate, Sort } from "@/shared";
+import { CreateOrderRequestDto, OrderFilter, SupplierFilter } from "./types";
 
 export const useOrderChart = () => {
   return useSuspenseQuery({
@@ -122,4 +127,11 @@ export const useOrders = (
       queryFn: () => getOrders(size!),
     });
   }
+};
+
+export const useCreateOrder = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (newOrder: CreateOrderRequestDto) => createOrder(newOrder),
+    onSuccess: afterMutate(queryClient, "order"),
+  });
 };

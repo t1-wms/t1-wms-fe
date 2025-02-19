@@ -25,8 +25,9 @@ export const SupplierListDrawer = ({ onClose }: SupplierListDrawerProps) => {
       };
 
       openModal(modalInfo);
+      onClose();
     }
-  }, [selectedRow, openModal]);
+  }, [onClose, selectedRow, openModal]);
 
   const handleChangeSelectedRow = useCallback(
     (row: SupplierResponseDto | null) => {
