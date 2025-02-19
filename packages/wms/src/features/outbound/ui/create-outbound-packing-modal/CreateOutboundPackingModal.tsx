@@ -4,10 +4,13 @@ import {
   CreateOutboundPackingModalInfo,
   OutboundPackingResponseDto,
   OutboundPickingResponseDto,
+  useCreateOutboundPacking,
+  useUpdateOutboundPacking,
 } from "../../model";
 import { useMemo } from "react";
 import { OutboundProductTable } from "@/features/product";
 import { CreateOutboundPackingForm } from "../create-outbound-packing-form";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateOutboundPackingModalProps {
   modalInfo: CreateOutboundPackingModalInfo;
@@ -39,10 +42,28 @@ export const CreateOutboundPackingModal = ({
   }, [outbound]);
 
   const { closeModal } = useModalStore();
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+
+  const { mutate: createOutboundPacking } =
+    useCreateOutboundPacking(queryClient);
+  const { mutate: updateOutboundPacking } =
+    useUpdateOutboundPacking(queryClient);
 
   const handleSubmitValid = (outboundPackingDate: string) => {
-    console.log(outboundPackingDate);
+    if (!isOutboundPacking(outbound)) {
+      // 출고지시 생성
+      createOutboundPacking(outbound.outboundPlanId);
+
+      closeModal();
+    } else {
+      // 출고지시 수정
+      updateOutboundPacking({
+        outboundId: outbound.outboundId,
+        outboundPackingDate,
+      });
+
+      closeModal();
+    }
   };
 
   return (

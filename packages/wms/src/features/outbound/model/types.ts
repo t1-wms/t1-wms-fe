@@ -20,6 +20,8 @@ export interface OutboundPlanResponseDto {
 }
 
 export interface OutboundAssignResponseDto {
+  outboundId: number;
+  outboundPlanId: number;
   process: string;
   outboundScheduleNumber: string;
   outboundAssignNumber: string;
@@ -30,6 +32,8 @@ export interface OutboundAssignResponseDto {
 }
 
 export interface OutboundPickingResponseDto {
+  outboundId: number;
+  outboundPlanId: number;
   process: string;
   outboundScheduleNumber: string;
   outboundAssignNumber: string;
@@ -41,6 +45,8 @@ export interface OutboundPickingResponseDto {
 }
 
 export interface OutboundPackingResponseDto {
+  outboundId: number;
+  outboundPlanId: number;
   process: string;
   outboundScheduleNumber: string;
   outboundAssignNumber: string;
@@ -53,6 +59,8 @@ export interface OutboundPackingResponseDto {
 }
 
 export interface OutboundLoadingResponseDto {
+  outboundId: number;
+  outboundPlanId: number;
   process: string;
   outboundScheduleNumber: string;
   outboundAssignNumber: string;
@@ -110,4 +118,24 @@ export interface UseCreateOutboundPlanParams {
 export interface UseUpdateOutboundPlanParams {
   outboundPlanId: number;
   newOutboundPlan: CreateOutboundPlanRequestDto;
+}
+
+export interface UseUpdateOutboundAssignParams {
+  outboundId: number;
+  outboundAssignDate: string;
+}
+
+export interface UseUpdateOutboundPickingParams {
+  outboundId: number;
+  outboundPickingDate: string;
+}
+
+export interface UseUpdateOutboundPackingParams {
+  outboundId: number;
+  outboundPackingDate: string;
+}
+
+export interface UseUpdateOutboundLoadingParams {
+  outboundId: number;
+  outboundLoadingDate: string;
 }
