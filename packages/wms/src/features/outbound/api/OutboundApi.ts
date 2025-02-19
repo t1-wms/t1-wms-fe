@@ -239,3 +239,31 @@ export const deleteOutboundPlan = async (outboundPlanId: number) => {
 
   return response.data;
 };
+
+export const createOutboundAssign = async (outboundPlanId: number) => {
+  const response = await noAuthAxios.post<void>(
+    `api/outboundAssign/register/${outboundPlanId}`
+  );
+
+  return response.data;
+};
+
+export const updateOutboundAssign = async (
+  outboundPlanId: number,
+  outboundAssignDate: string
+) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundAssign/${outboundPlanId}`,
+    { date: outboundAssignDate }
+  );
+
+  return response.data;
+};
+
+export const deleteOutboundAssign = async (outboundPlanId: number) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundAssign/${outboundPlanId}`
+  );
+
+  return response.data;
+};

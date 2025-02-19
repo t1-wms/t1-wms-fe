@@ -24,10 +24,14 @@ import {
   updateOutboundPlan,
   getOutboundChart,
   deleteOutboundPlan,
+  createOutboundAssign,
+  updateOutboundAssign,
+  deleteOutboundAssign,
 } from "../api";
 import {
   OutboundFilter,
   UseCreateOutboundPlanParams,
+  UseUpdateOutboundAssignParams,
   UseUpdateOutboundPlanParams,
 } from "./types";
 
@@ -252,20 +256,22 @@ export const useOutboundLoadings = (
   }
 };
 
+const afterMutate = (queryClient: QueryClient, key: string) => async () => {
+  await queryClient.invalidateQueries({
+    queryKey: [key, "count"],
+  });
+  setTimeout(() => {
+    queryClient.invalidateQueries({
+      queryKey: [key],
+    });
+  }, 0);
+};
+
 export const useCreateOutboundPlan = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: ({ newOutboundPlan }: UseCreateOutboundPlanParams) =>
       createOutboundPlan(newOutboundPlan),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["outboundPlan", "count"],
-      });
-      setTimeout(() => {
-        queryClient.invalidateQueries({
-          queryKey: ["outboundPlan"],
-        });
-      }, 0);
-    },
+    onSuccess: afterMutate(queryClient, "outboundPlan"),
   });
 };
 
@@ -276,31 +282,40 @@ export const useUpdateOutboundPlan = (queryClient: QueryClient) => {
       newOutboundPlan,
     }: UseUpdateOutboundPlanParams) =>
       updateOutboundPlan(outboundPlanId, newOutboundPlan),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["outboundPlan", "count"],
-      });
-      setTimeout(() => {
-        queryClient.invalidateQueries({
-          queryKey: ["outboundPlan"],
-        });
-      }, 0);
-    },
+    onSuccess: afterMutate(queryClient, "outboundPlan"),
   });
 };
 
 export const useDeleteOutboundPlan = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: (outboundPlanId: number) => deleteOutboundPlan(outboundPlanId),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["outboundPlan", "count"],
-      });
-      setTimeout(() => {
-        queryClient.invalidateQueries({
-          queryKey: ["outboundPlan"],
-        });
-      }, 0);
-    },
+    onSuccess: afterMutate(queryClient, "outboundPlan"),
+  });
+};
+
+export const useCreateOutboundAssign = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      createOutboundAssign(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundAssign"),
+  });
+};
+
+export const useUpdateOutboundAssign = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundPlanId,
+      outboundAssignDate,
+    }: UseUpdateOutboundAssignParams) =>
+      updateOutboundAssign(outboundPlanId, outboundAssignDate),
+    onSuccess: afterMutate(queryClient, "outboundAssign"),
+  });
+};
+
+export const useDeleteOutboundAssign = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      deleteOutboundAssign(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundAssign"),
   });
 };

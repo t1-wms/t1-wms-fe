@@ -3,9 +3,11 @@ import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
 import {
   CreateOutboundAssignModalInfo,
   OutboundAssignResponseDto,
+  useDeleteOutboundAssign,
 } from "../../model";
 import { OutboundProductTable } from "@/features";
 import { useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface OutboundAssignDrawerProps {
   data: OutboundAssignResponseDto;
@@ -26,6 +28,9 @@ export const OutboundAssignDrawer = ({
   } = data;
 
   const { openModal } = useModalStore();
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteOutboundAssign } = useDeleteOutboundAssign(queryClient);
 
   const handleClickUpdate = useCallback(() => {
     const modalInfo: CreateOutboundAssignModalInfo = {
@@ -34,7 +39,12 @@ export const OutboundAssignDrawer = ({
     };
 
     openModal(modalInfo);
-  }, [openModal, data]);
+    onClose();
+  }, [onClose, openModal, data]);
+
+  const handleClickDelete = useCallback(() => {
+    deleteOutboundAssign(data.outboundId);
+  }, [data, deleteOutboundAssign]);
 
   return (
     <BaseDrawer title={`출고지시 조회`} onClose={onClose}>
@@ -82,7 +92,7 @@ export const OutboundAssignDrawer = ({
           <MainButton size="sm" padding="sm" onClick={handleClickUpdate}>
             수정
           </MainButton>
-          <MainButton size="sm" padding="sm">
+          <MainButton size="sm" padding="sm" onClick={handleClickDelete}>
             삭제
           </MainButton>
         </div>

@@ -4,10 +4,13 @@ import {
   CreateOutboundAssignModalInfo,
   OutboundAssignResponseDto,
   OutboundPlanResponseDto,
+  useCreateOutboundAssign,
+  useUpdateOutboundAssign,
 } from "../../model";
 import { useMemo } from "react";
 import { CreateOutboundAssignForm } from "../create-outbound-assign-form";
 import { OutboundProductTable } from "@/features/product";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateOutboundAssignModalProps {
   modalInfo: CreateOutboundAssignModalInfo;
@@ -31,6 +34,7 @@ export const CreateOutboundAssignModal = ({
         }
       : {
           ...outbound,
+          outboundId: -1,
           outboundAssignNumber: "",
           outboundAssignDate: new Date(Date.now())
             .toISOString()
@@ -39,10 +43,25 @@ export const CreateOutboundAssignModal = ({
   }, [outbound]);
 
   const { closeModal } = useModalStore();
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+  const { mutate: createOutboundAssign } = useCreateOutboundAssign(queryClient);
+  const { mutate: updateOutboundAssign } = useUpdateOutboundAssign(queryClient);
 
   const handleSubmitValid = (outboundAssignDate: string) => {
-    console.log(outboundAssignDate);
+    if (!isOutboundAssign(outbound)) {
+      // 출고지시 생성
+      createOutboundAssign(outbound.outboundPlanId);
+
+      closeModal();
+    } else {
+      // 출고지시 수정
+      updateOutboundAssign({
+        outboundPlanId: outbound.outboundId,
+        outboundAssignDate,
+      });
+
+      closeModal();
+    }
   };
 
   return (
@@ -64,6 +83,7 @@ export const CreateOutboundAssignModal = ({
         <CreateOutboundAssignForm
           onSubmitValid={handleSubmitValid}
           defaultValues={defaultValues}
+          isUpdate={isOutboundAssign(outbound)}
         />
         <p className="font-b-md">출고지시 품목</p>
         <div className={styles["table-box"]}>
