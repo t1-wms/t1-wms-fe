@@ -1,5 +1,11 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
 import {
+  QueryClient,
+  useMutation,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import {
+  createOrder,
+  deleteOrder,
   getOrderChart,
   getOrderCount,
   getOrders,
@@ -7,9 +13,15 @@ import {
   getSupplierCount,
   getSuppliers,
   getSuppliersPaged,
+  updateOrder,
 } from "../api";
-import { Sort } from "@/shared";
-import { OrderFilter, SupplierFilter } from "./types";
+import { afterMutate, Sort } from "@/shared";
+import {
+  CreateOrderRequestDto,
+  OrderFilter,
+  SupplierFilter,
+  UseUpdateOrderParams,
+} from "./types";
 
 export const useOrderChart = () => {
   return useSuspenseQuery({
@@ -122,4 +134,32 @@ export const useOrders = (
       queryFn: () => getOrders(size!),
     });
   }
+};
+
+export const useCreateOrder = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (newOrder: CreateOrderRequestDto) => createOrder(newOrder),
+    onSuccess: afterMutate(queryClient, "order"),
+  });
+};
+
+export const useUpdateOrder = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({ orderId, productList }: UseUpdateOrderParams) =>
+      updateOrder(orderId, productList),
+    onSuccess: afterMutate(queryClient, "order"),
+    onError: () => {
+      alert("이미 승인된 발주입니다");
+    },
+  });
+};
+
+export const useDeleteOrder = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (orderId: number) => deleteOrder(orderId),
+    onSuccess: afterMutate(queryClient, "order"),
+    onError: () => {
+      alert("이미 승인된 발주입니다");
+    },
+  });
 };

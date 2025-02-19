@@ -48,11 +48,12 @@ export interface OrderResponseDto {
   isApproved: boolean;
   isReturnOrder: boolean;
   deliveryDeadline: string;
-  orderProductList: ProductListDto[];
+  productList: ProductListDto[];
 }
 
 export interface CreateOrderRequestDto {
   supplierId: number;
+  outboundPlanId?: number;
   productList: SupplierProductDto[];
 }
 
@@ -70,4 +71,9 @@ export interface OrderFilter {
   number?: string;
   startDate?: string;
   endDate?: string;
+}
+
+export interface UseUpdateOrderParams {
+  orderId: number;
+  productList: SupplierProductDto[];
 }

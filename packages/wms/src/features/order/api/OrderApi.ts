@@ -1,10 +1,12 @@
 import { PageResponse, Sort } from "@/shared";
 import { noAuthAxios } from "@/shared/api/base";
 import {
+  CreateOrderRequestDto,
   OrderChartData,
   OrderFilter,
   OrderResponseDto,
   SupplierFilter,
+  SupplierProductDto,
   SupplierResponseDto,
 } from "../model";
 
@@ -83,5 +85,26 @@ export const getOrdersPaged = async (
     }`
   );
 
+  return response.data;
+};
+
+export const createOrder = async (newOrder: CreateOrderRequestDto) => {
+  const response = await noAuthAxios.post<void>(`api/order`, newOrder);
+  return response.data;
+};
+
+export const updateOrder = async (
+  orderId: number,
+  productList: SupplierProductDto[]
+) => {
+  const response = await noAuthAxios.put<void>(
+    `api/order/${orderId}`,
+    productList
+  );
+  return response.data;
+};
+
+export const deleteOrder = async (orderId: number) => {
+  const response = await noAuthAxios.delete<void>(`api/order/${orderId}`);
   return response.data;
 };
