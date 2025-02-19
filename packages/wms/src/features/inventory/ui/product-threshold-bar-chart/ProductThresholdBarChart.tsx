@@ -7,7 +7,7 @@ export const ProductThresholdBarChart = () => {
 
   const chartData = useMemo(() => {
     const newChartData: number[][] = [];
-    newChartData.push(data.content.map((product) => product.productThreshold));
+    newChartData.push(data.content.map((product) => product.threshold));
     newChartData.push(data.content.map((product) => product.productCount));
 
     return newChartData;

@@ -9,7 +9,9 @@ import {
 } from "../model";
 
 export const getOrderChart = async () => {
-  const response = await noAuthAxios.get<OrderChartData>(`/api/order/chart`);
+  const response = await noAuthAxios.get<OrderChartData>(
+    `/api/dashboard/order-status`
+  );
 
   return response.data;
 };

@@ -12,7 +12,7 @@ import {
 
 export const getOutboundChart = async () => {
   const response = await noAuthAxios.get<OutboundChartData>(
-    `api/outbound/chart`
+    `api/dashboard/outbound-status`
   );
 
   return response.data;

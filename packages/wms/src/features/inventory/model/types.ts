@@ -3,5 +3,5 @@ export interface ProductThresholdDto {
   productCode: string;
   productName: string;
   productCount: number;
-  productThreshold: number;
+  threshold: number;
 }

@@ -8,7 +8,9 @@ import {
 } from "../model";
 
 export const getInboundChart = async () => {
-  const response = await noAuthAxios.get<InboundChartData>(`api/inbound/chart`);
+  const response = await noAuthAxios.get<InboundChartData>(
+    `api/dashboard/inbound-status`
+  );
 
   return response.data;
 };
