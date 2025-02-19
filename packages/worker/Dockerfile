@@ -12,11 +12,11 @@ COPY package*.json ./
 RUN npm install --legacy-peer-deps
 RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
 
-# WMS 폴더만 복사
-COPY packages/wms ./packages/wms
+# worker 폴더만 복사
+COPY packages/worker ./packages/worker
 
 # WMS 빌드
-RUN npm run build:wms
+RUN npm run build:worker
 
 # 프로덕션 스테이지
 FROM nginx:alpine
@@ -24,7 +24,7 @@ FROM nginx:alpine
 RUN apk update && apk add --no-cache ca-certificates curl
 RUN rm -rf /usr/share/nginx/html/*
 
-COPY --from=build /app/packages/wms/dist /home/ec2-user/frontend/wms/dist
+COPY --from=build /app/packages/worker/dist /home/ec2-user/frontend/worker/dist
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
