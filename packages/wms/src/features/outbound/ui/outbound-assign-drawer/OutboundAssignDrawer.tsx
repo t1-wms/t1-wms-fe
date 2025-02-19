@@ -32,6 +32,10 @@ export const OutboundAssignDrawer = ({
 
   const { mutate: deleteOutboundAssign } = useDeleteOutboundAssign(queryClient);
 
+  const handleClickDelete = useCallback(() => {
+    deleteOutboundAssign(data.outboundId);
+  }, [data, deleteOutboundAssign]);
+
   const handleClickUpdate = useCallback(() => {
     const modalInfo: CreateOutboundAssignModalInfo = {
       key: "createOutboundAssign",
@@ -41,10 +45,6 @@ export const OutboundAssignDrawer = ({
     openModal(modalInfo);
     onClose();
   }, [onClose, openModal, data]);
-
-  const handleClickDelete = useCallback(() => {
-    deleteOutboundAssign(data.outboundId);
-  }, [data, deleteOutboundAssign]);
 
   return (
     <BaseDrawer title={`출고지시 조회`} onClose={onClose}>

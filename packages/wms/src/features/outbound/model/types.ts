@@ -121,6 +121,21 @@ export interface UseUpdateOutboundPlanParams {
 }
 
 export interface UseUpdateOutboundAssignParams {
-  outboundPlanId: number;
+  outboundId: number;
   outboundAssignDate: string;
+}
+
+export interface UseUpdateOutboundPickingParams {
+  outboundId: number;
+  outboundPickingDate: string;
+}
+
+export interface UseUpdateOutboundPackingParams {
+  outboundId: number;
+  outboundPackingDate: string;
+}
+
+export interface UseUpdateOutboundLoadingParams {
+  outboundId: number;
+  outboundLoadingDate: string;
 }

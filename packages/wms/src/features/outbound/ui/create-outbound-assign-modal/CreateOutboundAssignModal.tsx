@@ -56,7 +56,7 @@ export const CreateOutboundAssignModal = ({
     } else {
       // 출고지시 수정
       updateOutboundAssign({
-        outboundPlanId: outbound.outboundId,
+        outboundId: outbound.outboundId,
         outboundAssignDate,
       });
 

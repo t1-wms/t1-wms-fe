@@ -249,21 +249,96 @@ export const createOutboundAssign = async (outboundPlanId: number) => {
 };
 
 export const updateOutboundAssign = async (
-  outboundPlanId: number,
+  outboundId: number,
   outboundAssignDate: string
 ) => {
   const response = await noAuthAxios.put<void>(
-    `api/outboundAssign/${outboundPlanId}`,
+    `api/outboundAssign/${outboundId}`,
     { date: outboundAssignDate }
   );
 
   return response.data;
 };
 
-export const deleteOutboundAssign = async (outboundPlanId: number) => {
+export const deleteOutboundAssign = async (outboundId: number) => {
   const response = await noAuthAxios.put<void>(
-    `api/outboundAssign/${outboundPlanId}`
+    `api/outboundAssign/${outboundId}`
   );
 
+  return response.data;
+};
+
+export const createOutboundPicking = async (outboundPlanId: number) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundPicking/register/${outboundPlanId}`
+  );
+  return response.data;
+};
+
+export const updateOutboundPicking = async (
+  outboundId: number,
+  outboundPickingDate: string
+) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundPicking/${outboundId}`,
+    { date: outboundPickingDate }
+  );
+  return response.data;
+};
+
+export const deleteOutboundPicking = async (outboundId: number) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundPicking/${outboundId}`
+  );
+  return response.data;
+};
+
+export const createOutboundPacking = async (outboundPlanId: number) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundPacking/register/${outboundPlanId}`
+  );
+  return response.data;
+};
+
+export const updateOutboundPacking = async (
+  outboundId: number,
+  outboundPackingDate: string
+) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundPacking/${outboundId}`,
+    { date: outboundPackingDate }
+  );
+  return response.data;
+};
+
+export const deleteOutboundPacking = async (outboundId: number) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundPacking/${outboundId}`
+  );
+  return response.data;
+};
+
+export const createOutboundLoading = async (outboundPlanId: number) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundLoading/register/${outboundPlanId}`
+  );
+  return response.data;
+};
+
+export const updateOutboundLoading = async (
+  outboundId: number,
+  outboundLoadingDate: string
+) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundLoading/${outboundId}`,
+    { date: outboundLoadingDate }
+  );
+  return response.data;
+};
+
+export const deleteOutboundLoading = async (outboundId: number) => {
+  const response = await noAuthAxios.put<void>(
+    `api/outboundLoading/${outboundId}`
+  );
   return response.data;
 };

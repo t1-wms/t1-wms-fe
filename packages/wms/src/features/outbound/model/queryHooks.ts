@@ -27,11 +27,23 @@ import {
   createOutboundAssign,
   updateOutboundAssign,
   deleteOutboundAssign,
+  deleteOutboundLoading,
+  updateOutboundLoading,
+  createOutboundLoading,
+  deleteOutboundPacking,
+  updateOutboundPacking,
+  createOutboundPacking,
+  deleteOutboundPicking,
+  updateOutboundPicking,
+  createOutboundPicking,
 } from "../api";
 import {
   OutboundFilter,
   UseCreateOutboundPlanParams,
   UseUpdateOutboundAssignParams,
+  UseUpdateOutboundLoadingParams,
+  UseUpdateOutboundPackingParams,
+  UseUpdateOutboundPickingParams,
   UseUpdateOutboundPlanParams,
 } from "./types";
 
@@ -304,10 +316,10 @@ export const useCreateOutboundAssign = (queryClient: QueryClient) => {
 export const useUpdateOutboundAssign = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: ({
-      outboundPlanId,
+      outboundId,
       outboundAssignDate,
     }: UseUpdateOutboundAssignParams) =>
-      updateOutboundAssign(outboundPlanId, outboundAssignDate),
+      updateOutboundAssign(outboundId, outboundAssignDate),
     onSuccess: afterMutate(queryClient, "outboundAssign"),
   });
 };
@@ -317,5 +329,86 @@ export const useDeleteOutboundAssign = (queryClient: QueryClient) => {
     mutationFn: (outboundPlanId: number) =>
       deleteOutboundAssign(outboundPlanId),
     onSuccess: afterMutate(queryClient, "outboundAssign"),
+  });
+};
+
+export const useCreateOutboundPicking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      createOutboundPicking(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundPicking"),
+  });
+};
+
+export const useUpdateOutboundPicking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundId,
+      outboundPickingDate,
+    }: UseUpdateOutboundPickingParams) =>
+      updateOutboundPicking(outboundId, outboundPickingDate),
+    onSuccess: afterMutate(queryClient, "outboundPicking"),
+  });
+};
+
+export const useDeleteOutboundPicking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      deleteOutboundPicking(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundPicking"),
+  });
+};
+
+export const useCreateOutboundPacking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      createOutboundPacking(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundPacking"),
+  });
+};
+
+export const useUpdateOutboundPacking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundId,
+      outboundPackingDate,
+    }: UseUpdateOutboundPackingParams) =>
+      updateOutboundPacking(outboundId, outboundPackingDate),
+    onSuccess: afterMutate(queryClient, "outboundPacking"),
+  });
+};
+
+export const useDeleteOutboundPacking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      deleteOutboundPacking(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundPacking"),
+  });
+};
+
+export const useCreateOutboundLoading = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      createOutboundLoading(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundLoading"),
+  });
+};
+
+export const useUpdateOutboundLoading = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundId,
+      outboundLoadingDate,
+    }: UseUpdateOutboundLoadingParams) =>
+      updateOutboundLoading(outboundId, outboundLoadingDate),
+    onSuccess: afterMutate(queryClient, "outboundLoading"),
+  });
+};
+
+export const useDeleteOutboundLoading = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      deleteOutboundLoading(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundLoading"),
   });
 };
