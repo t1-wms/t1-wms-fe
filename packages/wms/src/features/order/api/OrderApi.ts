@@ -144,3 +144,8 @@ export const deleteOrder = async (orderId: number) => {
   const response = await noAuthAxios.delete<void>(`api/order/${orderId}`);
   return response.data;
 };
+
+export const approveOrder = async (orderId: number) => {
+  const response = await noAuthAxios.post<void>(`api/order/approve/${orderId}`);
+  return response.data;
+};

@@ -4,6 +4,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
+  approveOrder,
   createOrder,
   deleteOrder,
   getOrderChart,
@@ -196,6 +197,16 @@ export const useDeleteOrder = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: (orderId: number) => deleteOrder(orderId),
     onSuccess: afterMutate(queryClient, "order"),
+    onError: () => {
+      alert("이미 승인된 발주입니다");
+    },
+  });
+};
+
+export const useApproveOrder = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (orderId: number) => approveOrder(orderId),
+    onSuccess: afterMutate(queryClient, "receivedOrder"),
     onError: () => {
       alert("이미 승인된 발주입니다");
     },

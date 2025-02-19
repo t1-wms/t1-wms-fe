@@ -1,7 +1,7 @@
 import { PageContentBox, Spinner } from "@/shared";
 import styles from "./ReceivedOrderPage.module.css";
 import {
-  OrderDrawer,
+  ReceivedOrderDrawer,
   OrderResponseDto,
   ReceivedOrderControlPanel,
   ReceivedOrderTableWrapper,
@@ -45,7 +45,10 @@ export default function ReceivedOrderPage() {
         </Suspense>
       </PageContentBox>
       {selectedRow && (
-        <OrderDrawer data={selectedRow} onClose={() => setSelectedRow(null)} />
+        <ReceivedOrderDrawer
+          data={selectedRow}
+          onClose={() => setSelectedRow(null)}
+        />
       )}
     </div>
   );
