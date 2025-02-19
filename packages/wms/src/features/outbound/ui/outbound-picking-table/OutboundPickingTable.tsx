@@ -13,6 +13,7 @@ interface OutboundPickingTableProps {
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
   onChangeSelectedRow: (row: OutboundPickingResponseDto | null) => void;
+  totalElements: number;
 }
 
 const columnHelper = createColumnHelper<OutboundPickingResponseDto>();
@@ -72,6 +73,7 @@ export const OutboundPickingTable = ({
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
+  totalElements,
 }: OutboundPickingTableProps) => {
   const {
     pagination,
@@ -87,6 +89,7 @@ export const OutboundPickingTable = ({
     outboundNumberKey: "outboundPickingNumber",
     outboundDateKey: "outboundPickingDate",
     useData: useOutboundPickings,
+    totalElements,
   });
 
   useEffect(() => {
@@ -95,7 +98,7 @@ export const OutboundPickingTable = ({
         ? parseInt(Object.keys(rowSelection)[0])
         : null;
 
-    onChangeSelectedRow(rowId || rowId === 0 ? data.data[rowId] : null);
+    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
   }, [rowSelection, onChangeSelectedRow]);
 
   return (

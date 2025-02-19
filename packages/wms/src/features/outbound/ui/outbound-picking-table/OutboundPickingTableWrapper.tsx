@@ -18,11 +18,13 @@ export const OutboundPickingTableWrapper = ({
   setColumnFilters,
   onChangeSelectedRow,
 }: OutboundPickingTableWrapperProps) => {
-  const { data: countResult } = useOutboundPickingCount();
+  const {
+    data: { totalElements },
+  } = useOutboundPickingCount();
 
   const isServerSide = useMemo(() => {
-    return countResult.count >= minCountForServerSide;
-  }, [countResult]);
+    return totalElements >= minCountForServerSide;
+  }, [totalElements]);
 
   return (
     <>
@@ -32,6 +34,7 @@ export const OutboundPickingTableWrapper = ({
           setColumnFilters={setColumnFilters}
           isServerSide={isServerSide}
           onChangeSelectedRow={onChangeSelectedRow}
+          totalElements={totalElements}
         />
       </Suspense>
     </>

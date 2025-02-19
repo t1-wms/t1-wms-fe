@@ -4,6 +4,8 @@ import {
   CreateOutboundPlanModalInfo,
   CreateOutboundPlanRequestDto,
   OutboundPlanResponseDto,
+  useCreateOutboundPlan,
+  useUpdateOutboundPlan,
 } from "../../model";
 import { CreateOutboundPlanForm } from "../create-outbound-plan-form";
 import { Suspense, useCallback, useMemo, useState } from "react";
@@ -27,6 +29,7 @@ export const CreateOutboundPlanModal = ({
           ...outboundPlan,
         }
       : {
+          outboundPlanId: -1,
           process: "",
           outboundScheduleNumber: "",
           outboundScheduleDate: new Date(Date.now())
@@ -44,6 +47,8 @@ export const CreateOutboundPlanModal = ({
 
   const { closeModal } = useModalStore();
   const queryClient = useQueryClient();
+  const { mutate: createOutboundPlan } = useCreateOutboundPlan(queryClient);
+  const { mutate: updateOutboundPlan } = useUpdateOutboundPlan(queryClient);
 
   const handleSubmitValid = (
     productionPlanNumber: string,
@@ -64,19 +69,17 @@ export const CreateOutboundPlanModal = ({
       productList,
     };
 
-    console.log(data);
-
     if (outboundPlan) {
-      queryClient.invalidateQueries({
-        predicate: (q) => {
-          const isOutboundPlan = (q.queryKey[0] as string) === "outboundPlan";
-          const isNotCount =
-            q.queryKey[1] === undefined ||
-            !((q.queryKey[1] as string) === "count");
-
-          return isOutboundPlan && isNotCount;
-        },
+      // 출고예정 수정
+      updateOutboundPlan({
+        outboundPlanId: outboundPlan.outboundPlanId,
+        newOutboundPlan: data,
       });
+
+      closeModal();
+    } else {
+      // 출고예정 생성
+      createOutboundPlan({ newOutboundPlan: data });
 
       closeModal();
     }

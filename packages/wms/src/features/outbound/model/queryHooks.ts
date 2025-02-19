@@ -1,5 +1,9 @@
 import { Sort } from "@/shared";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import {
   getOutboundAssignCount,
   getOutboundAssigns,
@@ -16,8 +20,39 @@ import {
   getOutboundLoadingCount,
   getOutboundLoadingsPaged,
   getOutboundLoadings,
+  createOutboundPlan,
+  updateOutboundPlan,
+  getOutboundChart,
+  deleteOutboundPlan,
+  createOutboundAssign,
+  updateOutboundAssign,
+  deleteOutboundAssign,
+  deleteOutboundLoading,
+  updateOutboundLoading,
+  createOutboundLoading,
+  deleteOutboundPacking,
+  updateOutboundPacking,
+  createOutboundPacking,
+  deleteOutboundPicking,
+  updateOutboundPicking,
+  createOutboundPicking,
 } from "../api";
-import { OutboundFilter } from "./types";
+import {
+  OutboundFilter,
+  UseCreateOutboundPlanParams,
+  UseUpdateOutboundAssignParams,
+  UseUpdateOutboundLoadingParams,
+  UseUpdateOutboundPackingParams,
+  UseUpdateOutboundPickingParams,
+  UseUpdateOutboundPlanParams,
+} from "./types";
+
+export const useOutboundChart = () => {
+  return useSuspenseQuery({
+    queryKey: ["outboundChart"],
+    queryFn: () => getOutboundChart(),
+  });
+};
 
 export const useOutboundPlanCount = () => {
   return useSuspenseQuery({
@@ -49,29 +84,29 @@ export const useOutboundPlans = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter
+  filter?: OutboundFilter,
+  size?: number
 ) => {
+  console.log("useOutboundPlans");
+  console.log(size);
+
+  const queryKey = createUseOutboundQueryKey(
+    "outboundPlan",
+    isServerSide,
+    page!,
+    sort,
+    filter
+  );
+
   if (isServerSide) {
     return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundPlan",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
+      queryKey,
       queryFn: () => getOutboundPlansPaged(page!, sort, filter),
     });
   } else {
     return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundPlan",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
-      queryFn: () => getOutboundPlans(),
+      queryKey,
+      queryFn: () => getOutboundPlans(size!),
     });
   }
 };
@@ -87,7 +122,8 @@ export const useOutboundAssigns = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter
+  filter?: OutboundFilter,
+  size?: number
 ) => {
   if (isServerSide) {
     return useSuspenseQuery({
@@ -109,7 +145,7 @@ export const useOutboundAssigns = (
         sort,
         filter
       ),
-      queryFn: () => getOutboundAssigns(),
+      queryFn: () => getOutboundAssigns(size!),
     });
   }
 };
@@ -125,7 +161,8 @@ export const useOutboundPickings = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter
+  filter?: OutboundFilter,
+  size?: number
 ) => {
   if (isServerSide) {
     return useSuspenseQuery({
@@ -147,7 +184,7 @@ export const useOutboundPickings = (
         sort,
         filter
       ),
-      queryFn: () => getOutboundPickings(),
+      queryFn: () => getOutboundPickings(size!),
     });
   }
 };
@@ -163,8 +200,10 @@ export const useOutboundPackings = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter
+  filter?: OutboundFilter,
+  size?: number
 ) => {
+  console.log(filter);
   if (isServerSide) {
     return useSuspenseQuery({
       queryKey: createUseOutboundQueryKey(
@@ -185,7 +224,7 @@ export const useOutboundPackings = (
         sort,
         filter
       ),
-      queryFn: () => getOutboundPackings(),
+      queryFn: () => getOutboundPackings(size!),
     });
   }
 };
@@ -201,7 +240,8 @@ export const useOutboundLoadings = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter
+  filter?: OutboundFilter,
+  size?: number
 ) => {
   if (isServerSide) {
     return useSuspenseQuery({
@@ -223,7 +263,152 @@ export const useOutboundLoadings = (
         sort,
         filter
       ),
-      queryFn: () => getOutboundLoadings(),
+      queryFn: () => getOutboundLoadings(size!),
     });
   }
+};
+
+const afterMutate = (queryClient: QueryClient, key: string) => async () => {
+  await queryClient.invalidateQueries({
+    queryKey: [key, "count"],
+  });
+  setTimeout(() => {
+    queryClient.invalidateQueries({
+      queryKey: [key],
+    });
+  }, 0);
+};
+
+export const useCreateOutboundPlan = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({ newOutboundPlan }: UseCreateOutboundPlanParams) =>
+      createOutboundPlan(newOutboundPlan),
+    onSuccess: afterMutate(queryClient, "outboundPlan"),
+  });
+};
+
+export const useUpdateOutboundPlan = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundPlanId,
+      newOutboundPlan,
+    }: UseUpdateOutboundPlanParams) =>
+      updateOutboundPlan(outboundPlanId, newOutboundPlan),
+    onSuccess: afterMutate(queryClient, "outboundPlan"),
+  });
+};
+
+export const useDeleteOutboundPlan = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) => deleteOutboundPlan(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundPlan"),
+  });
+};
+
+export const useCreateOutboundAssign = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      createOutboundAssign(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundAssign"),
+  });
+};
+
+export const useUpdateOutboundAssign = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundId,
+      outboundAssignDate,
+    }: UseUpdateOutboundAssignParams) =>
+      updateOutboundAssign(outboundId, outboundAssignDate),
+    onSuccess: afterMutate(queryClient, "outboundAssign"),
+  });
+};
+
+export const useDeleteOutboundAssign = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      deleteOutboundAssign(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundAssign"),
+  });
+};
+
+export const useCreateOutboundPicking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      createOutboundPicking(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundPicking"),
+  });
+};
+
+export const useUpdateOutboundPicking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundId,
+      outboundPickingDate,
+    }: UseUpdateOutboundPickingParams) =>
+      updateOutboundPicking(outboundId, outboundPickingDate),
+    onSuccess: afterMutate(queryClient, "outboundPicking"),
+  });
+};
+
+export const useDeleteOutboundPicking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      deleteOutboundPicking(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundPicking"),
+  });
+};
+
+export const useCreateOutboundPacking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      createOutboundPacking(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundPacking"),
+  });
+};
+
+export const useUpdateOutboundPacking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundId,
+      outboundPackingDate,
+    }: UseUpdateOutboundPackingParams) =>
+      updateOutboundPacking(outboundId, outboundPackingDate),
+    onSuccess: afterMutate(queryClient, "outboundPacking"),
+  });
+};
+
+export const useDeleteOutboundPacking = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      deleteOutboundPacking(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundPacking"),
+  });
+};
+
+export const useCreateOutboundLoading = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      createOutboundLoading(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundLoading"),
+  });
+};
+
+export const useUpdateOutboundLoading = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundId,
+      outboundLoadingDate,
+    }: UseUpdateOutboundLoadingParams) =>
+      updateOutboundLoading(outboundId, outboundLoadingDate),
+    onSuccess: afterMutate(queryClient, "outboundLoading"),
+  });
+};
+
+export const useDeleteOutboundLoading = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) =>
+      deleteOutboundLoading(outboundPlanId),
+    onSuccess: afterMutate(queryClient, "outboundLoading"),
+  });
 };

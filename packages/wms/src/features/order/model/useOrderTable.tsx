@@ -11,14 +11,17 @@ interface UseOrderTableParams {
     isServerSide: boolean,
     page?: number,
     sort?: Sort,
-    filter?: OrderFilter
+    filter?: OrderFilter,
+    totalElements?: number
   ) => UseSuspenseQueryResult<PageResponse<OrderResponseDto>>;
+  totalElements: number;
 }
 
 export const useOrderTable = ({
   columnFilters,
   isServerSide,
   useData,
+  totalElements,
 }: UseOrderTableParams) => {
   // 서버사이드 필터링에서만 사용
   const filter: OrderFilter | undefined = useMemo(() => {
@@ -48,9 +51,10 @@ export const useOrderTable = ({
 
   const { data } = useData(
     isServerSide,
-    pagination.pageIndex + 1,
+    pagination.pageIndex,
     sort,
-    filter
+    filter,
+    totalElements
   );
 
   return {

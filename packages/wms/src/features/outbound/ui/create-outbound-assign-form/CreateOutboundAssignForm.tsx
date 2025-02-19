@@ -8,6 +8,7 @@ import {
 interface CreateOutboundAssignFormProps {
   onSubmitValid: (outboundAssignDate: string) => void;
   defaultValues: OutboundAssignResponseDto;
+  isUpdate: boolean;
 }
 
 const inputWidth = "200px";
@@ -15,6 +16,7 @@ const inputWidth = "200px";
 export const CreateOutboundAssignForm = ({
   onSubmitValid,
   defaultValues,
+  isUpdate,
 }: CreateOutboundAssignFormProps) => {
   const { inputProps, onSubmit } = useCreateOutboundAssignForm(onSubmitValid);
 
@@ -48,6 +50,7 @@ export const CreateOutboundAssignForm = ({
         width={inputWidth}
         type="date"
         defaultValue={defaultValues.outboundAssignDate}
+        disabled={!isUpdate}
         {...inputProps.outboundAssignDate}
       />
     </form>

@@ -26,8 +26,9 @@ export const OutboundPackingListDrawer = ({
       };
 
       openModal(modalInfo);
+      onClose();
     }
-  }, [selectedRow, openModal]);
+  }, [onClose, selectedRow, openModal]);
 
   const handleChangeSelectedRow = useCallback(
     (row: OutboundPackingResponseDto | null) => {

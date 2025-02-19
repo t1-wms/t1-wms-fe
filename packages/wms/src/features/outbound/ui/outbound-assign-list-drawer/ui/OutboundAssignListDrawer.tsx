@@ -26,8 +26,9 @@ export const OutboundAssignListDrawer = ({
       };
 
       openModal(modalInfo);
+      onClose();
     }
-  }, [selectedRow, openModal]);
+  }, [onClose, selectedRow, openModal]);
 
   const handleChangeSelectedRow = useCallback(
     (row: OutboundAssignResponseDto | null) => {

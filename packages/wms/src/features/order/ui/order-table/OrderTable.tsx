@@ -12,6 +12,7 @@ interface OrderTableProps {
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
   onChangeSelectedRow: (rowId: OrderResponseDto | null) => void;
+  totalElements: number;
 }
 
 const columnHelper = createColumnHelper<OrderResponseDto>();
@@ -66,6 +67,7 @@ export const OrderTable = ({
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
+  totalElements,
 }: OrderTableProps) => {
   const {
     pagination,
@@ -79,6 +81,7 @@ export const OrderTable = ({
     columnFilters,
     isServerSide,
     useData: useOrders,
+    totalElements,
   });
 
   useEffect(() => {
@@ -87,7 +90,7 @@ export const OrderTable = ({
         ? parseInt(Object.keys(rowSelection)[0])
         : null;
 
-    onChangeSelectedRow(rowId || rowId === 0 ? data.data[rowId] : null);
+    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
   }, [rowSelection, onChangeSelectedRow]);
 
   return (

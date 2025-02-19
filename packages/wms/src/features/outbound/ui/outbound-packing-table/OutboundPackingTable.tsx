@@ -13,6 +13,7 @@ interface OutboundPackingTableProps {
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
   onChangeSelectedRow: (row: OutboundPackingResponseDto | null) => void;
+  totalElements: number;
 }
 
 const columnHelper = createColumnHelper<OutboundPackingResponseDto>();
@@ -76,6 +77,7 @@ export const OutboundPackingTable = ({
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
+  totalElements,
 }: OutboundPackingTableProps) => {
   const {
     pagination,
@@ -91,6 +93,7 @@ export const OutboundPackingTable = ({
     outboundNumberKey: "outboundPackingNumber",
     outboundDateKey: "outboundPackingDate",
     useData: useOutboundPackings,
+    totalElements,
   });
 
   useEffect(() => {
@@ -99,7 +102,7 @@ export const OutboundPackingTable = ({
         ? parseInt(Object.keys(rowSelection)[0])
         : null;
 
-    onChangeSelectedRow(rowId || rowId === 0 ? data.data[rowId] : null);
+    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
   }, [rowSelection, onChangeSelectedRow]);
 
   return (

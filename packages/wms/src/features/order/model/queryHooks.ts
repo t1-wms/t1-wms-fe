@@ -1,5 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
+  getOrderChart,
   getOrderCount,
   getOrders,
   getOrdersPaged,
@@ -9,6 +10,13 @@ import {
 } from "../api";
 import { Sort } from "@/shared";
 import { OrderFilter, SupplierFilter } from "./types";
+
+export const useOrderChart = () => {
+  return useSuspenseQuery({
+    queryKey: ["orderChart"],
+    queryFn: () => getOrderChart(),
+  });
+};
 
 export const createUseOrderQueryKey = (
   key: string,
@@ -57,7 +65,8 @@ export const useSuppliers = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: SupplierFilter
+  filter?: SupplierFilter,
+  size?: number
 ) => {
   const queryKey = createUseSupplierQueryKey(
     "supplier",
@@ -75,7 +84,7 @@ export const useSuppliers = (
   } else {
     return useSuspenseQuery({
       queryKey,
-      queryFn: () => getSuppliers(),
+      queryFn: () => getSuppliers(size!),
     });
   }
 };
@@ -91,7 +100,8 @@ export const useOrders = (
   isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OrderFilter
+  filter?: OrderFilter,
+  size?: number
 ) => {
   const queryKey = createUseOrderQueryKey(
     "order",
@@ -109,7 +119,7 @@ export const useOrders = (
   } else {
     return useSuspenseQuery({
       queryKey,
-      queryFn: () => getOrders(),
+      queryFn: () => getOrders(size!),
     });
   }
 };

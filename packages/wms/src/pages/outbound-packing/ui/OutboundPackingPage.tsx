@@ -18,6 +18,7 @@ export const OutboundPackingPage = () => {
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
+      console.log("asdf");
       setColumnFilters([
         { id: "outboundPackingDate", value: `${startDate},${endDate}` },
         { id: "outboundPackingNumber", value: number },

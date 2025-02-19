@@ -15,7 +15,8 @@ interface SupplierTableProps {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
-  onChangeSelectedRow: (rowId: SupplierResponseDto | null) => void;
+  onChangeSelectedRow?: (rowId: SupplierResponseDto | null) => void;
+  totalElements: number;
 }
 
 const columnHelper = createColumnHelper<SupplierResponseDto>();
@@ -39,7 +40,7 @@ const dateFilterFn: FilterFn<SupplierResponseDto> = (
 
 const defaultColumns = [
   columnHelper.accessor("businessNumber", {
-    header: "납품업체번호",
+    header: "사업자등록번호",
     cell: (row) => row.getValue(),
     filterFn: dateFilterFn,
   }),
@@ -66,6 +67,7 @@ export const SupplierTable = ({
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
+  totalElements,
 }: SupplierTableProps) => {
   const {
     pagination,
@@ -79,15 +81,17 @@ export const SupplierTable = ({
     columnFilters,
     isServerSide,
     useData: useSuppliers,
+    totalElements,
   });
 
   useEffect(() => {
+    if (!onChangeSelectedRow) return;
     const rowId =
       Object.keys(rowSelection).length > 0
         ? parseInt(Object.keys(rowSelection)[0])
         : null;
 
-    onChangeSelectedRow(rowId || rowId === 0 ? data.data[rowId] : null);
+    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
   }, [rowSelection, onChangeSelectedRow]);
 
   return (
