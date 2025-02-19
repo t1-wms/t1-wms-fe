@@ -11,6 +11,10 @@
   &.padding-sm {
     padding: 4px 16px;
   }
+
+  &.padding-xs {
+    padding: 2px 8px;
+  }
 }
 
 .container:focus {
