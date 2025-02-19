@@ -6,7 +6,8 @@
     "worker": "npm run dev --workspace=@t1-wms-fe/worker",
     "build:wms": "npm run build -w @t1-wms-fe/wms",
     "build:worker": "npm run build -w @t1-wms-fe/worker",
-    "i:wms": "cd packages/wms && npm install"
+    "build": "npm run build:wms && npm run build:worker && npm run copy-dist",
+    "copy-dist": "mkdir -p ./dist && cp -r packages/wms/dist/* ./dist/ && cp -r packages/worker/dist/* ./dist/"
   },
   "license": "MIT",
   "workspaces": [
