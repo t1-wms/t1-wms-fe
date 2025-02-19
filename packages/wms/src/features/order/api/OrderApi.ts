@@ -103,3 +103,8 @@ export const updateOrder = async (
   );
   return response.data;
 };
+
+export const deleteOrder = async (orderId: number) => {
+  const response = await noAuthAxios.delete<void>(`api/order/${orderId}`);
+  return response.data;
+};

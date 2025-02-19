@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 import {
   createOrder,
+  deleteOrder,
   getOrderChart,
   getOrderCount,
   getOrders,
@@ -146,6 +147,16 @@ export const useUpdateOrder = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: ({ orderId, productList }: UseUpdateOrderParams) =>
       updateOrder(orderId, productList),
+    onSuccess: afterMutate(queryClient, "order"),
+    onError: () => {
+      alert("이미 승인된 발주입니다");
+    },
+  });
+};
+
+export const useDeleteOrder = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (orderId: number) => deleteOrder(orderId),
     onSuccess: afterMutate(queryClient, "order"),
     onError: () => {
       alert("이미 승인된 발주입니다");

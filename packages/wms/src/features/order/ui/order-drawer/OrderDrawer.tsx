@@ -1,8 +1,13 @@
 import styles from "./OrderDrawer.module.css";
 import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
-import { CreateOrderModalInfo, OrderResponseDto } from "../../model";
+import {
+  CreateOrderModalInfo,
+  OrderResponseDto,
+  useDeleteOrder,
+} from "../../model";
 import { OutboundProductTable } from "@/features";
 import { useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface OrderDrawerProps {
   data: OrderResponseDto;
@@ -13,6 +18,9 @@ export const OrderDrawer = ({ data, onClose }: OrderDrawerProps) => {
   const { orderNumber, orderDate, supplierName, productList } = data;
 
   const { openModal } = useModalStore();
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteOrder } = useDeleteOrder(queryClient);
 
   const handleClickUpdate = useCallback(() => {
     const modalInfo: CreateOrderModalInfo = {
@@ -21,7 +29,13 @@ export const OrderDrawer = ({ data, onClose }: OrderDrawerProps) => {
     };
 
     openModal(modalInfo);
-  }, [openModal, data]);
+    onClose();
+  }, [onClose, openModal, data]);
+
+  const handleClickDelete = useCallback(() => {
+    deleteOrder(data.orderId);
+    onClose();
+  }, [onClose, data, deleteOrder]);
 
   return (
     <BaseDrawer title={`발주 조회`} onClose={onClose}>
@@ -55,7 +69,7 @@ export const OrderDrawer = ({ data, onClose }: OrderDrawerProps) => {
           <MainButton size="sm" padding="sm" onClick={handleClickUpdate}>
             수정
           </MainButton>
-          <MainButton size="sm" padding="sm">
+          <MainButton size="sm" padding="sm" onClick={handleClickDelete}>
             삭제
           </MainButton>
         </div>
