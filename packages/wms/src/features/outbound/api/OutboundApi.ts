@@ -3,12 +3,21 @@ import { PageResponse, Sort } from "@shared/model";
 import {
   CreateOutboundPlanRequestDto,
   OutboundAssignResponseDto,
+  OutboundChartData,
   OutboundFilter,
   OutboundLoadingResponseDto,
   OutboundPackingResponseDto,
   OutboundPickingResponseDto,
   OutboundPlanResponseDto,
 } from "../model";
+
+export const getOutboundChart = async () => {
+  const response = await noAuthAxios.get<OutboundChartData>(
+    `api/dashboard/outbound-status`
+  );
+
+  return response.data;
+};
 
 export const getOutboundPlanCount = async () => {
   const response = await noAuthAxios.get<PageResponse<OutboundPlanResponseDto>>(

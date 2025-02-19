@@ -11,6 +11,9 @@ import OrderPage from "@/pages/order";
 import ReceivedOrder from "@/pages/received-order";
 import { InboundSchedulePage } from "@/pages/inbound-schedule";
 import { InboundCheckPage } from "@/pages/inbound-check";
+import ProductPage from "@/pages/product";
+import SupplierPage from "@/pages/supplier";
+import DashBoardPage from "@/pages/dashboard/ui/DashboardPage";
 
 const router = createBrowserRouter([
   {
@@ -22,8 +25,20 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
+        path: "/dashboard",
+        element: <DashBoardPage />,
+      },
+      {
         path: "/user",
         element: <UserPage />,
+      },
+      {
+        path: "/master/product",
+        element: <ProductPage />,
+      },
+      {
+        path: "/master/supplier",
+        element: <SupplierPage />,
       },
       {
         path: "/order",

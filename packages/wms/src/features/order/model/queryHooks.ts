@@ -1,5 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
+  getOrderChart,
   getOrderCount,
   getOrders,
   getOrdersPaged,
@@ -9,6 +10,13 @@ import {
 } from "../api";
 import { Sort } from "@/shared";
 import { OrderFilter, SupplierFilter } from "./types";
+
+export const useOrderChart = () => {
+  return useSuspenseQuery({
+    queryKey: ["orderChart"],
+    queryFn: () => getOrderChart(),
+  });
+};
 
 export const createUseOrderQueryKey = (
   key: string,

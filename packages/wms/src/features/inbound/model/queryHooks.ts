@@ -2,6 +2,7 @@ import { Sort } from "@/shared";
 import { InboundFilter } from "./types";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
+  getInboundChart,
   getInboundCheckCount,
   getInboundChecks,
   getInboundChecksPaged,
@@ -27,6 +28,14 @@ export const createUseInboundQueryKey = (
           : "not-filtering",
       ]
     : [key];
+};
+
+export const useInboundChart = () => {
+  return useSuspenseQuery({
+    queryKey: ["inboundChart"],
+    queryFn: () => getInboundChart(),
+    staleTime: 1000,
+  });
 };
 
 export const useInboundScheduleCount = () => {

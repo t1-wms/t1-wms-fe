@@ -22,12 +22,20 @@ import {
   getOutboundLoadings,
   createOutboundPlan,
   updateOutboundPlan,
+  getOutboundChart,
 } from "../api";
 import {
   OutboundFilter,
   UseCreateOutboundPlanParams,
   UseUpdateOutboundPlanParams,
 } from "./types";
+
+export const useOutboundChart = () => {
+  return useSuspenseQuery({
+    queryKey: ["outboundChart"],
+    queryFn: () => getOutboundChart(),
+  });
+};
 
 export const useOutboundPlanCount = () => {
   return useSuspenseQuery({
