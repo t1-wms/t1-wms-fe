@@ -24,7 +24,7 @@ FROM nginx:alpine
 RUN apk update && apk add --no-cache ca-certificates curl
 RUN rm -rf /usr/share/nginx/html/*
 
-COPY --from=build /app/packages/wms/dist /usr/share/nginx/html
+COPY --from=build /app/packages/worker/dist /home/ec2-user/frontend/worker/dist
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

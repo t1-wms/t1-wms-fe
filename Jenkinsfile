@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        EC2_DOMAIN = 'stockholmes.store'
+        EC2_WMS_DOMAIN = 'stockholmes.store'
+        EC2_WORKER_DOMAIN = 'worker.stockholmes.store'
         EC2_USER = 'ec2-user'
     }
 
@@ -41,6 +42,8 @@ pipeline {
                         ls -la packages/
                         echo "===== WMS package contents ====="
                         ls -la packages/wms/
+                        echo "===== Worker package contents ====="
+                        ls -la packages/worker/
                     '''
                 }
             }
@@ -50,14 +53,21 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        echo "===== Before copy shared folder ====="
+                        # For WMS
+                        echo "===== Before copy shared folder to WMS ====="
                         ls -la packages/wms/
-
                         mkdir -p packages/wms/dist
                         cp -r packages/shared/* packages/wms/dist/
-
-                        echo "===== After copy shared folder ====="
+                        echo "===== After copy shared folder to WMS ====="
                         ls -la packages/wms/dist/
+
+                        # For Worker
+                        echo "===== Before copy shared folder to Worker ====="
+                        ls -la packages/worker/
+                        mkdir -p packages/worker/dist
+                        cp -r packages/shared/* packages/worker/dist/
+                        echo "===== After copy shared folder to Worker ====="
+                        ls -la packages/worker/dist/
                     '''
                 }
             }
@@ -67,12 +77,12 @@ pipeline {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
                     sh '''
-                        echo "===== Before build ====="
+                        echo "===== Before WMS build ====="
                         ls -la packages/wms/
 
                         npm run build:wms
 
-                        echo "===== After build ====="
+                        echo "===== After WMS build ====="
                         echo "WMS dist directory contents:"
                         ls -la packages/wms/dist/
                         echo "Assets directory contents:"
@@ -82,52 +92,118 @@ pipeline {
             }
         }
 
-        stage('Deploy to EC2') {
+        stage('Build Worker') {
             steps {
-                script {
-                    sshPublisher(
-                        publishers: [
-                            sshPublisherDesc(
-                                configName: 'FrontendServer',
-                                transfers: [
-                                    sshTransfer(
-                                        sourceFiles: "nginx/frontend.conf,nginx/nginx.conf,packages/wms/dist/**",
-                                        remoteDirectory: "",
-                                        execCommand: '''
-                                            echo "===== Cleaning up old directories ====="
-                                            rm -rf ~/frontend/wms/dist/*
-                                            rm -rf ~/frontend/dist
+                nodejs(nodeJSInstallationName: 'NodeJS 20.11.1') {
+                    sh '''
+                        echo "===== Before Worker build ====="
+                        ls -la packages/worker/
 
-                                            echo "===== Creating new directory structure ====="
-                                            mkdir -p ~/frontend/nginx
-                                            mkdir -p ~/frontend/wms/dist
+                        npm run build:worker
 
-                                            echo "===== Moving files ====="
-                                            mv packages/wms/dist/* ~/frontend/wms/dist/
-                                            mv nginx/* ~/frontend/nginx/
-
-                                            echo "===== New directory contents ====="
-                                            ls -la ~/frontend/wms/dist/
-
-                                            echo "===== Updating Nginx configuration ====="
-                                            sudo cp ~/frontend/nginx/frontend.conf /etc/nginx/conf.d/
-                                            sudo nginx -t && sudo systemctl reload nginx
-
-                                            echo "===== Final directory structure ====="
-                                            ls -la ~/frontend/
-                                            ls -la ~/frontend/wms/dist/
-
-                                            echo "Deployment completed successfully"
-                                        '''
-                                    )
-                                ]
-                            )
-                        ]
-                    )
+                        echo "===== After Worker build ====="
+                        echo "Worker dist directory contents:"
+                        ls -la packages/worker/dist/
+                        echo "Assets directory contents:"
+                        ls -la packages/worker/dist/assets/
+                    '''
                 }
             }
         }
-    }
+
+         stage('Deploy WMS to EC2') {
+             steps {
+                 script {
+                     sshPublisher(
+                         publishers: [
+                             sshPublisherDesc(
+                                 configName: 'FrontendServer',
+                                 transfers: [
+                                     sshTransfer(
+                                         sourceFiles: "nginx/frontend.conf,nginx/nginx.conf,packages/wms/dist/**",
+                                         remoteDirectory: "",
+                                         execCommand: '''
+                                             echo "===== Cleaning up old WMS directories ====="
+                                             rm -rf ~/frontend/wms/dist/*
+                                             rm -rf ~/frontend/dist
+
+                                             echo "===== Creating new WMS directory structure ====="
+                                             mkdir -p ~/frontend/nginx
+                                             mkdir -p ~/frontend/wms/dist
+
+                                             echo "===== Moving WMS files ====="
+                                             mv packages/wms/dist/* ~/frontend/wms/dist/
+                                             mv nginx/frontend.conf ~/frontend/nginx/frontend.conf
+
+                                             echo "===== New WMS directory contents ====="
+                                             ls -la ~/frontend/wms/dist/
+
+                                             echo "===== Updating Nginx configuration ====="
+                                             sudo cp ~/frontend/nginx/frontend.conf /etc/nginx/conf.d/
+                                             sudo nginx -t && sudo systemctl reload nginx
+
+                                             echo "===== Final WMS directory structure ====="
+                                             ls -la ~/frontend/
+                                             ls -la ~/frontend/wms/dist/
+
+                                             echo "WMS Deployment completed successfully"
+                                         '''
+                                     )
+                                 ]
+                             )
+                         ]
+                     )
+                 }
+             }
+         }
+
+         stage('Deploy Worker to EC2') {
+             steps {
+                 script {
+                     sshPublisher(
+                         publishers: [
+                             sshPublisherDesc(
+                                 configName: 'WorkerServer',
+                                 transfers: [
+                                     sshTransfer(
+                                         sourceFiles: "nginx/frontend2.conf,nginx/nginx.conf,packages/worker/dist/**",
+                                         remoteDirectory: "",
+                                         execCommand: '''
+                                             echo "===== Cleaning up old Worker directories ====="
+                                             rm -rf ~/frontend/worker/dist/*
+                                             rm -rf ~/frontend/dist
+
+                                             echo "===== Creating new Worker directory structure ====="
+                                             mkdir -p ~/frontend/nginx
+                                             mkdir -p ~/frontend/worker/dist
+
+                                             echo "===== Moving Worker files ====="
+                                             mv packages/worker/dist/* ~/frontend/worker/dist/
+                                             mv nginx/frontend2.conf ~/frontend/nginx/frontend2.conf
+
+                                             echo "===== New Worker directory contents ====="
+                                             ls -la ~/frontend/worker/dist/
+
+                                             echo "===== Updating Nginx configuration ====="
+                                             sudo cp ~/frontend/nginx/frontend2.conf /etc/nginx/conf.d/
+                                             sudo nginx -t && sudo systemctl reload nginx
+
+                                             echo "===== Final Worker directory structure ====="
+                                             ls -la ~/frontend/
+                                             ls -la ~/frontend/worker/dist/
+
+                                             echo "Worker Deployment completed successfully"
+                                         '''
+                                     )
+                                 ]
+                             )
+                         ]
+                     )
+                 }
+             }
+         }
+     }
+
     post {
         always {
             echo "===== Workspace contents after build ====="
