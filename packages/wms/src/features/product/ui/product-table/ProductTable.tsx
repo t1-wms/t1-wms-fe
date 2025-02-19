@@ -27,7 +27,7 @@ const defaultColumns = [
     header: "카테고리",
     cell: (row) => row.getValue(),
   }),
-  columnHelper.accessor("stockLotCount", {
+  columnHelper.accessor("productCount", {
     header: "재고량",
     cell: (row) => row.getValue(),
   }),
@@ -35,8 +35,8 @@ const defaultColumns = [
     header: "BIN",
     cell: (row) => row.getValue(),
   }),
-  columnHelper.accessor("supplierId", {
-    header: "납품업체 ID",
+  columnHelper.accessor("supplierName", {
+    header: "납품업체",
     cell: (row) => row.getValue(),
   }),
 ];

@@ -4,9 +4,8 @@ export interface ProductResponseDto {
   productName: string;
   purchasePrice: number;
   salePrice: number;
-  lotUnit: number;
-  supplierId: number;
-  stockLotCount: number;
+  productCount: number;
+  supplierName: string;
   category: string;
   threshold: number;
   leadTime: number;
