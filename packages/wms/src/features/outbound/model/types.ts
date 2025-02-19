@@ -1,6 +1,14 @@
 import { ProductListDto } from "@/entities/product";
 import { ModalInfoBase } from "@/shared";
 
+export interface OutboundChartData {
+  outboundSchedule: number;
+  outboundAssign: number;
+  outboundPicking: number;
+  outboundPacking: number;
+  outboundLoading: number;
+}
+
 export interface OutboundPlanResponseDto {
   process: string;
   outboundScheduleNumber: string;

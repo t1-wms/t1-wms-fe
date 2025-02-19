@@ -4,3 +4,4 @@ export * from "./order-drawer";
 export * from "./supplier-table";
 export * from "./supplier-control-panel";
 export * from "./supplier-drawer";
+export * from "./order-bar-chart";

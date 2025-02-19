@@ -1,6 +1,11 @@
 import { ProductListDto } from "@/entities";
 import { ModalInfoBase } from "@/shared";
 
+export interface OrderChartData {
+  notApproved: number;
+  approved: number;
+}
+
 export interface ProductInSupplierDto {
   productId: number;
   supplierId: number;
