@@ -36,6 +36,9 @@ pipeline {
                         npm install
                         npm install -D @rollup/rollup-linux-x64-gnu @types/react @types/react-dom @tailwindcss/vite
 
+                        # lightningcss Linux 바이너리 설치
+                        npm install -D lightningcss-linux-x64-gnu
+
                         echo "===== After dependencies installation ====="
                         ls -la
                         echo "===== Packages directory ====="
