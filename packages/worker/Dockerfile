@@ -15,7 +15,7 @@ RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
 # worker 폴더만 복사
 COPY packages/worker ./packages/worker
 
-# WMS 빌드
+# worker 빌드
 RUN npm run build:worker
 
 # 프로덕션 스테이지
