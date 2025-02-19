@@ -3,6 +3,7 @@ import styles from "./ThresholdPage.module.css";
 import {
   ProductThresholdDto,
   ThresholdControlPanel,
+  ThresholdDrawer,
   ThresholdTable,
 } from "@/features";
 import { Suspense, useCallback, useState } from "react";
