@@ -4,12 +4,16 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
+  approveOrder,
   createOrder,
   deleteOrder,
   getOrderChart,
   getOrderCount,
   getOrders,
   getOrdersPaged,
+  getReceivedOrderCount,
+  getReceivedOrders,
+  getReceivedOrdersPaged,
   getSupplierCount,
   getSuppliers,
   getSuppliersPaged,
@@ -136,6 +140,41 @@ export const useOrders = (
   }
 };
 
+export const useReceivedOrderCount = () => {
+  return useSuspenseQuery({
+    queryKey: ["receivedOrder", "count"],
+    queryFn: () => getReceivedOrderCount(),
+  });
+};
+
+export const useReceivedOrdes = (
+  isServerSide: boolean,
+  page?: number,
+  sort?: Sort,
+  filter?: OrderFilter,
+  size?: number
+) => {
+  const queryKey = createUseOrderQueryKey(
+    "receivedOrder",
+    isServerSide,
+    page!,
+    sort,
+    filter
+  );
+
+  if (isServerSide) {
+    return useSuspenseQuery({
+      queryKey,
+      queryFn: () => getReceivedOrdersPaged(page!, sort, filter),
+    });
+  } else {
+    return useSuspenseQuery({
+      queryKey,
+      queryFn: () => getReceivedOrders(size!),
+    });
+  }
+};
+
 export const useCreateOrder = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: (newOrder: CreateOrderRequestDto) => createOrder(newOrder),
@@ -158,6 +197,16 @@ export const useDeleteOrder = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: (orderId: number) => deleteOrder(orderId),
     onSuccess: afterMutate(queryClient, "order"),
+    onError: () => {
+      alert("이미 승인된 발주입니다");
+    },
+  });
+};
+
+export const useApproveOrder = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (orderId: number) => approveOrder(orderId),
+    onSuccess: afterMutate(queryClient, "receivedOrder"),
     onError: () => {
       alert("이미 승인된 발주입니다");
     },
