@@ -4,31 +4,34 @@ import { ReceivedOrderTable } from "./ReceivedOrderTable";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { minCountForServerSide, Spinner } from "@/shared";
 
-interface OrderTableWrapperProps {
+interface ReceivedOrderTableWrapperProps {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   onChangeSelectedRow: (row: OrderResponseDto | null) => void;
 }
 
-export const OrderTableWrapper = ({
+export const ReceivedOrderTableWrapper = ({
   columnFilters,
   setColumnFilters,
   onChangeSelectedRow,
-}: OrderTableWrapperProps) => {
-  const { data: countResult } = useOrderCount();
+}: ReceivedOrderTableWrapperProps) => {
+  const {
+    data: { totalElements },
+  } = useReceivedOrderCount();
 
   const isServerSide = useMemo(() => {
-    return countResult.count >= minCountForServerSide;
-  }, [countResult]);
+    return totalElements >= minCountForServerSide;
+  }, [totalElements]);
 
   return (
     <>
       <Suspense fallback={<Spinner message="발주 데이터를 가져오는 중" />}>
-        <OrderTable
+        <ReceivedOrderTable
           columnFilters={columnFilters}
           setColumnFilters={setColumnFilters}
           isServerSide={isServerSide}
           onChangeSelectedRow={onChangeSelectedRow}
+          totalElements={totalElements}
         />
       </Suspense>
     </>

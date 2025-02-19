@@ -10,6 +10,9 @@ import {
   getOrderCount,
   getOrders,
   getOrdersPaged,
+  getReceivedOrderCount,
+  getReceivedOrders,
+  getReceivedOrdersPaged,
   getSupplierCount,
   getSuppliers,
   getSuppliersPaged,
@@ -132,6 +135,41 @@ export const useOrders = (
     return useSuspenseQuery({
       queryKey,
       queryFn: () => getOrders(size!),
+    });
+  }
+};
+
+export const useReceivedOrderCount = () => {
+  return useSuspenseQuery({
+    queryKey: ["receivedOrder", "count"],
+    queryFn: () => getReceivedOrderCount(),
+  });
+};
+
+export const useReceivedOrdes = (
+  isServerSide: boolean,
+  page?: number,
+  sort?: Sort,
+  filter?: OrderFilter,
+  size?: number
+) => {
+  const queryKey = createUseOrderQueryKey(
+    "receivedOrder",
+    isServerSide,
+    page!,
+    sort,
+    filter
+  );
+
+  if (isServerSide) {
+    return useSuspenseQuery({
+      queryKey,
+      queryFn: () => getReceivedOrdersPaged(page!, sort, filter),
+    });
+  } else {
+    return useSuspenseQuery({
+      queryKey,
+      queryFn: () => getReceivedOrders(size!),
     });
   }
 };

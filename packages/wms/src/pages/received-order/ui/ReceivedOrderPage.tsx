@@ -3,8 +3,8 @@ import styles from "./ReceivedOrderPage.module.css";
 import {
   OrderDrawer,
   OrderResponseDto,
-  OrderTableWrapper,
   OrderControlPanel,
+  ReceivedOrderTableWrapper,
 } from "@/features";
 import { Suspense, useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
@@ -46,7 +46,7 @@ export default function ReceivedOrderPage() {
       </PageContentBox>
       <PageContentBox>
         <Suspense fallback={<Spinner message="발주 품목을 세는 중" />}>
-          <OrderTableWrapper
+          <ReceivedOrderTableWrapper
             columnFilters={columnFilters}
             setColumnFilters={setColumnFilters}
             onChangeSelectedRow={handleChangeSelectedRow}

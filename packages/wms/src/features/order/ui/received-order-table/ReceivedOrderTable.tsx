@@ -5,13 +5,14 @@ import {
   FilterFn,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { OrderResponseDto, useOrders, useOrderTable } from "../../model";
+import { OrderResponseDto, useOrderTable, useReceivedOrdes } from "../../model";
 
 interface OrderTableProps {
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   isServerSide: boolean;
   onChangeSelectedRow: (rowId: OrderResponseDto | null) => void;
+  totalElements: number;
 }
 
 const columnHelper = createColumnHelper<OrderResponseDto>();
@@ -43,14 +44,6 @@ const defaultColumns = [
     cell: (row) => row.getValue(),
     filterFn: dateFilterFn,
   }),
-  columnHelper.accessor("orderStatus", {
-    header: "발주상태",
-    cell: (row) => row.getValue(),
-  }),
-  columnHelper.accessor("supplierName", {
-    header: "납품업체",
-    cell: (row) => row.getValue(),
-  }),
   columnHelper.accessor("deliveryDeadline", {
     header: "납품기한",
     cell: (row) => row.getValue(),
@@ -61,11 +54,12 @@ const defaultColumns = [
   }),
 ];
 
-export const OrderTable = ({
+export const ReceivedOrderTable = ({
   columnFilters,
   setColumnFilters,
   isServerSide,
   onChangeSelectedRow,
+  totalElements,
 }: OrderTableProps) => {
   const {
     pagination,
@@ -78,7 +72,8 @@ export const OrderTable = ({
   } = useOrderTable({
     columnFilters,
     isServerSide,
-    useData: useOrders,
+    useData: useReceivedOrdes,
+    totalElements,
   });
 
   useEffect(() => {
