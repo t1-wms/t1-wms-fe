@@ -30,8 +30,6 @@ export const SideBar = () => {
             label: "마스터",
             icon: <ToolIcon />,
             subItems: [
-              { label: "품목 조회", path: "/master/product" },
-              { label: "BIN 조회", path: "/master/bin" },
               { label: "품목별 적치 조회", path: "/master/location" },
               { label: "납품업체 조회", path: "/master/supplier" },
             ],

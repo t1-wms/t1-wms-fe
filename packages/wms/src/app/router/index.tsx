@@ -14,6 +14,7 @@ import { InboundCheckPage } from "@/pages/inbound-check";
 import ProductPage from "@/pages/product";
 import SupplierPage from "@/pages/supplier";
 import DashBoardPage from "@/pages/dashboard/ui/DashboardPage";
+import ThresholdPage from "@/pages/threshold";
 
 const router = createBrowserRouter([
   {
@@ -31,10 +32,6 @@ const router = createBrowserRouter([
       {
         path: "/user",
         element: <UserPage />,
-      },
-      {
-        path: "/master/product",
-        element: <ProductPage />,
       },
       {
         path: "/master/supplier",
@@ -75,6 +72,14 @@ const router = createBrowserRouter([
       {
         path: "/outbound/loading",
         element: <OutboundLoadingPage />,
+      },
+      {
+        path: "/inventory/product",
+        element: <ProductPage />,
+      },
+      {
+        path: "/inventory/threshold",
+        element: <ThresholdPage />,
       },
     ],
   },

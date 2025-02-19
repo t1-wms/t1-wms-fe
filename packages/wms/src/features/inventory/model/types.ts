@@ -5,3 +5,8 @@ export interface ProductThresholdDto {
   productCount: number;
   threshold: number;
 }
+
+export interface UpdateThresholdRequestDto {
+  productId: number;
+  threshold: number;
+}
