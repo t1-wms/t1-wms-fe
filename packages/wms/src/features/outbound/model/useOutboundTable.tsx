@@ -27,6 +27,8 @@ export const useOutboundTable = <OutboundResponseDto extends unknown>({
   totalElements,
   useData,
 }: UseOutboundTableParams<OutboundResponseDto>) => {
+  console.log("useOutboundTable");
+  console.log("totalElements", totalElements);
   // 서버사이드 필터링에서만 사용
   const filter: OutboundFilter | undefined = useMemo(() => {
     if (!columnFilters || columnFilters.length === 0) return undefined;
@@ -44,7 +46,6 @@ export const useOutboundTable = <OutboundResponseDto extends unknown>({
       endDate,
     };
   }, [columnFilters, outboundNumberKey, outboundDateKey]);
-  console.log(filter);
 
   const {
     pagination,
@@ -63,6 +64,8 @@ export const useOutboundTable = <OutboundResponseDto extends unknown>({
     filter,
     totalElements
   );
+
+  console.log("data", data);
 
   return {
     pagination,

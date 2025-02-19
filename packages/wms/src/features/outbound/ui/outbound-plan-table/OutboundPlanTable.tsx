@@ -69,6 +69,7 @@ export const OutboundPlanTable = ({
   onChangeSelectedRow,
   totalElements,
 }: OutboundPlanTableProps) => {
+  console.log("Table Render");
   const {
     pagination,
     setPagination,

@@ -1,5 +1,9 @@
 import { Sort } from "@/shared";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import {
   getOutboundAssignCount,
   getOutboundAssigns,
@@ -16,9 +20,16 @@ import {
   getOutboundLoadingCount,
   getOutboundLoadingsPaged,
   getOutboundLoadings,
+  createOutboundPlan,
+  updateOutboundPlan,
   getOutboundChart,
+  deleteOutboundPlan,
 } from "../api";
-import { OutboundFilter } from "./types";
+import {
+  OutboundFilter,
+  UseCreateOutboundPlanParams,
+  UseUpdateOutboundPlanParams,
+} from "./types";
 
 export const useOutboundChart = () => {
   return useSuspenseQuery({
@@ -60,6 +71,9 @@ export const useOutboundPlans = (
   filter?: OutboundFilter,
   size?: number
 ) => {
+  console.log("useOutboundPlans");
+  console.log(size);
+
   const queryKey = createUseOutboundQueryKey(
     "outboundPlan",
     isServerSide,
@@ -236,4 +250,57 @@ export const useOutboundLoadings = (
       queryFn: () => getOutboundLoadings(size!),
     });
   }
+};
+
+export const useCreateOutboundPlan = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({ newOutboundPlan }: UseCreateOutboundPlanParams) =>
+      createOutboundPlan(newOutboundPlan),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["outboundPlan", "count"],
+      });
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["outboundPlan"],
+        });
+      }, 0);
+    },
+  });
+};
+
+export const useUpdateOutboundPlan = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({
+      outboundPlanId,
+      newOutboundPlan,
+    }: UseUpdateOutboundPlanParams) =>
+      updateOutboundPlan(outboundPlanId, newOutboundPlan),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["outboundPlan", "count"],
+      });
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["outboundPlan"],
+        });
+      }, 0);
+    },
+  });
+};
+
+export const useDeleteOutboundPlan = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) => deleteOutboundPlan(outboundPlanId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["outboundPlan", "count"],
+      });
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["outboundPlan"],
+        });
+      }, 0);
+    },
+  });
 };
