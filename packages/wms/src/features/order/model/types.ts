@@ -72,3 +72,8 @@ export interface OrderFilter {
   startDate?: string;
   endDate?: string;
 }
+
+export interface UseUpdateOrderParams {
+  orderId: number;
+  productList: SupplierProductDto[];
+}

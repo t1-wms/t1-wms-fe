@@ -6,6 +6,7 @@ import {
   CreateOrderRequestDto,
   SupplierProductDto,
   useCreateOrder,
+  useUpdateOrder,
 } from "../../model";
 import { CreateOrderForm } from "../create-order-form";
 import { useCallback, useMemo, useState } from "react";
@@ -61,6 +62,7 @@ export const CreateOrderModal = ({ modalInfo }: CreateOrderModalProps) => {
   const queryClient = useQueryClient();
 
   const { mutate: createOrder } = useCreateOrder(queryClient);
+  const { mutate: updateOrder } = useUpdateOrder(queryClient);
 
   const handleSubmitValid = () => {
     const productList: SupplierProductDto[] = [];
@@ -81,22 +83,14 @@ export const CreateOrderModal = ({ modalInfo }: CreateOrderModalProps) => {
       // 발주 생성
       createOrder(data);
       closeModal();
+    } else {
+      // 발주 수정
+      updateOrder({
+        orderId: order.orderId,
+        productList,
+      });
+      closeModal();
     }
-
-    // if (outboundPlan) {
-    //   queryClient.invalidateQueries({
-    //     predicate: (q) => {
-    //       const isOutboundPlan = (q.queryKey[0] as string) === "outboundPlan";
-    //       const isNotCount =
-    //         q.queryKey[1] === undefined ||
-    //         !((q.queryKey[1] as string) === "count");
-
-    //       return isOutboundPlan && isNotCount;
-    //     },
-    //   });
-
-    //   closeModal();
-    // }
   };
 
   const handleChangeProductCount = useCallback(

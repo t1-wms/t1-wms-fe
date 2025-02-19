@@ -12,9 +12,15 @@ import {
   getSupplierCount,
   getSuppliers,
   getSuppliersPaged,
+  updateOrder,
 } from "../api";
 import { afterMutate, Sort } from "@/shared";
-import { CreateOrderRequestDto, OrderFilter, SupplierFilter } from "./types";
+import {
+  CreateOrderRequestDto,
+  OrderFilter,
+  SupplierFilter,
+  UseUpdateOrderParams,
+} from "./types";
 
 export const useOrderChart = () => {
   return useSuspenseQuery({
@@ -133,5 +139,16 @@ export const useCreateOrder = (queryClient: QueryClient) => {
   return useMutation({
     mutationFn: (newOrder: CreateOrderRequestDto) => createOrder(newOrder),
     onSuccess: afterMutate(queryClient, "order"),
+  });
+};
+
+export const useUpdateOrder = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({ orderId, productList }: UseUpdateOrderParams) =>
+      updateOrder(orderId, productList),
+    onSuccess: afterMutate(queryClient, "order"),
+    onError: () => {
+      alert("이미 승인된 발주입니다");
+    },
   });
 };
