@@ -206,18 +206,29 @@ pipeline {
              }
          }
      }
-
     post {
-        always {
-            echo "===== Workspace contents after build ====="
-            sh 'ls -la'
-            cleanWs()
-        }
         success {
-            echo 'Pipeline succeeded!'
+            slackSend (
+                message: """
+                    :white_check_mark: 배포 성공 ! :white_check_mark:
+
+                    *Job*: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
+                    *빌드 URL*: <${env.BUILD_URL}|링크>
+                    *최근 커밋 메시지*: ${env.GIT_COMMIT_MESSAGE}
+                """
+            )
         }
+
         failure {
-            echo 'Pipeline failed!'
+            slackSend (
+                message: """
+                    :x: 배포 실패 :x:
+
+                    *Job*: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
+                    *빌드 URL*: <${env.BUILD_URL}|링크>
+                    *최근 커밋 메시지*: ${env.GIT_COMMIT_MESSAGE}
+                """
+            )
         }
     }
 }
