@@ -6,3 +6,4 @@ export * from "./supplier-control-panel";
 export * from "./supplier-drawer";
 export * from "./order-bar-chart";
 export * from "./received-order-table";
+export * from "./received-order-control-panel";

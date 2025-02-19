@@ -48,6 +48,10 @@ const defaultColumns = [
     header: "납품기한",
     cell: (row) => row.getValue(),
   }),
+  columnHelper.accessor("orderStatus", {
+    header: "발주상태",
+    cell: (row) => row.getValue(),
+  }),
   columnHelper.accessor("isReturnOrder", {
     header: "재발주 여부",
     cell: (row) => (row.getValue() ? "Y" : "N"),
