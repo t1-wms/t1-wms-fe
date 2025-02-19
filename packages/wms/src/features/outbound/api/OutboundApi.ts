@@ -231,3 +231,11 @@ export const updateOutboundPlan = async (
 
   return response.data;
 };
+
+export const deleteOutboundPlan = async (outboundPlanId: number) => {
+  const response = await noAuthAxios.delete<void>(
+    `api/outbound/${outboundPlanId}`
+  );
+
+  return response.data;
+};

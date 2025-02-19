@@ -23,6 +23,7 @@ import {
   createOutboundPlan,
   updateOutboundPlan,
   getOutboundChart,
+  deleteOutboundPlan,
 } from "../api";
 import {
   OutboundFilter,
@@ -275,6 +276,22 @@ export const useUpdateOutboundPlan = (queryClient: QueryClient) => {
       newOutboundPlan,
     }: UseUpdateOutboundPlanParams) =>
       updateOutboundPlan(outboundPlanId, newOutboundPlan),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["outboundPlan", "count"],
+      });
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["outboundPlan"],
+        });
+      }, 0);
+    },
+  });
+};
+
+export const useDeleteOutboundPlan = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (outboundPlanId: number) => deleteOutboundPlan(outboundPlanId),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["outboundPlan", "count"],

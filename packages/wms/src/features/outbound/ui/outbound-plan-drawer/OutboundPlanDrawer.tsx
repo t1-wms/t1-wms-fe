@@ -3,9 +3,11 @@ import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
 import {
   CreateOutboundPlanModalInfo,
   OutboundPlanResponseDto,
+  useDeleteOutboundPlan,
 } from "../../model";
 import { OutboundProductTable } from "@/features";
 import { useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface OutboundPlanDrawerProps {
   data: OutboundPlanResponseDto;
@@ -25,6 +27,9 @@ export const OutboundPlanDrawer = ({
   } = data;
 
   const { openModal } = useModalStore();
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteOutboundPlan } = useDeleteOutboundPlan(queryClient);
 
   const handleClickUpdate = useCallback(() => {
     const modalInfo: CreateOutboundPlanModalInfo = {
@@ -35,6 +40,12 @@ export const OutboundPlanDrawer = ({
     openModal(modalInfo);
     onClose();
   }, [openModal, onClose, data]);
+
+  const handleClickDelete = useCallback(() => {
+    deleteOutboundPlan(data.outboundPlanId);
+
+    onClose();
+  }, [data]);
 
   return (
     <BaseDrawer title={`출고예정 조회`} onClose={onClose}>
@@ -75,7 +86,7 @@ export const OutboundPlanDrawer = ({
           <MainButton size="sm" padding="sm" onClick={handleClickUpdate}>
             수정
           </MainButton>
-          <MainButton size="sm" padding="sm">
+          <MainButton size="sm" padding="sm" onClick={handleClickDelete}>
             삭제
           </MainButton>
         </div>
