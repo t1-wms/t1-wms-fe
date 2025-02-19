@@ -10,7 +10,7 @@ interface OrderDrawerProps {
 }
 
 export const OrderDrawer = ({ data, onClose }: OrderDrawerProps) => {
-  const { orderNumber, orderDate, supplierName, orderProductList } = data;
+  const { orderNumber, orderDate, supplierName, productList } = data;
 
   const { openModal } = useModalStore();
 
@@ -50,7 +50,7 @@ export const OrderDrawer = ({ data, onClose }: OrderDrawerProps) => {
           />
         </div>
         <p className={`font-b-md ${styles.header}}`}>발주 품목</p>
-        <OutboundProductTable data={orderProductList} />
+        <OutboundProductTable data={productList} />
         <div className={styles["button-box"]}>
           <MainButton size="sm" padding="sm" onClick={handleClickUpdate}>
             수정

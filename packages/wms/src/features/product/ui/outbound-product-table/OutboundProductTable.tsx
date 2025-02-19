@@ -25,6 +25,8 @@ export const OutboundProductTable = ({
     defaultColumns,
   } = useOutboundProductTable(canCount, onChangeProductCount);
 
+  console.log(data);
+
   const pagedData = createPageResponse(data);
 
   return (

@@ -48,7 +48,7 @@ export interface OrderResponseDto {
   isApproved: boolean;
   isReturnOrder: boolean;
   deliveryDeadline: string;
-  orderProductList: ProductListDto[];
+  productList: ProductListDto[];
 }
 
 export interface CreateOrderRequestDto {
