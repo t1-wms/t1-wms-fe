@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useInboundStore } from '../store/inboundstore';
-import Success from '@/shared/ui/success';
+import Success from '@/shared/ui/Success';
 
 function InboundCompletePage() {
   const navigate = useNavigate();

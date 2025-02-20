@@ -1,5 +1,4 @@
 import { FaBox, FaTruck } from "react-icons/fa";
-import { LuForklift } from "react-icons/lu";
 import { MenuItem } from '../types/menu';
 
 export const menuItems: MenuItem[] = [
@@ -17,11 +16,4 @@ export const menuItems: MenuItem[] = [
     path: '/outbound/location/1',
     icon: <FaTruck />
   },
-  {
-    id: 3,
-    title: '재고 이동',
-    description: '상품 위치 이동 작업',
-    path: '/move',
-    icon: <LuForklift />
-  }
 ];
