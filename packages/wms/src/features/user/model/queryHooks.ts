@@ -1,13 +1,19 @@
 import { Sort } from "@shared/model";
-import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import {
   getRoles,
   getUserCount,
   getUsers,
   getUsersPaged,
+  registerUser,
   updateUserActive,
 } from "../api/UserApi";
-import { UserFilter } from "@/features";
+import { RegisterUserRequestDto, UserFilter } from "@/features";
 
 export const useUserCount = () => {
   return useSuspenseQuery({
@@ -63,5 +69,16 @@ export const useRoles = () => {
   return useQuery({
     queryKey: ["role"],
     queryFn: () => getRoles(),
+  });
+};
+
+export const useRegisterUser = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (newUser: RegisterUserRequestDto) => registerUser(newUser),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
+    },
   });
 };

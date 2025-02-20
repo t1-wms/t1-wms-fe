@@ -20,12 +20,13 @@ export default function UserPage() {
         <UserControlPanel onSearch={handleSearch} />
       </PageContentBox>
       <PageContentBox stretch>
-        <Suspense fallback={<Spinner message="사용자 정보를 가져오는 중" />}>
+        <></>
+        {/* <Suspense fallback={<Spinner message="사용자 정보를 가져오는 중" />}>
           <UserTableWrapper
             columnFilters={columnFilters}
             setColumnFilters={setColumnFilters}
           />
-        </Suspense>
+        </Suspense> */}
       </PageContentBox>
     </div>
   );

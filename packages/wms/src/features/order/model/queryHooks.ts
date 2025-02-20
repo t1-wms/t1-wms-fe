@@ -1,6 +1,7 @@
 import {
   QueryClient,
   useMutation,
+  useQuery,
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
@@ -14,6 +15,7 @@ import {
   getReceivedOrderCount,
   getReceivedOrders,
   getReceivedOrdersPaged,
+  getSimpleSuppliers,
   getSupplierCount,
   getSuppliers,
   getSuppliersPaged,
@@ -74,6 +76,13 @@ export const useSupplierCount = () => {
   return useSuspenseQuery({
     queryKey: ["supplier", "count"],
     queryFn: () => getSupplierCount(),
+  });
+};
+
+export const useSimpleSuppliers = () => {
+  return useQuery({
+    queryKey: ["supplier", "simple"],
+    queryFn: () => getSimpleSuppliers(),
   });
 };
 

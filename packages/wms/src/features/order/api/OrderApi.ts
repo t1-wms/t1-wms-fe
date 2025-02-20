@@ -5,6 +5,7 @@ import {
   OrderChartData,
   OrderFilter,
   OrderResponseDto,
+  SimpleSupplierDto,
   SupplierFilter,
   SupplierProductDto,
   SupplierResponseDto,
@@ -21,6 +22,14 @@ export const getOrderChart = async () => {
 export const getSupplierCount = async () => {
   const response = await noAuthAxios.get<PageResponse<SupplierResponseDto>>(
     `/api/supplier?page=0&size=1`
+  );
+
+  return response.data;
+};
+
+export const getSimpleSuppliers = async () => {
+  const response = await noAuthAxios.get<SimpleSupplierDto[]>(
+    `api/supplier/list`
   );
 
   return response.data;

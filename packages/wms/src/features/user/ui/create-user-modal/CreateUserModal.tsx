@@ -1,7 +1,22 @@
 import styles from "./CreateUserModal.module.css";
-import { CreateUserModalInfo } from "../../model";
-import { BasicModal, MainInput, MainSelect, useModalStore } from "@/shared";
+import {
+  CreateUserModalInfo,
+  RegisterUserRequestDto,
+  useRegisterUser,
+} from "../../model";
+import {
+  BasicModal,
+  Gender,
+  MainInput,
+  MainSelect,
+  Option,
+  useModalStore,
+  UserRole,
+} from "@/shared";
 import { useCreateUserForm } from "../../model/useCreateUserForm";
+import { useSimpleSuppliers } from "@/features/order";
+import { ChangeEventHandler, useCallback, useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateUserModalProps {
   modalInfo: CreateUserModalInfo;
@@ -9,10 +24,68 @@ interface CreateUserModalProps {
 
 const inputWidth = "400px";
 
+const isUserRole = (value: string): value is UserRole => {
+  return value === "작업자" || value === "관리자" || value === "공급업체";
+};
+
 export const CreateUserModal = ({}: CreateUserModalProps) => {
-  const { inputProps, onSubmit } = useCreateUserForm();
+  const [userRole, setUserRole] = useState<UserRole>("작업자");
+  const [supplierId, setSupplierId] = useState<number>();
 
   const { closeModal } = useModalStore();
+
+  const queryClient = useQueryClient();
+  const { mutate: registerUser } = useRegisterUser(queryClient);
+
+  const handleValid = useCallback(
+    (
+      name: string,
+      staffNumber: string,
+      phone: string,
+      birthDate: string,
+      gender: Gender
+    ) => {
+      const newUser: RegisterUserRequestDto = {
+        name,
+        staffNumber,
+        phone,
+        birthDate,
+        gender,
+        userRole,
+        supplierId: supplierId || null,
+        isActive: true,
+        address: "",
+        password: "1234",
+      };
+
+      registerUser(newUser);
+      closeModal();
+    },
+    [userRole, supplierId, closeModal]
+  );
+
+  const { inputProps, onSubmit } = useCreateUserForm(handleValid);
+
+  const { data, isPending } = useSimpleSuppliers();
+
+  const supplierOptions: Option[] = useMemo(() => {
+    return userRole === "공급업체" && data
+      ? data.map((supplier) => ({
+          value: String(supplier.supplierId),
+          display: supplier.supplierName,
+        }))
+      : [];
+  }, [userRole, data]);
+
+  const handleChangeUserRole: ChangeEventHandler<HTMLSelectElement> = (e) => {
+    if (isUserRole(e.target.value)) setUserRole(e.target.value);
+  };
+
+  const handleChangeSupplierId: ChangeEventHandler<HTMLSelectElement> = (e) => {
+    if (!Number.isNaN(e.target.value)) {
+      setSupplierId(parseInt(e.target.value));
+    }
+  };
 
   return (
     <BasicModal
@@ -33,7 +106,7 @@ export const CreateUserModal = ({}: CreateUserModalProps) => {
         <MainInput width={inputWidth} label="이름" {...inputProps.name} />
         <MainInput
           width={inputWidth}
-          label="사번"
+          label="사원번호"
           {...inputProps.staffNumber}
         />
         <MainInput
@@ -41,7 +114,12 @@ export const CreateUserModal = ({}: CreateUserModalProps) => {
           label="휴대폰 번호"
           {...inputProps.phone}
         />
-        <MainInput width={inputWidth} label="생일" {...inputProps.birthDate} />
+        <MainInput
+          width={inputWidth}
+          label="생일"
+          type="date"
+          {...inputProps.birthDate}
+        />
         <MainSelect
           width={inputWidth}
           label="성별"
@@ -55,19 +133,21 @@ export const CreateUserModal = ({}: CreateUserModalProps) => {
           width={inputWidth}
           label="권한"
           options={[
-            { value: "ADMIN", display: "관리자" },
-            { value: "WORKER", display: "작업자" },
+            { value: "작업자", display: "작업자" },
+            { value: "관리자", display: "관리자" },
+            { value: "공급업체", display: "공급업체" },
           ]}
-          {...inputProps.userRole}
+          value={userRole}
+          onChange={handleChangeUserRole}
         />
         <MainSelect
           width={inputWidth}
           label="납품업체"
-          options={[
-            { value: "HD001", display: "현대모비스" },
-            { value: "HD002", display: "현대어쩌구" },
-          ]}
-          {...inputProps.supplierId}
+          disabled={isPending}
+          options={supplierOptions}
+          isPending={isPending}
+          value={supplierId}
+          onChange={handleChangeSupplierId}
         />
       </form>
     </BasicModal>

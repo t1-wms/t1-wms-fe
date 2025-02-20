@@ -14,6 +14,19 @@ export interface UserListDto {
   supplierId: number;
 }
 
+export interface RegisterUserRequestDto {
+  staffNumber: string;
+  password: string;
+  userRole: string;
+  name: string;
+  phone: string;
+  address: string;
+  gender: string;
+  isActive: boolean;
+  birthDate: string;
+  supplierId: number | null;
+}
+
 export interface UserFilter {
   staffNumber?: string;
 }
