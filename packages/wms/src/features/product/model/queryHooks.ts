@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   getProductCount,
   getProducts,
@@ -25,7 +25,7 @@ export const createUseProductQueryKey = (
 };
 
 export const useSimpleProducts = () => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: ["product", "simple"],
     queryFn: () => getProductSimple(),
     staleTime: 10000,

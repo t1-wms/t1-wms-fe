@@ -1,6 +1,9 @@
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import styles from "./BaseTable.module.css";
@@ -14,11 +17,13 @@ interface BaseTableProps<TData> {
   tableParams: TableParams<TData>;
   noPagination?: boolean;
   hasMinHeight?: boolean;
+  isClientSide?: boolean;
 }
 
 export const BaseTable = <TData extends unknown>({
   tableParams,
   hasMinHeight,
+  isClientSide,
 }: BaseTableProps<TData>) => {
   const {
     data,
@@ -37,12 +42,15 @@ export const BaseTable = <TData extends unknown>({
   const table = useReactTable<TData>({
     data: data ? data.content : [],
     columns,
-    manualPagination: true,
-    manualSorting: true,
-    manualFiltering: true,
+    manualPagination: !isClientSide,
+    manualSorting: !isClientSide,
+    manualFiltering: !isClientSide,
     getCoreRowModel: getCoreRowModel(),
-    rowCount: data ? data.totalElements : 0,
-    pageCount: data ? data.totalPages : 0,
+    getPaginationRowModel: isClientSide ? getPaginationRowModel() : undefined,
+    getSortedRowModel: isClientSide ? getSortedRowModel() : undefined,
+    getFilteredRowModel: isClientSide ? getFilteredRowModel() : undefined,
+    rowCount: !isClientSide ? (data ? data.totalElements : 0) : undefined,
+    pageCount: !isClientSide ? (data ? data.totalPages : 0) : undefined,
     state: {
       pagination,
       sorting,

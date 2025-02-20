@@ -42,6 +42,7 @@ export const OutboundProductTable = ({
           isPending: false,
         }}
         hasMinHeight={hasMinHeight}
+        isClientSide
       />
     </>
   );

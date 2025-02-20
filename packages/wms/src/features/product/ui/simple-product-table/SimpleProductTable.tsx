@@ -17,21 +17,23 @@ export const SimpleProductTable = ({ onClickAdd }: SimpleProductTableProps) => {
     defaultColumns,
   } = useSimpleProductTable(onClickAdd);
 
-  const { data } = useSimpleProducts();
-  console.log(data);
+  const { data, isPending } = useSimpleProducts();
 
   return (
     <>
       <BaseTable
-        serverSide={false}
-        data={createPageResponse(data)}
-        columns={defaultColumns}
-        pagination={pagination}
-        setPagination={setPagination}
-        sorting={sorting}
-        setSorting={setSorting}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
+        tableParams={{
+          data: createPageResponse(data),
+          columns: defaultColumns,
+          pagination: pagination,
+          setPagination: setPagination,
+          sorting: sorting,
+          setSorting: setSorting,
+          rowSelection: rowSelection,
+          setRowSelection: setRowSelection,
+          isPending,
+        }}
+        isClientSide
       />
     </>
   );

@@ -4,17 +4,14 @@ import {
   CreateOutboundPlanModalInfo,
   OutboundControlPanel,
   OutboundPlanDrawer,
-  OutboundPlanResponseDto,
   OutboundPlanTable,
 } from "@/features";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { useOutboundPlanTable } from "@/features/outbound/model/useOutboundPlanTable";
 
 export const OutBoundPlanPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [selectedRow, setSelectedRow] =
-    useState<OutboundPlanResponseDto | null>(null);
 
   const { openModal } = useModalStore();
 
@@ -48,16 +45,14 @@ export const OutBoundPlanPage = () => {
     isPending,
   } = useOutboundPlanTable(columnFilters);
 
-  useEffect(() => {
-    if (isFetched) {
-      const rowId =
-        Object.keys(rowSelection).length > 0
-          ? parseInt(Object.keys(rowSelection)[0])
-          : null;
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
 
-      setSelectedRow(rowId || rowId === 0 ? data!.content[rowId] : null);
-    }
-  }, [isFetched, rowSelection, data]);
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -84,10 +79,10 @@ export const OutBoundPlanPage = () => {
           }}
         />
       </PageContentBox>
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <OutboundPlanDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>
