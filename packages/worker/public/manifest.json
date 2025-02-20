@@ -19,5 +19,8 @@
         "type": "image/png",
         "purpose": "any maskable"
       }
-    ]
+    ],
+    "orientation": "portrait",
+    "display_override": ["standalone"],
+    "splash_pages": null
 }
