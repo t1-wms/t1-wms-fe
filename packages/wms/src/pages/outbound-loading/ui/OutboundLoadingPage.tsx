@@ -2,20 +2,17 @@ import { PageContentBox } from "@/shared";
 import styles from "./OutboundLoadingPage.module.css";
 import {
   OutboundLoadingDrawer,
-  OutboundLoadingResponseDto,
   OutboundControlPanel,
   OutboundPackingListDrawer,
   OutboundLoadingTable,
 } from "@/features";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { useOutboundLoadingTable } from "@/features/outbound/model/useOutboundLodingTable";
 
 export const OutboundLoadingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [selectedRow, setSelectedRow] =
-    useState<OutboundLoadingResponseDto | null>(null);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
@@ -43,16 +40,14 @@ export const OutboundLoadingPage = () => {
     isPending,
   } = useOutboundLoadingTable(columnFilters);
 
-  useEffect(() => {
-    if (isFetched) {
-      const rowId =
-        Object.keys(rowSelection).length > 0
-          ? parseInt(Object.keys(rowSelection)[0])
-          : null;
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
 
-      setSelectedRow(rowId || rowId === 0 ? data!.content[rowId] : null);
-    }
-  }, [isFetched, rowSelection, data]);
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -82,10 +77,10 @@ export const OutboundLoadingPage = () => {
       {isDrawerOpen && (
         <OutboundPackingListDrawer onClose={() => setDrawerOpen(false)} />
       )}
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <OutboundLoadingDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>

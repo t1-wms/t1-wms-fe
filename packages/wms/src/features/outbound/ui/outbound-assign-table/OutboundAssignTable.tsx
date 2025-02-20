@@ -37,7 +37,7 @@ const defaultColumns = [
     filterFn: dateFilterFn,
   }),
   columnHelper.accessor("process", {
-    header: "진헹상태",
+    header: "진행상태",
     cell: (row) => row.getValue(),
   }),
   columnHelper.accessor("productionPlanNumber", {

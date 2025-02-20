@@ -41,9 +41,10 @@ export const OutboundPickingListDrawer = ({
         };
 
         openModal(modalInfo);
+        onClose();
       }
     }
-  }, [isFetched, rowSelection, data]);
+  }, [isFetched, rowSelection, data, onClose, openModal]);
 
   return (
     <BaseDrawer title="출고피킹 선택" onClose={onClose}>

@@ -2,20 +2,17 @@ import { PageContentBox } from "@/shared";
 import styles from "./OutboundPickingPage.module.css";
 import {
   OutboundPickingDrawer,
-  OutboundPickingResponseDto,
   OutboundControlPanel,
   OutboundAssignListDrawer,
   OutboundPickingTable,
 } from "@/features";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { useOutboundPickingTable } from "@/features/outbound/model/useOutboundPickingTable";
 
 export const OutboundPickingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [selectedRow, setSelectedRow] =
-    useState<OutboundPickingResponseDto | null>(null);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
@@ -43,16 +40,14 @@ export const OutboundPickingPage = () => {
     isPending,
   } = useOutboundPickingTable(columnFilters);
 
-  useEffect(() => {
-    if (isFetched) {
-      const rowId =
-        Object.keys(rowSelection).length > 0
-          ? parseInt(Object.keys(rowSelection)[0])
-          : null;
+  const selectedRows = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
 
-      setSelectedRow(rowId || rowId === 0 ? data!.content[rowId] : null);
-    }
-  }, [isFetched, rowSelection, data]);
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -82,10 +77,10 @@ export const OutboundPickingPage = () => {
       {isDrawerOpen && (
         <OutboundAssignListDrawer onClose={() => setDrawerOpen(false)} />
       )}
-      {selectedRow && (
+      {isFetched && selectedRows && (
         <OutboundPickingDrawer
-          data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          data={selectedRows}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>

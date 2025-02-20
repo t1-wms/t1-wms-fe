@@ -2,20 +2,17 @@ import { PageContentBox } from "@/shared";
 import styles from "./OutboundPackingPage.module.css";
 import {
   OutboundPackingDrawer,
-  OutboundPackingResponseDto,
   OutboundControlPanel,
   OutboundPickingListDrawer,
   OutboundPackingTable,
 } from "@/features";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { useOutboundPackingTable } from "@/features/outbound/model/useOutboundPackingTable";
 
 export const OutboundPackingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [selectedRow, setSelectedRow] =
-    useState<OutboundPackingResponseDto | null>(null);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
@@ -44,16 +41,14 @@ export const OutboundPackingPage = () => {
     isPending,
   } = useOutboundPackingTable(columnFilters);
 
-  useEffect(() => {
-    if (isFetched) {
-      const rowId =
-        Object.keys(rowSelection).length > 0
-          ? parseInt(Object.keys(rowSelection)[0])
-          : null;
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
 
-      setSelectedRow(rowId || rowId === 0 ? data!.content[rowId] : null);
-    }
-  }, [isFetched, rowSelection, data]);
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -83,10 +78,10 @@ export const OutboundPackingPage = () => {
       {isDrawerOpen && (
         <OutboundPickingListDrawer onClose={() => setDrawerOpen(false)} />
       )}
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <OutboundPackingDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>
