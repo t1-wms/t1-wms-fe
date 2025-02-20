@@ -5,10 +5,10 @@ import {
   OutboundControlPanel,
   OutboundAssignListDrawer,
   OutboundPickingTable,
+  useOutboundPickingTable,
 } from "@/features";
 import { useCallback, useMemo, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
-import { useOutboundPickingTable } from "@/features/outbound/model/useOutboundPickingTable";
 
 export const OutboundPickingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

@@ -1,4 +1,4 @@
-import { ProductListDto } from "@/entities/product";
+import { ProductListDto } from "@/entities";
 import { ModalInfoBase } from "@/shared";
 
 export interface OutboundChartData {

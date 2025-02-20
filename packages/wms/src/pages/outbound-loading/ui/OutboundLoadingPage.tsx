@@ -5,10 +5,10 @@ import {
   OutboundControlPanel,
   OutboundPackingListDrawer,
   OutboundLoadingTable,
+  useOutboundLoadingTable,
 } from "@/features";
 import { useCallback, useMemo, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
-import { useOutboundLoadingTable } from "@/features/outbound/model/useOutboundLodingTable";
 
 export const OutboundLoadingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

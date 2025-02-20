@@ -5,10 +5,10 @@ import {
   OutboundControlPanel,
   OutboundPickingListDrawer,
   OutboundPackingTable,
+  useOutboundPackingTable,
 } from "@/features";
 import { useCallback, useMemo, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
-import { useOutboundPackingTable } from "@/features/outbound/model/useOutboundPackingTable";
 
 export const OutboundPackingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -16,7 +16,6 @@ export const OutboundPackingPage = () => {
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
-      console.log("asdf");
       setColumnFilters([
         { id: "outboundPackingDate", value: `${startDate},${endDate}` },
         { id: "outboundPackingNumber", value: number },
