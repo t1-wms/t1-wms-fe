@@ -1,17 +1,16 @@
-import { PageContentBox, Spinner } from "@/shared";
-import styles from "./ReceivedOrderPage.module.css";
 import {
-  ReceivedOrderDrawer,
-  OrderResponseDto,
   ReceivedOrderControlPanel,
-  ReceivedOrderTableWrapper,
+  ReceivedOrderDrawer,
+  ReceivedOrderTable,
+  useReceivedOrderTable,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./ReceivedOrderPage.module.css";
 
 export default function ReceivedOrderPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [selectedRow, setSelectedRow] = useState<OrderResponseDto | null>(null);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
@@ -23,12 +22,29 @@ export default function ReceivedOrderPage() {
     [setColumnFilters]
   );
 
-  const handleChangeSelectedRow = useCallback(
-    (row: OrderResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useReceivedOrderTable(columnFilters);
+
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
+
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -36,18 +52,26 @@ export default function ReceivedOrderPage() {
         <ReceivedOrderControlPanel onSearch={handleSearch} />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="발주 품목을 세는 중" />}>
-          <ReceivedOrderTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <ReceivedOrderTable
+          tableParams={{
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            data,
+            isPending,
+            isError,
+            error,
+            refetch,
+          }}
+        />
       </PageContentBox>
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <ReceivedOrderDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>

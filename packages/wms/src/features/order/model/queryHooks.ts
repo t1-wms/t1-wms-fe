@@ -1,6 +1,8 @@
+import { afterMutate, Sort } from "@/shared";
 import {
   QueryClient,
   useMutation,
+  useQuery,
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
@@ -8,16 +10,11 @@ import {
   createOrder,
   deleteOrder,
   getOrderChart,
-  getOrderCount,
-  getOrders,
   getOrdersPaged,
-  getReceivedOrderCount,
-  getReceivedOrders,
   getReceivedOrdersPaged,
   getSuppliersPaged,
   updateOrder,
 } from "../api";
-import { afterMutate, Sort } from "@/shared";
 import {
   CreateOrderRequestDto,
   OrderFilter,
@@ -34,21 +31,18 @@ export const useOrderChart = () => {
 
 export const createUseOrderQueryKey = (
   key: string,
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
   filter?: OrderFilter
 ) => {
-  return isServerSide
-    ? [
-        key,
-        page!,
-        sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
-        filter
-          ? `${filter.number}/${filter.startDate}/${filter.endDate}`
-          : "not-filtering",
-      ]
-    : [key];
+  return [
+    key,
+    page!,
+    sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
+    filter
+      ? `n=${filter.number}/s=${filter.startDate}/e=${filter.endDate}`
+      : "not-filtering",
+  ];
 };
 
 export const createUseSupplierQueryKey = (
@@ -70,80 +64,28 @@ export const useSuppliers = (
   sort?: Sort,
   filter?: SupplierFilter
 ) => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: createUseSupplierQueryKey("supplier", page!, sort, filter),
     queryFn: () => getSuppliersPaged(page!, sort, filter),
   });
 };
 
-export const useOrderCount = () => {
-  return useSuspenseQuery({
-    queryKey: ["order", "count"],
-    queryFn: () => getOrderCount(),
-  });
-};
-
-export const useOrders = (
-  isServerSide: boolean,
-  page?: number,
-  sort?: Sort,
-  filter?: OrderFilter,
-  size?: number
-) => {
-  const queryKey = createUseOrderQueryKey(
-    "order",
-    isServerSide,
-    page!,
-    sort,
-    filter
-  );
-
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getOrdersPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getOrders(size!),
-    });
-  }
-};
-
-export const useReceivedOrderCount = () => {
-  return useSuspenseQuery({
-    queryKey: ["receivedOrder", "count"],
-    queryFn: () => getReceivedOrderCount(),
+export const useOrders = (page?: number, sort?: Sort, filter?: OrderFilter) => {
+  return useQuery({
+    queryKey: createUseOrderQueryKey("order", page!, sort, filter),
+    queryFn: () => getOrdersPaged(page!, sort, filter),
   });
 };
 
 export const useReceivedOrdes = (
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OrderFilter,
-  size?: number
+  filter?: OrderFilter
 ) => {
-  const queryKey = createUseOrderQueryKey(
-    "receivedOrder",
-    isServerSide,
-    page!,
-    sort,
-    filter
-  );
-
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getReceivedOrdersPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getReceivedOrders(size!),
-    });
-  }
+  return useQuery({
+    queryKey: createUseOrderQueryKey("receivedOrder", page!, sort, filter),
+    queryFn: () => getReceivedOrdersPaged(page!, sort, filter),
+  });
 };
 
 export const useCreateOrder = (queryClient: QueryClient) => {
