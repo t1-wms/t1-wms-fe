@@ -3,9 +3,6 @@ import {
   ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   PaginationState,
   RowSelectionState,
   SortingState,
@@ -17,10 +14,10 @@ import SortAscIcon from "@assets/sort-asc.svg?react";
 import SortDescIcon from "@assets/sort-desc.svg?react";
 import { Pagination } from "@shared/pagination";
 import { PageResponse } from "@shared/model";
+import { BaseTableContent } from "./BaseTableContent";
 
 interface BaseTableProps<TData> {
-  serverSide: boolean;
-  data: PageResponse<TData>;
+  data?: PageResponse<TData>;
   columns: ColumnDef<TData, any>[];
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
@@ -32,10 +29,10 @@ interface BaseTableProps<TData> {
   setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
   noPagination?: boolean;
   hasMinHeight?: boolean;
+  isPending: boolean;
 }
 
 export const BaseTable = <TData extends unknown>({
-  serverSide,
   data,
   columns,
   columnFilters,
@@ -47,19 +44,17 @@ export const BaseTable = <TData extends unknown>({
   rowSelection,
   setRowSelection,
   hasMinHeight,
+  isPending,
 }: BaseTableProps<TData>) => {
   const table = useReactTable<TData>({
     data: data ? data.content : [],
     columns,
-    manualPagination: serverSide,
-    manualSorting: serverSide,
-    manualFiltering: serverSide,
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: !serverSide ? getPaginationRowModel() : undefined,
-    getSortedRowModel: !serverSide ? getSortedRowModel() : undefined,
-    getFilteredRowModel: !serverSide ? getFilteredRowModel() : undefined,
-    rowCount: serverSide ? data.totalElements : undefined,
-    pageCount: serverSide ? data.totalPages : undefined,
+    rowCount: data ? data.totalElements : 0,
+    pageCount: data ? data.totalPages : 0,
     state: {
       pagination,
       sorting,
@@ -73,8 +68,6 @@ export const BaseTable = <TData extends unknown>({
     autoResetPageIndex: false,
     enableMultiRowSelection: false,
   });
-
-  console.log(pagination);
 
   return (
     <div className={styles.container}>
@@ -113,32 +106,20 @@ export const BaseTable = <TData extends unknown>({
               </tr>
             ))}
           </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className={row.getIsSelected() ? styles["selected-row"] : ""}
-                onClick={row.getToggleSelectedHandler()}
-              >
-                {row.getAllCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
+          <BaseTableContent table={table} isPending={isPending} />
         </table>
       </div>
 
-      <Pagination
-        currentPage={pagination.pageIndex + 1}
-        size={2}
-        maxPage={table.getPageCount()}
-        onClickPrev={() => table.previousPage()}
-        onClickNext={() => table.nextPage()}
-        onClickPage={(page: number) => table.setPageIndex(page)}
-      />
+      <div className={styles["pagination-wrapper"]}>
+        <Pagination
+          currentPage={pagination.pageIndex + 1}
+          size={2}
+          maxPage={table.getPageCount()}
+          onClickPrev={() => table.previousPage()}
+          onClickNext={() => table.nextPage()}
+          onClickPage={(page: number) => table.setPageIndex(page)}
+        />
+      </div>
     </div>
   );
 };
