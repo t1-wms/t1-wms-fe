@@ -1,14 +1,15 @@
-import { PageContentBox, Spinner } from "@/shared";
+import { PageContentBox } from "@/shared";
 import styles from "./OutboundAssignPage.module.css";
 import {
   OutboundAssignDrawer,
   OutboundAssignResponseDto,
-  OutboundAssignTableWrapper,
+  OutboundAssignTable,
   OutboundControlPanel,
   OutboundPlanListDrawer,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useOutboundAssignTable } from "@/features/outbound/model/useOutboundAssignTable";
 
 export const OutboundAssignPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -30,12 +31,28 @@ export const OutboundAssignPage = () => {
     setDrawerOpen(true);
   }, [setDrawerOpen]);
 
-  const handleChangeSelectedRow = useCallback(
-    (row: OutboundAssignResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+  } = useOutboundAssignTable(columnFilters);
+
+  useEffect(() => {
+    if (isFetched) {
+      const rowId =
+        Object.keys(rowSelection).length > 0
+          ? parseInt(Object.keys(rowSelection)[0])
+          : null;
+
+      setSelectedRow(rowId || rowId === 0 ? data!.content[rowId] : null);
+    }
+  }, [isFetched, rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -47,13 +64,20 @@ export const OutboundAssignPage = () => {
         />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="출고지시 품목을 세는 중" />}>
-          <OutboundAssignTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <OutboundAssignTable
+          tableParams={{
+            data: data,
+            columnFilters: columnFilters,
+            setColumnFilters: setColumnFilters,
+            pagination: pagination,
+            setPagination: setPagination,
+            sorting: sorting,
+            setSorting: setSorting,
+            rowSelection: rowSelection,
+            setRowSelection: setRowSelection,
+            isPending: isPending,
+          }}
+        />
       </PageContentBox>
       {isDrawerOpen && (
         <OutboundPlanListDrawer onClose={() => setDrawerOpen(false)} />

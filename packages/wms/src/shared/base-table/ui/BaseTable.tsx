@@ -1,51 +1,39 @@
 import {
-  ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  PaginationState,
-  RowSelectionState,
-  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 import styles from "./BaseTable.module.css";
-import { Dispatch, SetStateAction } from "react";
 import SortAscIcon from "@assets/sort-asc.svg?react";
 import SortDescIcon from "@assets/sort-desc.svg?react";
 import { Pagination } from "@shared/pagination";
-import { PageResponse } from "@shared/model";
 import { BaseTableContent } from "./BaseTableContent";
+import { TableParams } from "../model";
 
 interface BaseTableProps<TData> {
-  data?: PageResponse<TData>;
-  columns: ColumnDef<TData, any>[];
-  columnFilters?: ColumnFiltersState;
-  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
-  pagination: PaginationState;
-  setPagination: Dispatch<SetStateAction<PaginationState>>;
-  sorting: SortingState;
-  setSorting: Dispatch<SetStateAction<SortingState>>;
-  rowSelection: RowSelectionState;
-  setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
+  tableParams: TableParams<TData>;
   noPagination?: boolean;
   hasMinHeight?: boolean;
-  isPending: boolean;
 }
 
 export const BaseTable = <TData extends unknown>({
-  data,
-  columns,
-  columnFilters,
-  setColumnFilters,
-  pagination,
-  setPagination,
-  sorting,
-  setSorting,
-  rowSelection,
-  setRowSelection,
+  tableParams,
   hasMinHeight,
-  isPending,
 }: BaseTableProps<TData>) => {
+  const {
+    data,
+    columns,
+    columnFilters,
+    setColumnFilters,
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    isPending,
+  } = tableParams;
+
   const table = useReactTable<TData>({
     data: data ? data.content : [],
     columns,

@@ -1,20 +1,6 @@
-import { BaseTable } from "@/shared";
-import { OutboundLoadingResponseDto, useOutboundLoadings } from "../../model";
-import {
-  ColumnFiltersState,
-  createColumnHelper,
-  FilterFn,
-} from "@tanstack/react-table";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { useOutboundTable } from "../../model/useOutboundTable";
-
-interface OutboundLoadingTableProps {
-  columnFilters?: ColumnFiltersState;
-  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
-  isServerSide: boolean;
-  onChangeSelectedRow: (row: OutboundLoadingResponseDto | null) => void;
-  totalElements: number;
-}
+import { BaseTable, TableParams } from "@/shared";
+import { OutboundLoadingResponseDto } from "../../model";
+import { createColumnHelper, FilterFn } from "@tanstack/react-table";
 
 const columnHelper = createColumnHelper<OutboundLoadingResponseDto>();
 
@@ -76,54 +62,16 @@ const defaultColumns = [
   }),
 ];
 
+interface OutboundLoadingTableProps {
+  tableParams: Omit<TableParams<OutboundLoadingResponseDto>, "columns">;
+}
+
 export const OutboundLoadingTable = ({
-  columnFilters,
-  setColumnFilters,
-  isServerSide,
-  onChangeSelectedRow,
-  totalElements,
+  tableParams,
 }: OutboundLoadingTableProps) => {
-  const {
-    pagination,
-    setPagination,
-    sorting,
-    setSorting,
-    rowSelection,
-    setRowSelection,
-    data,
-  } = useOutboundTable({
-    columnFilters,
-    isServerSide,
-    outboundNumberKey: "outboundLoadingNumber",
-    outboundDateKey: "outboundLoadingDate",
-    useData: useOutboundLoadings,
-    totalElements,
-  });
-
-  useEffect(() => {
-    const rowId =
-      Object.keys(rowSelection).length > 0
-        ? parseInt(Object.keys(rowSelection)[0])
-        : null;
-
-    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
-  }, [rowSelection, onChangeSelectedRow]);
-
   return (
     <>
-      <BaseTable
-        serverSide={isServerSide}
-        data={data}
-        columns={defaultColumns}
-        columnFilters={columnFilters}
-        setColumnFilters={setColumnFilters}
-        pagination={pagination}
-        setPagination={setPagination}
-        sorting={sorting}
-        setSorting={setSorting}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
-      />
+      <BaseTable tableParams={{ ...tableParams, columns: defaultColumns }} />
     </>
   );
 };

@@ -1,14 +1,15 @@
-import { PageContentBox, Spinner, useModalStore } from "@/shared";
+import { PageContentBox, useModalStore } from "@/shared";
 import styles from "./OutBoundPlanPage.module.css";
 import {
   CreateOutboundPlanModalInfo,
   OutboundControlPanel,
   OutboundPlanDrawer,
   OutboundPlanResponseDto,
-  OutboundPlanTableWrapper,
+  OutboundPlanTable,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useOutboundPlanTable } from "@/features/outbound/model/useOutboundPlanTable";
 
 export const OutBoundPlanPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -35,12 +36,28 @@ export const OutBoundPlanPage = () => {
     openModal(modalInfo);
   }, [openModal]);
 
-  const handleChangeSelectedRow = useCallback(
-    (row: OutboundPlanResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+  } = useOutboundPlanTable(columnFilters);
+
+  useEffect(() => {
+    if (isFetched) {
+      const rowId =
+        Object.keys(rowSelection).length > 0
+          ? parseInt(Object.keys(rowSelection)[0])
+          : null;
+
+      setSelectedRow(rowId || rowId === 0 ? data!.content[rowId] : null);
+    }
+  }, [isFetched, rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -52,13 +69,20 @@ export const OutBoundPlanPage = () => {
         />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="출고예정 품목을 세는 중" />}>
-          <OutboundPlanTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <OutboundPlanTable
+          tableParams={{
+            data: data,
+            columnFilters: columnFilters,
+            setColumnFilters: setColumnFilters,
+            pagination: pagination,
+            setPagination: setPagination,
+            sorting: sorting,
+            setSorting: setSorting,
+            rowSelection: rowSelection,
+            setRowSelection: setRowSelection,
+            isPending: isPending,
+          }}
+        />
       </PageContentBox>
       {selectedRow && (
         <OutboundPlanDrawer

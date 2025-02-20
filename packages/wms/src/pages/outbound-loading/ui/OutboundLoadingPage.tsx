@@ -1,14 +1,15 @@
-import { PageContentBox, Spinner } from "@/shared";
+import { PageContentBox } from "@/shared";
 import styles from "./OutboundLoadingPage.module.css";
 import {
   OutboundLoadingDrawer,
   OutboundLoadingResponseDto,
-  OutboundLoadingTableWrapper,
   OutboundControlPanel,
   OutboundPackingListDrawer,
+  OutboundLoadingTable,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useOutboundLoadingTable } from "@/features/outbound/model/useOutboundLodingTable";
 
 export const OutboundLoadingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -30,12 +31,28 @@ export const OutboundLoadingPage = () => {
     setDrawerOpen(true);
   }, [setDrawerOpen]);
 
-  const handleChangeSelectedRow = useCallback(
-    (row: OutboundLoadingResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+  } = useOutboundLoadingTable(columnFilters);
+
+  useEffect(() => {
+    if (isFetched) {
+      const rowId =
+        Object.keys(rowSelection).length > 0
+          ? parseInt(Object.keys(rowSelection)[0])
+          : null;
+
+      setSelectedRow(rowId || rowId === 0 ? data!.content[rowId] : null);
+    }
+  }, [isFetched, rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -47,13 +64,20 @@ export const OutboundLoadingPage = () => {
         />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="출하상차 품목을 세는 중" />}>
-          <OutboundLoadingTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <OutboundLoadingTable
+          tableParams={{
+            data: data,
+            columnFilters: columnFilters,
+            setColumnFilters: setColumnFilters,
+            pagination: pagination,
+            setPagination: setPagination,
+            sorting: sorting,
+            setSorting: setSorting,
+            rowSelection: rowSelection,
+            setRowSelection: setRowSelection,
+            isPending: isPending,
+          }}
+        />
       </PageContentBox>
       {isDrawerOpen && (
         <OutboundPackingListDrawer onClose={() => setDrawerOpen(false)} />

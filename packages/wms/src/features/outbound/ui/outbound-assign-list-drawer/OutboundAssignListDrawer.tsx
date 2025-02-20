@@ -1,16 +1,16 @@
 import { BaseDrawer, useModalStore } from "@/shared";
 import { useEffect } from "react";
-import { OutboundPickingTable } from "../../outbound-picking-table";
-import { CreateOutboundPackingModalInfo } from "@/features";
-import { useOutboundPickingTable } from "@/features/outbound/model/useOutboundPickingTable";
+import { OutboundAssignTable } from "../outbound-assign-table";
+import { CreateOutboundPickingModalInfo } from "@/features";
+import { useOutboundAssignTable } from "../../model/useOutboundAssignTable";
 
-interface OutboundPickingListDrawerProps {
+interface OutboundAssignListDrawerProps {
   onClose: () => void;
 }
 
-export const OutboundPickingListDrawer = ({
+export const OutboundAssignListDrawer = ({
   onClose,
-}: OutboundPickingListDrawerProps) => {
+}: OutboundAssignListDrawerProps) => {
   const { openModal } = useModalStore();
 
   const {
@@ -23,7 +23,7 @@ export const OutboundPickingListDrawer = ({
     data,
     isFetched,
     isPending,
-  } = useOutboundPickingTable();
+  } = useOutboundAssignTable();
 
   useEffect(() => {
     if (isFetched) {
@@ -35,8 +35,8 @@ export const OutboundPickingListDrawer = ({
       if (rowId || rowId === 0) {
         const row = data!.content[rowId];
 
-        const modalInfo: CreateOutboundPackingModalInfo = {
-          key: "createOutboundPacking",
+        const modalInfo: CreateOutboundPickingModalInfo = {
+          key: "createOutboundPicking",
           outbound: row,
         };
 
@@ -46,8 +46,8 @@ export const OutboundPickingListDrawer = ({
   }, [isFetched, rowSelection, data]);
 
   return (
-    <BaseDrawer title="출고피킹 선택" onClose={onClose}>
-      <OutboundPickingTable
+    <BaseDrawer title="출고지시 선택" onClose={onClose}>
+      <OutboundAssignTable
         tableParams={{
           data: data,
           pagination: pagination,
