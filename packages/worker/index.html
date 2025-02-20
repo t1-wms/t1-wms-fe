@@ -4,12 +4,31 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/Logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>T1 Worker</title>
     <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="/src/shared/ui/splashspinner.css" />
     <title>T1 Worker</title>
   </head>
   <body>
+    <!-- 스플래시 스크린 -->
+    <div id="splash-screen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color:#024CAA; z-index: 1000;">
+      <div class="loader" style="transform: translateZ(0); will-change: transform;"></div>
+      <h1 style="color: white; font-size: 24px; margin-top: 10px; font-weight: bold; transform: translateZ(0); will-change: transform;">STOCKHOLMES</h1>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // 스플래시 스크린 제거
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const splash = document.getElementById('splash-screen');
+          splash.style.opacity = '0';
+          splash.style.transition = 'opacity 0.4s ease-out';
+          setTimeout(() => {
+            splash.style.display = 'none';
+          }, 400);
+        }, 1000);
+      });
+    </script>
   </body>
 </html>
