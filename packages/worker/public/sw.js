@@ -2,7 +2,8 @@ const CACHE_NAME = 't1-wms-cache-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/Logo.png'
 ];
 
 self.addEventListener('install', event => {
@@ -12,9 +13,25 @@ self.addEventListener('install', event => {
   );
 });
 
+// 네트워크 우선, 실패시 캐시 사용 전략
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
+    fetch(event.request)
+      .catch(() => {
+        return caches.match(event.request);
+      })
+  );
+});
+
+// Service Worker 활성화 시 이전 캐시 정리
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames
+          .filter(cacheName => cacheName !== CACHE_NAME)
+          .map(cacheName => caches.delete(cacheName))
+      );
+    })
   );
 });
