@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { usePickingStore } from '../store/outboundstore';
-import Success from '@/shared/ui/success';
+import Success from '@/shared/ui/Success';
 
 export const PickingCompletePage = () => {
   const navigate = useNavigate();
