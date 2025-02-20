@@ -21,6 +21,9 @@ export const OutboundPlanListDrawer = ({
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
   } = useOutboundPlanTable();
 
   const { openModal } = useModalStore();
@@ -58,6 +61,9 @@ export const OutboundPlanListDrawer = ({
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
           isPending: isPending,
+          isError,
+          error,
+          refetch,
         }}
       />
     </BaseDrawer>

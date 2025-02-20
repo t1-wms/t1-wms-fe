@@ -23,6 +23,9 @@ export default function UserPage() {
     setRowSelection,
     data,
     isPending,
+    isError,
+    error,
+    refetch,
     filter,
     sort,
   } = useUserTable(columnFilters);
@@ -43,6 +46,9 @@ export default function UserPage() {
             setRowSelection,
             data,
             isPending,
+            isError,
+            error,
+            refetch,
             filter,
             sort,
           }}

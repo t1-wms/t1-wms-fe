@@ -1,4 +1,4 @@
-import { ModalInfoBase, Sort, TableParams } from "@/shared";
+import { ModalInfoBase, PageResponse, Sort, TableParams } from "@/shared";
 
 export interface UserListDto {
   userId: number;
@@ -26,7 +26,8 @@ export interface CreateUserModalInfo extends ModalInfoBase {
   key: "createUser";
 }
 
-export interface UserTableParams extends TableParams<UserListDto> {
+export interface UserTableParams
+  extends TableParams<UserListDto, PageResponse<UserListDto>> {
   sort?: Sort;
   filter?: UserFilter;
 }

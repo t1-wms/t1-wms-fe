@@ -23,6 +23,9 @@ export const OutboundAssignListDrawer = ({
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
   } = useOutboundAssignTable();
 
   useEffect(() => {
@@ -58,6 +61,9 @@ export const OutboundAssignListDrawer = ({
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
           isPending: isPending,
+          isError,
+          error,
+          refetch,
         }}
       />
     </BaseDrawer>

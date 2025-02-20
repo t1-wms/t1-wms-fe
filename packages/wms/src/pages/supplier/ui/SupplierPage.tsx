@@ -1,19 +1,16 @@
-import { PageContentBox, Spinner } from "@/shared";
+import { PageContentBox } from "@/shared";
 import styles from "./SupplierPage.module.css";
 import {
-  SupplierTableWrapper,
   SupplierControlPanel,
-  SupplierResponseDto,
   SupplierDrawer,
+  useSupplierTable,
+  SupplierTable,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
 export default function SupplierPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [selectedRow, setSelectedRow] = useState<SupplierResponseDto | null>(
-    null
-  );
 
   const handleSearch = useCallback(
     (businessNumber: string) => {
@@ -22,12 +19,29 @@ export default function SupplierPage() {
     [setColumnFilters]
   );
 
-  const handleChangeSelectedRow = useCallback(
-    (row: SupplierResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useSupplierTable(columnFilters);
+
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
+
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -35,18 +49,26 @@ export default function SupplierPage() {
         <SupplierControlPanel onSearch={handleSearch} />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="납품업체를 세는 중" />}>
-          <SupplierTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <SupplierTable
+          tableParams={{
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            data,
+            isPending,
+            isError,
+            error,
+            refetch,
+          }}
+        />
       </PageContentBox>
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <SupplierDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>

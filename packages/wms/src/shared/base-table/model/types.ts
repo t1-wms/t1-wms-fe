@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 
-export interface TableParams<TData> {
+export interface TableParams<TData, QueryResult> {
   data?: PageResponse<TData>;
   columns: ColumnDef<TData, any>[];
   columnFilters?: ColumnFiltersState;
@@ -25,5 +25,5 @@ export interface TableParams<TData> {
   error: Error | null;
   refetch?: (
     options?: RefetchOptions
-  ) => Promise<QueryObserverResult<PageResponse<TData>>>;
+  ) => Promise<QueryObserverResult<QueryResult>>;
 }

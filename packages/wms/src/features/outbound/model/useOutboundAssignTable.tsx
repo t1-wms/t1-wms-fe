@@ -18,11 +18,8 @@ export const useOutboundAssignTable = (columnFilters?: ColumnFiltersState) => {
     outboundDateKey: "outboundAssignDate",
   });
 
-  const { data, isFetched, isPending } = useOutboundAssigns(
-    pagination.pageIndex,
-    sort,
-    filter
-  );
+  const { data, isFetched, isPending, isError, error, refetch } =
+    useOutboundAssigns(pagination.pageIndex, sort, filter);
 
   return {
     pagination,
@@ -34,5 +31,8 @@ export const useOutboundAssignTable = (columnFilters?: ColumnFiltersState) => {
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
   };
 };

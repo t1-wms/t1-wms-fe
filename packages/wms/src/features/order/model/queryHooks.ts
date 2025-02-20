@@ -14,8 +14,6 @@ import {
   getReceivedOrderCount,
   getReceivedOrders,
   getReceivedOrdersPaged,
-  getSupplierCount,
-  getSuppliers,
   getSuppliersPaged,
   updateOrder,
 } from "../api";
@@ -55,54 +53,27 @@ export const createUseOrderQueryKey = (
 
 export const createUseSupplierQueryKey = (
   key: string,
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
   filter?: SupplierFilter
 ) => {
-  return isServerSide
-    ? [
-        key,
-        page!,
-        sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
-        filter ? `${filter.businessNumber}` : "not-filtering",
-      ]
-    : [key];
-};
-
-export const useSupplierCount = () => {
-  return useSuspenseQuery({
-    queryKey: ["supplier", "count"],
-    queryFn: () => getSupplierCount(),
-  });
+  return [
+    key,
+    page!,
+    sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
+    filter ? `b=${filter.businessNumber}` : "not-filtering",
+  ];
 };
 
 export const useSuppliers = (
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: SupplierFilter,
-  size?: number
+  filter?: SupplierFilter
 ) => {
-  const queryKey = createUseSupplierQueryKey(
-    "supplier",
-    isServerSide,
-    page!,
-    sort,
-    filter
-  );
-
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getSuppliersPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getSuppliers(size!),
-    });
-  }
+  return useSuspenseQuery({
+    queryKey: createUseSupplierQueryKey("supplier", page!, sort, filter),
+    queryFn: () => getSuppliersPaged(page!, sort, filter),
+  });
 };
 
 export const useOrderCount = () => {

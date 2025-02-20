@@ -1,28 +1,10 @@
-import { getFilterValue, PageResponse, Sort, useTable } from "@/shared";
+import { getFilterValue, useTable } from "@/shared";
 import { useMemo } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
-import { ProductFilter, ProductResponseDto } from "./types";
-import { UseSuspenseQueryResult } from "@tanstack/react-query";
+import { ProductFilter } from "./types";
+import { useProducts } from "./queryHooks";
 
-interface UseProductTableParams {
-  columnFilters?: ColumnFiltersState;
-  isServerSide: boolean;
-  totalElements: number;
-  useData: (
-    isServerSide: boolean,
-    page?: number,
-    sort?: Sort,
-    filter?: ProductFilter,
-    size?: number
-  ) => UseSuspenseQueryResult<PageResponse<ProductResponseDto>>;
-}
-
-export const useProductTable = ({
-  columnFilters,
-  isServerSide,
-  totalElements,
-  useData,
-}: UseProductTableParams) => {
+export const useProductTable = (columnFilters: ColumnFiltersState) => {
   // 서버사이드 필터링에서만 사용
   const filter: ProductFilter | undefined = useMemo(() => {
     if (!columnFilters || columnFilters.length === 0) return undefined;
@@ -44,12 +26,10 @@ export const useProductTable = ({
     sort,
   } = useTable();
 
-  const { data } = useData(
-    isServerSide,
+  const { data, isPending, isError, error, refetch } = useProducts(
     pagination.pageIndex,
     sort,
-    filter,
-    totalElements
+    filter
   );
 
   return {
@@ -60,5 +40,9 @@ export const useProductTable = ({
     rowSelection,
     setRowSelection,
     data,
+    isPending,
+    isError,
+    error,
+    refetch,
   };
 };

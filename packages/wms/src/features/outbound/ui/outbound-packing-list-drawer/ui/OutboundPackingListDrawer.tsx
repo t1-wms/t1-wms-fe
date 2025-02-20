@@ -23,6 +23,9 @@ export const OutboundPackingListDrawer = ({
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
   } = useOutboundPackingTable();
 
   useEffect(() => {
@@ -58,6 +61,9 @@ export const OutboundPackingListDrawer = ({
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
           isPending: isPending,
+          isError,
+          error,
+          refetch,
         }}
       />
     </BaseDrawer>

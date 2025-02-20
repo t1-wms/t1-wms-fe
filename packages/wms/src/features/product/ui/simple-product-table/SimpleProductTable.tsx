@@ -17,7 +17,7 @@ export const SimpleProductTable = ({ onClickAdd }: SimpleProductTableProps) => {
     defaultColumns,
   } = useSimpleProductTable(onClickAdd);
 
-  const { data, isPending } = useSimpleProducts();
+  const { data, isPending, isError, error, refetch } = useSimpleProducts();
 
   return (
     <>
@@ -32,6 +32,9 @@ export const SimpleProductTable = ({ onClickAdd }: SimpleProductTableProps) => {
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
           isPending,
+          isError,
+          error,
+          refetch,
         }}
         isClientSide
       />

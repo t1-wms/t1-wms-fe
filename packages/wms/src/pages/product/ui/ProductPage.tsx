@@ -1,7 +1,7 @@
-import { PageContentBox, Spinner } from "@/shared";
+import { PageContentBox } from "@/shared";
 import styles from "./ProductPage.module.css";
-import { ProductTableWrapper, ProductControlPanel } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { ProductControlPanel, ProductTable, useProductTable } from "@/features";
+import { useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
 export default function ProductPage() {
@@ -14,18 +14,41 @@ export default function ProductPage() {
     [setColumnFilters]
   );
 
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useProductTable(columnFilters);
+
   return (
     <div className={styles.container}>
       <PageContentBox>
         <ProductControlPanel onSearch={handleSearch} />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="품목을 세는 중" />}>
-          <ProductTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-          />
-        </Suspense>
+        <ProductTable
+          tableParams={{
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            data,
+            isPending,
+            isError,
+            error,
+            refetch,
+          }}
+        />
       </PageContentBox>
     </div>
   );

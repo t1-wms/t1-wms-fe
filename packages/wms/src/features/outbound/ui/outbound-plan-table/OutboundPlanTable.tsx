@@ -1,4 +1,4 @@
-import { BaseTable, TableParams } from "@/shared";
+import { BaseTable, PageResponse, TableParams } from "@/shared";
 import { createColumnHelper, FilterFn } from "@tanstack/react-table";
 import { OutboundPlanResponseDto } from "../../model";
 
@@ -46,7 +46,10 @@ const defaultColumns = [
 ];
 
 interface OutboundPlanTableProps {
-  tableParams: Omit<TableParams<OutboundPlanResponseDto>, "columns">;
+  tableParams: Omit<
+    TableParams<OutboundPlanResponseDto, PageResponse<OutboundPlanResponseDto>>,
+    "columns"
+  >;
 }
 
 export const OutboundPlanTable = ({ tableParams }: OutboundPlanTableProps) => {

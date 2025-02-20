@@ -14,18 +14,18 @@ import { BaseTableContent } from "./BaseTableContent";
 import { TableParams } from "../model";
 import { BaseTableError } from "./BaseTableError";
 
-interface BaseTableProps<TData> {
-  tableParams: TableParams<TData>;
+interface BaseTableProps<TData, QueryResult> {
+  tableParams: TableParams<TData, QueryResult>;
   noPagination?: boolean;
   hasMinHeight?: boolean;
   isClientSide?: boolean;
 }
 
-export const BaseTable = <TData extends unknown>({
+export const BaseTable = <TData extends unknown, QueryResult>({
   tableParams,
   hasMinHeight,
   isClientSide,
-}: BaseTableProps<TData>) => {
+}: BaseTableProps<TData, QueryResult>) => {
   const {
     data,
     columns,

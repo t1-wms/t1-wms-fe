@@ -23,6 +23,9 @@ export const OutboundPickingListDrawer = ({
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
   } = useOutboundPickingTable();
 
   useEffect(() => {
@@ -58,6 +61,9 @@ export const OutboundPickingListDrawer = ({
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
           isPending: isPending,
+          isError,
+          error,
+          refetch,
         }}
       />
     </BaseDrawer>

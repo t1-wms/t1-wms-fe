@@ -38,6 +38,9 @@ export const OutboundLoadingPage = () => {
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
   } = useOutboundLoadingTable(columnFilters);
 
   const selectedRow = useMemo(() => {
@@ -61,16 +64,19 @@ export const OutboundLoadingPage = () => {
       <PageContentBox>
         <OutboundLoadingTable
           tableParams={{
-            data: data,
-            columnFilters: columnFilters,
-            setColumnFilters: setColumnFilters,
-            pagination: pagination,
-            setPagination: setPagination,
-            sorting: sorting,
-            setSorting: setSorting,
-            rowSelection: rowSelection,
-            setRowSelection: setRowSelection,
-            isPending: isPending,
+            data,
+            columnFilters,
+            setColumnFilters,
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            isPending,
+            isError,
+            error,
+            refetch,
           }}
         />
       </PageContentBox>

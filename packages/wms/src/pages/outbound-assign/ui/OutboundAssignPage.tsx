@@ -38,6 +38,9 @@ export const OutboundAssignPage = () => {
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
   } = useOutboundAssignTable(columnFilters);
 
   const selectedRow = useMemo(() => {
@@ -61,16 +64,19 @@ export const OutboundAssignPage = () => {
       <PageContentBox>
         <OutboundAssignTable
           tableParams={{
-            data: data,
-            columnFilters: columnFilters,
-            setColumnFilters: setColumnFilters,
-            pagination: pagination,
-            setPagination: setPagination,
-            sorting: sorting,
-            setSorting: setSorting,
-            rowSelection: rowSelection,
-            setRowSelection: setRowSelection,
-            isPending: isPending,
+            data,
+            columnFilters,
+            setColumnFilters,
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            isPending,
+            isError,
+            error,
+            refetch,
           }}
         />
       </PageContentBox>

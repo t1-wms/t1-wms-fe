@@ -38,6 +38,9 @@ export const OutboundPackingPage = () => {
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
   } = useOutboundPackingTable(columnFilters);
 
   const selectedRow = useMemo(() => {
@@ -61,16 +64,19 @@ export const OutboundPackingPage = () => {
       <PageContentBox>
         <OutboundPackingTable
           tableParams={{
-            data: data,
-            columnFilters: columnFilters,
-            setColumnFilters: setColumnFilters,
-            pagination: pagination,
-            setPagination: setPagination,
-            sorting: sorting,
-            setSorting: setSorting,
-            rowSelection: rowSelection,
-            setRowSelection: setRowSelection,
-            isPending: isPending,
+            data,
+            columnFilters,
+            setColumnFilters,
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            isPending,
+            isError,
+            error,
+            refetch,
           }}
         />
       </PageContentBox>

@@ -1,21 +1,20 @@
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import styles from "./BaseTable.module.css";
-import { PageResponse } from "@/shared/model";
 import { AxiosError } from "axios";
 import { useCallback } from "react";
 import { useNavigate } from "react-router";
 
-interface BaseTableErrorProps<TData> {
+interface BaseTableErrorProps<QueryResult> {
   error: Error | null;
   refetch?: (
     options?: RefetchOptions
-  ) => Promise<QueryObserverResult<PageResponse<TData>>>;
+  ) => Promise<QueryObserverResult<QueryResult>>;
 }
 
-export const BaseTableError = <TData extends unknown>({
+export const BaseTableError = <QueryResult extends unknown>({
   error,
   refetch,
-}: BaseTableErrorProps<TData>) => {
+}: BaseTableErrorProps<QueryResult>) => {
   const navigate = useNavigate();
 
   const handleRefetch = useCallback(() => {

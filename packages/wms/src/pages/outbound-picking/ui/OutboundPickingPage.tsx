@@ -38,6 +38,9 @@ export const OutboundPickingPage = () => {
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
   } = useOutboundPickingTable(columnFilters);
 
   const selectedRows = useMemo(() => {
@@ -61,16 +64,19 @@ export const OutboundPickingPage = () => {
       <PageContentBox>
         <OutboundPickingTable
           tableParams={{
-            data: data,
-            columnFilters: columnFilters,
-            setColumnFilters: setColumnFilters,
-            pagination: pagination,
-            setPagination: setPagination,
-            sorting: sorting,
-            setSorting: setSorting,
-            rowSelection: rowSelection,
-            setRowSelection: setRowSelection,
-            isPending: isPending,
+            data,
+            columnFilters,
+            setColumnFilters,
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            isPending,
+            isError,
+            error,
+            refetch,
           }}
         />
       </PageContentBox>

@@ -1,4 +1,4 @@
-import { BaseTable, TableParams } from "@/shared";
+import { BaseTable, PageResponse, TableParams } from "@/shared";
 import { OutboundPickingResponseDto } from "../../model";
 import { createColumnHelper, FilterFn } from "@tanstack/react-table";
 
@@ -55,7 +55,13 @@ const defaultColumns = [
 ];
 
 interface OutboundPickingTableProps {
-  tableParams: Omit<TableParams<OutboundPickingResponseDto>, "columns">;
+  tableParams: Omit<
+    TableParams<
+      OutboundPickingResponseDto,
+      PageResponse<OutboundPickingResponseDto>
+    >,
+    "columns"
+  >;
 }
 
 export const OutboundPickingTable = ({

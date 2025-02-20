@@ -25,7 +25,7 @@ export const useUserTable = (columnFilters: ColumnFiltersState) => {
     sort,
   } = useTable();
 
-  const { data, isFetched, isPending } = useUsers(
+  const { data, isFetched, isPending, isError, error, refetch } = useUsers(
     pagination.pageIndex,
     sort,
     filter
@@ -41,6 +41,9 @@ export const useUserTable = (columnFilters: ColumnFiltersState) => {
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
     filter,
     sort,
   };

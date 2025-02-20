@@ -40,6 +40,8 @@ export const OutboundProductTable = ({
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
           isPending: false,
+          isError: false,
+          error: null,
         }}
         hasMinHeight={hasMinHeight}
         isClientSide

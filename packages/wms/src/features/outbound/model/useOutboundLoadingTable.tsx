@@ -18,11 +18,8 @@ export const useOutboundLoadingTable = (columnFilters?: ColumnFiltersState) => {
     outboundDateKey: "outboundLoadingDate",
   });
 
-  const { data, isFetched, isPending } = useOutboundLoadings(
-    pagination.pageIndex,
-    sort,
-    filter
-  );
+  const { data, isFetched, isPending, isError, error, refetch } =
+    useOutboundLoadings(pagination.pageIndex, sort, filter);
 
   return {
     pagination,
@@ -34,5 +31,8 @@ export const useOutboundLoadingTable = (columnFilters?: ColumnFiltersState) => {
     data,
     isFetched,
     isPending,
+    isError,
+    error,
+    refetch,
   };
 };
