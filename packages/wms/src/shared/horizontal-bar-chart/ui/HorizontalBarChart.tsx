@@ -10,7 +10,7 @@ interface BarChartProps {
   dataLabel: string;
 }
 
-const colors = ["#392061", "#E54F6D"];
+const colors = ["#1C60B8", "#F5E0B4"];
 
 export const HorizontalBarChart = ({
   title,
