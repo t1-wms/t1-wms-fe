@@ -12,6 +12,7 @@ import SortDescIcon from "@assets/sort-desc.svg?react";
 import { Pagination } from "@shared/pagination";
 import { BaseTableContent } from "./BaseTableContent";
 import { TableParams } from "../model";
+import { BaseTableError } from "./BaseTableError";
 
 interface BaseTableProps<TData> {
   tableParams: TableParams<TData>;
@@ -37,6 +38,9 @@ export const BaseTable = <TData extends unknown>({
     rowSelection,
     setRowSelection,
     isPending,
+    isError,
+    error,
+    refetch,
   } = tableParams;
 
   const table = useReactTable<TData>({
@@ -102,8 +106,9 @@ export const BaseTable = <TData extends unknown>({
               </tr>
             ))}
           </thead>
-          <BaseTableContent table={table} isPending={isPending} />
+          {!isError && <BaseTableContent table={table} isPending={isPending} />}
         </table>
+        {isError && <BaseTableError error={error} refetch={refetch} />}
       </div>
 
       <div className={styles["pagination-wrapper"]}>

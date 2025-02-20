@@ -1,4 +1,5 @@
 import { PageResponse } from "@/shared";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -20,4 +21,9 @@ export interface TableParams<TData> {
   rowSelection: RowSelectionState;
   setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
   isPending: boolean;
+  isError: boolean;
+  error: Error | null;
+  refetch?: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<PageResponse<TData>>>;
 }
