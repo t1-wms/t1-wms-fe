@@ -1,7 +1,7 @@
 import styles from "./UserPage.module.css";
-import { UserControlPanel, UserTableWrapper } from "@/features";
-import { PageContentBox, Spinner } from "@/shared";
-import { Suspense, useCallback, useState } from "react";
+import { UserControlPanel, UserTable, useUserTable } from "@/features";
+import { PageContentBox } from "@/shared";
+import { useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
 export default function UserPage() {
@@ -14,18 +14,39 @@ export default function UserPage() {
     [setColumnFilters]
   );
 
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isPending,
+    filter,
+    sort,
+  } = useUserTable(columnFilters);
+
   return (
     <div className={styles.container}>
       <PageContentBox>
         <UserControlPanel onSearch={handleSearch} />
       </PageContentBox>
       <PageContentBox stretch>
-        <Suspense fallback={<Spinner message="사용자 정보를 가져오는 중" />}>
-          <UserTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-          />
-        </Suspense>
+        <UserTable
+          tableParams={{
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            data,
+            isPending,
+            filter,
+            sort,
+          }}
+        />
       </PageContentBox>
     </div>
   );
