@@ -1,4 +1,18 @@
-import { ModalInfoBase } from "@/shared";
+import { Gender, ModalInfoBase, UserRole } from "@/shared";
+
+export interface CurrentUser {
+  at: string;
+  userId: number;
+  name: string;
+  profileImage: string;
+  staffNumber: string;
+  phone: string;
+  gender: Gender;
+  isActive: boolean;
+  address: string;
+  userRole: UserRole;
+  birthDate: string;
+}
 
 export interface UserListDto {
   userId: number;
@@ -25,6 +39,11 @@ export interface RegisterUserRequestDto {
   isActive: boolean;
   birthDate: string;
   supplierId: number | null;
+}
+
+export interface LoginDto {
+  staffNumber: string;
+  password: string;
 }
 
 export interface UserFilter {

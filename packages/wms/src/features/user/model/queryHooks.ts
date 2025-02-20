@@ -10,10 +10,17 @@ import {
   getUserCount,
   getUsers,
   getUsersPaged,
+  login,
   registerUser,
   updateUserActive,
 } from "../api/UserApi";
-import { RegisterUserRequestDto, UserFilter } from "@/features";
+import {
+  CurrentUser,
+  LoginDto,
+  RegisterUserRequestDto,
+  UserFilter,
+} from "@/features";
+import { AxiosResponse } from "axios";
 
 export const useUserCount = () => {
   return useSuspenseQuery({
@@ -69,6 +76,15 @@ export const useRoles = () => {
   return useQuery({
     queryKey: ["role"],
     queryFn: () => getRoles(),
+  });
+};
+
+export const useLogin = (
+  onSuccess: (data: AxiosResponse<CurrentUser>) => void
+) => {
+  return useMutation({
+    mutationFn: (loginDto: LoginDto) => login(loginDto),
+    onSuccess,
   });
 };
 

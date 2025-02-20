@@ -1,6 +1,8 @@
 import { noAuthAxios } from "@shared/api/base";
 import { PageResponse, Sort } from "@shared/model";
 import {
+  CurrentUser,
+  LoginDto,
   RegisterUserRequestDto,
   UpdateActiveResDto,
   UserFilter,
@@ -51,6 +53,15 @@ export const updateUserActive = async (userId: number) => {
 
 export const getRoles = async () => {
   const response = await noAuthAxios.get<string[]>("api/roles");
+
+  return response;
+};
+
+export const login = async (loginDto: LoginDto) => {
+  const response = await noAuthAxios.post<CurrentUser>(
+    "api/auth/login",
+    loginDto
+  );
 
   return response;
 };
