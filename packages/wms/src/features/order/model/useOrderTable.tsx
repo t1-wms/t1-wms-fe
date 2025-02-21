@@ -1,28 +1,10 @@
-import { getFilterValue, PageResponse, Sort, useTable } from "@/shared";
-import { useMemo } from "react";
+import { getFilterValue, useTable } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
-import { OrderFilter, OrderResponseDto } from "./types";
-import { UseSuspenseQueryResult } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { useOrders } from "./queryHooks";
+import { OrderFilter } from "./types";
 
-interface UseOrderTableParams {
-  columnFilters?: ColumnFiltersState;
-  isServerSide: boolean;
-  useData: (
-    isServerSide: boolean,
-    page?: number,
-    sort?: Sort,
-    filter?: OrderFilter,
-    totalElements?: number
-  ) => UseSuspenseQueryResult<PageResponse<OrderResponseDto>>;
-  totalElements: number;
-}
-
-export const useOrderTable = ({
-  columnFilters,
-  isServerSide,
-  useData,
-  totalElements,
-}: UseOrderTableParams) => {
+export const useOrderTable = (columnFilters: ColumnFiltersState) => {
   // 서버사이드 필터링에서만 사용
   const filter: OrderFilter | undefined = useMemo(() => {
     if (!columnFilters || columnFilters.length === 0) return undefined;
@@ -49,12 +31,10 @@ export const useOrderTable = ({
     sort,
   } = useTable();
 
-  const { data } = useData(
-    isServerSide,
+  const { data, isFetched, isPending, isError, error, refetch } = useOrders(
     pagination.pageIndex,
     sort,
-    filter,
-    totalElements
+    filter
   );
 
   return {
@@ -65,5 +45,10 @@ export const useOrderTable = ({
     rowSelection,
     setRowSelection,
     data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
   };
 };

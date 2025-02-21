@@ -1,19 +1,16 @@
-import { PageContentBox, Spinner } from "@/shared";
-import styles from "./ThresholdPage.module.css";
 import {
-  ProductThresholdDto,
   ThresholdControlPanel,
   ThresholdDrawer,
   ThresholdTable,
+  useProductThresholdTable,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./ThresholdPage.module.css";
 
 export function ThresholdPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [selectedRow, setSelectedRow] = useState<ProductThresholdDto | null>(
-    null
-  );
 
   const handleSearch = useCallback(
     (productCode: string) => {
@@ -22,12 +19,29 @@ export function ThresholdPage() {
     [setColumnFilters]
   );
 
-  const handleChangeSelectedRow = useCallback(
-    (row: ProductThresholdDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useProductThresholdTable(columnFilters);
+
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
+
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -35,18 +49,26 @@ export function ThresholdPage() {
         <ThresholdControlPanel onSearch={handleSearch} />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="품목을 가져오는 중" />}>
-          <ThresholdTable
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <ThresholdTable
+          tableParams={{
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            data,
+            isPending,
+            isError,
+            error,
+            refetch,
+          }}
+        />
       </PageContentBox>
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <ThresholdDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>

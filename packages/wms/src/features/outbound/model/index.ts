@@ -7,3 +7,8 @@ export * from "./useCreateOutboundAssignForm";
 export * from "./useCreateOutboundPickingForm";
 export * from "./useCreateOutboundPackingForm";
 export * from "./useCreateOutboundLoadingForm";
+export * from "./useOutboundPlanTable";
+export * from "./useOutboundAssignTable";
+export * from "./useOutboundPickingTable";
+export * from "./useOutboundPackingTable";
+export * from "./useOutboundLoadingTable";

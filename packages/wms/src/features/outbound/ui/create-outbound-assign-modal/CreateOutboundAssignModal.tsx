@@ -1,15 +1,15 @@
 import styles from "./CreateOutboundAssignModal.module.css";
 import { BasicModal, useModalStore } from "@/shared";
+import { useMemo } from "react";
+import { CreateOutboundAssignForm } from "../create-outbound-assign-form";
 import {
   CreateOutboundAssignModalInfo,
   OutboundAssignResponseDto,
   OutboundPlanResponseDto,
   useCreateOutboundAssign,
   useUpdateOutboundAssign,
-} from "../../model";
-import { useMemo } from "react";
-import { CreateOutboundAssignForm } from "../create-outbound-assign-form";
-import { OutboundProductTable } from "@/features/product";
+  OutboundProductTable,
+} from "@/features";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateOutboundAssignModalProps {

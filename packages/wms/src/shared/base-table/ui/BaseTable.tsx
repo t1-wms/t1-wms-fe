@@ -1,65 +1,60 @@
 import {
-  ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  PaginationState,
-  RowSelectionState,
-  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 import styles from "./BaseTable.module.css";
-import { Dispatch, SetStateAction } from "react";
 import SortAscIcon from "@assets/sort-asc.svg?react";
 import SortDescIcon from "@assets/sort-desc.svg?react";
 import { Pagination } from "@shared/pagination";
-import { PageResponse } from "@shared/model";
+import { BaseTableContent } from "./BaseTableContent";
+import { TableParams } from "../model";
+import { BaseTableError } from "./BaseTableError";
 
-interface BaseTableProps<TData> {
-  serverSide: boolean;
-  data: PageResponse<TData>;
-  columns: ColumnDef<TData, any>[];
-  columnFilters?: ColumnFiltersState;
-  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
-  pagination: PaginationState;
-  setPagination: Dispatch<SetStateAction<PaginationState>>;
-  sorting: SortingState;
-  setSorting: Dispatch<SetStateAction<SortingState>>;
-  rowSelection: RowSelectionState;
-  setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
+interface BaseTableProps<TData, QueryResult> {
+  tableParams: TableParams<TData, QueryResult>;
   noPagination?: boolean;
   hasMinHeight?: boolean;
+  isClientSide?: boolean;
 }
 
-export const BaseTable = <TData extends unknown>({
-  serverSide,
-  data,
-  columns,
-  columnFilters,
-  setColumnFilters,
-  pagination,
-  setPagination,
-  sorting,
-  setSorting,
-  rowSelection,
-  setRowSelection,
+export const BaseTable = <TData extends unknown, QueryResult>({
+  tableParams,
   hasMinHeight,
-}: BaseTableProps<TData>) => {
+  isClientSide,
+}: BaseTableProps<TData, QueryResult>) => {
+  const {
+    data,
+    columns,
+    columnFilters,
+    setColumnFilters,
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = tableParams;
+
   const table = useReactTable<TData>({
     data: data ? data.content : [],
     columns,
-    manualPagination: serverSide,
-    manualSorting: serverSide,
-    manualFiltering: serverSide,
+    manualPagination: !isClientSide,
+    manualSorting: !isClientSide,
+    manualFiltering: !isClientSide,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: !serverSide ? getPaginationRowModel() : undefined,
-    getSortedRowModel: !serverSide ? getSortedRowModel() : undefined,
-    getFilteredRowModel: !serverSide ? getFilteredRowModel() : undefined,
-    rowCount: serverSide ? data.totalElements : undefined,
-    pageCount: serverSide ? data.totalPages : undefined,
+    getPaginationRowModel: isClientSide ? getPaginationRowModel() : undefined,
+    getSortedRowModel: isClientSide ? getSortedRowModel() : undefined,
+    getFilteredRowModel: isClientSide ? getFilteredRowModel() : undefined,
+    rowCount: !isClientSide ? (data ? data.totalElements : 0) : undefined,
+    pageCount: !isClientSide ? (data ? data.totalPages : 0) : undefined,
     state: {
       pagination,
       sorting,
@@ -73,8 +68,6 @@ export const BaseTable = <TData extends unknown>({
     autoResetPageIndex: false,
     enableMultiRowSelection: false,
   });
-
-  console.log(pagination);
 
   return (
     <div className={styles.container}>
@@ -113,32 +106,21 @@ export const BaseTable = <TData extends unknown>({
               </tr>
             ))}
           </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className={row.getIsSelected() ? styles["selected-row"] : ""}
-                onClick={row.getToggleSelectedHandler()}
-              >
-                {row.getAllCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
+          {!isError && <BaseTableContent table={table} isPending={isPending} />}
         </table>
+        {isError && <BaseTableError error={error} refetch={refetch} />}
       </div>
 
-      <Pagination
-        currentPage={pagination.pageIndex + 1}
-        size={2}
-        maxPage={table.getPageCount()}
-        onClickPrev={() => table.previousPage()}
-        onClickNext={() => table.nextPage()}
-        onClickPage={(page: number) => table.setPageIndex(page)}
-      />
+      <div className={styles["pagination-wrapper"]}>
+        <Pagination
+          currentPage={pagination.pageIndex + 1}
+          size={2}
+          maxPage={table.getPageCount()}
+          onClickPrev={() => table.previousPage()}
+          onClickNext={() => table.nextPage()}
+          onClickPage={(page: number) => table.setPageIndex(page)}
+        />
+      </div>
     </div>
   );
 };

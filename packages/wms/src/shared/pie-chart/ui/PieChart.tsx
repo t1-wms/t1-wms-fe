@@ -3,7 +3,7 @@ import { Doughnut } from "react-chartjs-2";
 import styles from "./PieChart.module.css";
 import { ChartData, ChartOptions } from "chart.js";
 
-const colors = ["#392061", "#F6AE2D", "#E54F6D", "#86BBD8", "#B7F0AD"];
+const colors = ["#1C60B8", "#3C71B6", "#A2B3CB", "#F5E0B4", "#C1A694"];
 
 interface PieChartProps {
   title: string;
@@ -18,6 +18,7 @@ export const PieChart = ({ title, labels, dataLabel, data }: PieChartProps) => {
     datasets: [
       {
         label: dataLabel,
+        // data: [100, 50, 20, 120, 70],
         data,
         backgroundColor: colors,
         hoverOffset: 4,

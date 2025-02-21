@@ -1,25 +1,10 @@
-import { getFilterValue, PageResponse, Sort, useTable } from "@/shared";
-import { useMemo } from "react";
-import { ColumnFiltersState } from "@tanstack/react-table";
-import { ProductThresholdDto } from "./types";
-import { UseSuspenseQueryResult } from "@tanstack/react-query";
 import { ProductFilter } from "@/features/product";
+import { getFilterValue, useTable } from "@/shared";
+import { ColumnFiltersState } from "@tanstack/react-table";
+import { useMemo } from "react";
+import { useProductThresholds } from "./queryHooks";
 
-interface UseProductTableParams {
-  columnFilters?: ColumnFiltersState;
-  useData: (
-    isServerSide: boolean,
-    page?: number,
-    sort?: Sort,
-    filter?: ProductFilter,
-    size?: number
-  ) => UseSuspenseQueryResult<PageResponse<ProductThresholdDto>>;
-}
-
-export const useProductThresholdTable = ({
-  columnFilters,
-  useData,
-}: UseProductTableParams) => {
+export const useProductThresholdTable = (columnFilters: ColumnFiltersState) => {
   // 서버사이드 필터링에서만 사용
   const filter: ProductFilter | undefined = useMemo(() => {
     if (!columnFilters || columnFilters.length === 0) return undefined;
@@ -41,7 +26,8 @@ export const useProductThresholdTable = ({
     sort,
   } = useTable();
 
-  const { data } = useData(true, pagination.pageIndex, sort, filter);
+  const { data, isFetched, isPending, isError, error, refetch } =
+    useProductThresholds(pagination.pageIndex, sort, filter);
 
   return {
     pagination,
@@ -51,5 +37,10 @@ export const useProductThresholdTable = ({
     rowSelection,
     setRowSelection,
     data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
   };
 };

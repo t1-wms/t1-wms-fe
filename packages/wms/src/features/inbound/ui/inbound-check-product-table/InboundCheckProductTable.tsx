@@ -1,6 +1,6 @@
-import { useInboundCheckProductTable } from "../../model";
 import { InboundCheckProductListDto } from "@/features";
 import { BaseTable, createPageResponse } from "@/shared";
+import { useInboundCheckProductTable } from "../../model";
 
 interface InboundCheckProductTableProps {
   data: InboundCheckProductListDto[];
@@ -30,16 +30,21 @@ export const InboundCheckProductTable = ({
   return (
     <>
       <BaseTable
-        serverSide={false}
-        data={pagedData}
-        columns={defaultColumns}
-        pagination={pagination}
-        setPagination={setPagination}
-        sorting={sorting}
-        setSorting={setSorting}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
+        tableParams={{
+          data: pagedData,
+          columns: defaultColumns,
+          pagination: pagination,
+          setPagination: setPagination,
+          sorting: sorting,
+          setSorting: setSorting,
+          rowSelection: rowSelection,
+          setRowSelection: setRowSelection,
+          isPending: false,
+          isError: false,
+          error: null,
+        }}
         hasMinHeight={hasMinHeight}
+        isClientSide
       />
     </>
   );

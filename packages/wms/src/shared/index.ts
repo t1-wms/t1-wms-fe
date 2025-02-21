@@ -16,3 +16,4 @@ export * from "./pie-chart";
 export * from "./horizontal-bar-chart";
 export * from "./bar-chart";
 export * from "./lib";
+export * from "./skeleton";

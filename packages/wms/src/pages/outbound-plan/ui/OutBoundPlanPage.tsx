@@ -1,19 +1,17 @@
-import { PageContentBox, Spinner, useModalStore } from "@/shared";
+import { PageContentBox, useModalStore } from "@/shared";
 import styles from "./OutBoundPlanPage.module.css";
 import {
   CreateOutboundPlanModalInfo,
   OutboundControlPanel,
   OutboundPlanDrawer,
-  OutboundPlanResponseDto,
-  OutboundPlanTableWrapper,
+  OutboundPlanTable,
+  useOutboundPlanTable,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
 export const OutBoundPlanPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [selectedRow, setSelectedRow] =
-    useState<OutboundPlanResponseDto | null>(null);
 
   const { openModal } = useModalStore();
 
@@ -35,12 +33,29 @@ export const OutBoundPlanPage = () => {
     openModal(modalInfo);
   }, [openModal]);
 
-  const handleChangeSelectedRow = useCallback(
-    (row: OutboundPlanResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useOutboundPlanTable(columnFilters);
+
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
+
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -52,18 +67,28 @@ export const OutBoundPlanPage = () => {
         />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="출고예정 품목을 세는 중" />}>
-          <OutboundPlanTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <OutboundPlanTable
+          tableParams={{
+            data,
+            columnFilters,
+            setColumnFilters,
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            isPending,
+            isError,
+            error,
+            refetch,
+          }}
+        />
       </PageContentBox>
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <OutboundPlanDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>

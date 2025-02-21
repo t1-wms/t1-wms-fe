@@ -1,5 +1,5 @@
 import styles from "./CreateOutboundPlanModal.module.css";
-import { BasicModal, Spinner, useModalStore } from "@/shared";
+import { BasicModal, useModalStore } from "@/shared";
 import {
   CreateOutboundPlanModalInfo,
   CreateOutboundPlanRequestDto,
@@ -8,7 +8,7 @@ import {
   useUpdateOutboundPlan,
 } from "../../model";
 import { CreateOutboundPlanForm } from "../create-outbound-plan-form";
-import { Suspense, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ProductListDto } from "@/entities";
 import { OutboundProductTable } from "@/features/product/ui";
 import { SimpleProductTable } from "@/features/product/ui/simple-product-table";
@@ -128,11 +128,7 @@ export const CreateOutboundPlanModal = ({
         />
         <div className={styles["table-box"]}>
           <div className={`${styles.products} shadow-md`}>
-            <Suspense
-              fallback={<Spinner message="품목 리스트를 가져오는 중" />}
-            >
-              <SimpleProductTable onClickAdd={handleClickRow} />
-            </Suspense>
+            <SimpleProductTable onClickAdd={handleClickRow} />
           </div>
           <div className={`${styles["table-wrapper"]} shadow-md`}>
             <OutboundProductTable

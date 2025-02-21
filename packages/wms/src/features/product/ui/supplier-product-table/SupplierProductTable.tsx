@@ -20,15 +20,20 @@ export const SupplierProductTable = ({ data }: SupplierProductTableProps) => {
   return (
     <>
       <BaseTable
-        serverSide={false}
-        data={createPageResponse(data)}
-        columns={defaultColumns}
-        pagination={pagination}
-        setPagination={setPagination}
-        sorting={sorting}
-        setSorting={setSorting}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
+        tableParams={{
+          data: createPageResponse(data),
+          columns: defaultColumns,
+          pagination: pagination,
+          setPagination: setPagination,
+          sorting: sorting,
+          setSorting: setSorting,
+          rowSelection: rowSelection,
+          setRowSelection: setRowSelection,
+          isError: false,
+          isPending: false,
+          error: null,
+        }}
+        isClientSide
       />
     </>
   );

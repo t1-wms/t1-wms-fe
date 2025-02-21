@@ -47,6 +47,9 @@ export const OutboundPlanDrawer = ({
     onClose();
   }, [data]);
 
+  console.log(data);
+  console.log(productList);
+
   return (
     <BaseDrawer title={`출고예정 조회`} onClose={onClose}>
       <div className={styles.container}>

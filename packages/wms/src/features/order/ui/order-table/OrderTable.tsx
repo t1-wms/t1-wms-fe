@@ -1,19 +1,6 @@
-import { BaseTable } from "@/shared";
-import {
-  ColumnFiltersState,
-  createColumnHelper,
-  FilterFn,
-} from "@tanstack/react-table";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { OrderResponseDto, useOrders, useOrderTable } from "../../model";
-
-interface OrderTableProps {
-  columnFilters?: ColumnFiltersState;
-  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
-  isServerSide: boolean;
-  onChangeSelectedRow: (rowId: OrderResponseDto | null) => void;
-  totalElements: number;
-}
+import { BaseTable, PageResponse, TableParams } from "@/shared";
+import { createColumnHelper, FilterFn } from "@tanstack/react-table";
+import { OrderResponseDto } from "../../model";
 
 const columnHelper = createColumnHelper<OrderResponseDto>();
 
@@ -62,51 +49,21 @@ const defaultColumns = [
   }),
 ];
 
-export const OrderTable = ({
-  columnFilters,
-  setColumnFilters,
-  isServerSide,
-  onChangeSelectedRow,
-  totalElements,
-}: OrderTableProps) => {
-  const {
-    pagination,
-    setPagination,
-    sorting,
-    setSorting,
-    rowSelection,
-    setRowSelection,
-    data,
-  } = useOrderTable({
-    columnFilters,
-    isServerSide,
-    useData: useOrders,
-    totalElements,
-  });
+interface OrderTableProps {
+  tableParams: Omit<
+    TableParams<OrderResponseDto, PageResponse<OrderResponseDto>>,
+    "columns"
+  >;
+}
 
-  useEffect(() => {
-    const rowId =
-      Object.keys(rowSelection).length > 0
-        ? parseInt(Object.keys(rowSelection)[0])
-        : null;
-
-    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
-  }, [rowSelection, onChangeSelectedRow]);
-
+export const OrderTable = ({ tableParams }: OrderTableProps) => {
   return (
     <>
       <BaseTable
-        serverSide={isServerSide}
-        data={data}
-        columns={defaultColumns}
-        columnFilters={columnFilters}
-        setColumnFilters={setColumnFilters}
-        pagination={pagination}
-        setPagination={setPagination}
-        sorting={sorting}
-        setSorting={setSorting}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
+        tableParams={{
+          ...tableParams,
+          columns: defaultColumns,
+        }}
       />
     </>
   );
