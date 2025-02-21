@@ -8,6 +8,8 @@
 
   .table-wrapper {
     width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
 
     &.min-height {
       min-height: 528px;
