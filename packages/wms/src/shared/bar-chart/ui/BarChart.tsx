@@ -1,7 +1,7 @@
+import { ChartData, ChartOptions } from "chart.js";
 import "chart.js/auto";
 import { Bar } from "react-chartjs-2";
 import styles from "./BarChart.module.css";
-import { ChartData, ChartOptions } from "chart.js";
 
 interface BarChartProps {
   title: string;
@@ -19,19 +19,18 @@ export const BarChart = ({ title, data, labels, dataLabel }: BarChartProps) => {
       {
         label: dataLabel[0],
         data: data[0],
-        backgroundColor: "#00000000",
+        backgroundColor: colors[0],
         barPercentage: 1.0,
         categoryPercentage: 0.9,
-        borderColor: "#ff0000",
-        borderWidth: {
-          top: 8,
+        borderRadius: {
+          topLeft: 4,
+          topRight: 4,
         },
-        borderSkipped: false,
       },
       {
         label: dataLabel[1],
         data: data[1],
-        backgroundColor: colors[0],
+        backgroundColor: colors[1],
         barPercentage: 1.0,
         categoryPercentage: 0.9,
         borderRadius: {
@@ -52,7 +51,6 @@ export const BarChart = ({ title, data, labels, dataLabel }: BarChartProps) => {
         grid: {
           drawOnChartArea: false,
         },
-        stacked: true,
       },
       y: {
         display: false,

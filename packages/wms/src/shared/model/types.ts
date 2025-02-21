@@ -39,3 +39,6 @@ export interface Sort {
 export interface ModalInfoBase {
   key: string;
 }
+
+export type UserRole = "공급업체" | "작업자" | "관리자";
+export type Gender = "M" | "F";

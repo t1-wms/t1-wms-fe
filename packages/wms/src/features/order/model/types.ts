@@ -57,6 +57,11 @@ export interface CreateOrderRequestDto {
   productList: SupplierProductDto[];
 }
 
+export interface SimpleSupplierDto {
+  supplierId: number;
+  supplierName: string;
+}
+
 export interface CreateOrderModalInfo extends ModalInfoBase {
   key: "createOrder";
   supplier?: SupplierResponseDto;

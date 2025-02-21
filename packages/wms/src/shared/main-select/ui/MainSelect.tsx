@@ -3,6 +3,7 @@ import styles from "./MainSelect.module.css";
 import { ForwardedRef, forwardRef, InputHTMLAttributes } from "react";
 import { FieldError } from "react-hook-form";
 import { Option } from "../model";
+import { MiniSpinner } from "@/shared";
 
 interface MainSelectProps extends InputHTMLAttributes<HTMLSelectElement> {
   options: Option[];
@@ -10,6 +11,7 @@ interface MainSelectProps extends InputHTMLAttributes<HTMLSelectElement> {
   width: string | "fullWidth";
   fontSize?: Size;
   error?: FieldError | null;
+  isPending?: boolean;
 }
 
 const Select = forwardRef(
@@ -55,6 +57,7 @@ export const MainSelect = forwardRef(
       width,
       fontSize = "md",
       error,
+      isPending,
       ...props
     }: MainSelectProps,
     ref: ForwardedRef<HTMLSelectElement>
@@ -87,6 +90,11 @@ export const MainSelect = forwardRef(
             error={error}
             {...props}
           />
+        )}
+        {isPending && (
+          <div className={styles["spinner-wrapper"]}>
+            <MiniSpinner />
+          </div>
         )}
       </div>
     );

@@ -1,3 +1,4 @@
+import BinPage from "@/pages/bin";
 import DashBoardPage from "@/pages/dashboard/ui/DashboardPage";
 import { InboundCheckPage } from "@/pages/inbound-check";
 import { InboundPutAwayPage } from "@/pages/inbound-put-away";
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
       {
         path: "/inventory/product",
         element: <ProductPage />,
+      },
+      {
+        path: "/inventory/bin",
+        element: <BinPage />,
       },
       {
         path: "/inventory/threshold",

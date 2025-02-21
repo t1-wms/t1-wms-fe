@@ -3,3 +3,4 @@ export * from "./queryHooks";
 export * from "./useCreateUserForm";
 export * from "./useUserTable";
 export * from "./useSearchUserForm";
+export * from "./useUserStore";

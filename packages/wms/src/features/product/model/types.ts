@@ -5,6 +5,7 @@ export interface ProductResponseDto {
   purchasePrice: number;
   salePrice: number;
   productCount: number;
+  availableQuantity: number;
   supplierName: string;
   category: string;
   threshold: number;

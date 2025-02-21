@@ -12,6 +12,7 @@ import {
   getOrderChart,
   getOrdersPaged,
   getReceivedOrdersPaged,
+  getSimpleSuppliers,
   getSuppliersPaged,
   updateOrder,
 } from "../api";
@@ -57,6 +58,13 @@ export const createUseSupplierQueryKey = (
     sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
     filter ? `b=${filter.businessNumber}` : "not-filtering",
   ];
+};
+
+export const useSimpleSuppliers = () => {
+  return useQuery({
+    queryKey: ["supplier", "simple"],
+    queryFn: () => getSimpleSuppliers(),
+  });
 };
 
 export const useSuppliers = (
