@@ -1,6 +1,6 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { getProductSimple, getProductsPaged } from "../api";
 import { Sort } from "@/shared";
+import { useQuery } from "@tanstack/react-query";
+import { getProductSimple, getProductsPaged } from "../api";
 import { ProductFilter } from "./types";
 
 export const createUseProductQueryKey = (
@@ -29,7 +29,7 @@ export const useProducts = (
   sort?: Sort,
   filter?: ProductFilter
 ) => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: createUseProductQueryKey(page!, sort, filter),
     queryFn: () => getProductsPaged(page!, sort, filter),
   });

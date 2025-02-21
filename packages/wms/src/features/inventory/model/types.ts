@@ -4,6 +4,7 @@ export interface ProductThresholdDto {
   productName: string;
   productCount: number;
   threshold: number;
+  availableQuantity: number;
 }
 
 export interface UpdateThresholdRequestDto {

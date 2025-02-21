@@ -1,5 +1,5 @@
 import { PageResponse, Sort } from "@/shared";
-import { noAuthAxios } from "@/shared/api/base";
+import { authAxios, noAuthAxios } from "@/shared/api/base";
 import {
   CreateOrderRequestDto,
   OrderChartData,
@@ -35,14 +35,6 @@ export const getSimpleSuppliers = async () => {
   return response.data;
 };
 
-export const getSuppliers = async (size: number) => {
-  const response = await noAuthAxios.get<PageResponse<SupplierResponseDto>>(
-    `api/supplier?page=0&size=${size}`
-  );
-
-  return response.data;
-};
-
 export const getSuppliersPaged = async (
   page: number,
   sort?: Sort,
@@ -56,22 +48,6 @@ export const getSuppliersPaged = async (
         ? `${filter.businessNumber ? `&number=${filter.businessNumber}` : ""}`
         : ""
     }`
-  );
-
-  return response.data;
-};
-
-export const getOrderCount = async () => {
-  const response = await noAuthAxios.get<PageResponse<OrderResponseDto>>(
-    `/api/order?page=0&size=1`
-  );
-
-  return response.data;
-};
-
-export const getOrders = async (size: number) => {
-  const response = await noAuthAxios.get<PageResponse<OrderResponseDto>>(
-    `api/order?page=0&size=${size}`
   );
 
   return response.data;
@@ -97,29 +73,13 @@ export const getOrdersPaged = async (
   return response.data;
 };
 
-export const getReceivedOrderCount = async () => {
-  const response = await noAuthAxios.get<PageResponse<OrderResponseDto>>(
-    `/api/orderReceived?page=0&size=1`
-  );
-
-  return response.data;
-};
-
-export const getReceivedOrders = async (size: number) => {
-  const response = await noAuthAxios.get<PageResponse<OrderResponseDto>>(
-    `api/orderReceived?page=0&size=${size}`
-  );
-
-  return response.data;
-};
-
 export const getReceivedOrdersPaged = async (
   page: number,
   sort?: Sort,
   filter?: OrderFilter
 ) => {
-  const response = await noAuthAxios.get<PageResponse<OrderResponseDto>>(
-    `api/orderReceived?page=${page}${
+  const response = await authAxios.get<PageResponse<OrderResponseDto>>(
+    `api/order/supplier?page=${page}${
       sort ? `&sort=${sort.sortField},${sort.sortOrder}` : ""
     }${
       filter
