@@ -5,6 +5,7 @@ export * from "./base-modal";
 export * from "./base-table";
 export * from "./basic-modal";
 export * from "./check-box";
+export * from "./error-boundary";
 export * from "./horizontal-bar-chart";
 export * from "./lib";
 export * from "./main-button";
