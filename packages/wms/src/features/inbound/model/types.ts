@@ -75,10 +75,12 @@ export interface Defective {
 }
 
 export interface CreateInboundCheckRequestDto {
-  inboundId: number;
-  checkDate: string;
-  scheduleNumber: string;
   checkedProductList: Defective[];
+}
+
+export interface UseCreateInboundCheckParams {
+  inboundId: number;
+  reqDto: CreateInboundCheckRequestDto;
 }
 
 export interface CreateInboundCheckModalInfo extends ModalInfoBase {

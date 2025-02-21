@@ -3,12 +3,14 @@ import {
   InboundCheckProductTable,
 } from "@/features";
 import { BasicModal, useModalStore } from "@/shared";
+import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo, useState } from "react";
 import {
   CreateInboundCheckModalInfo,
   CreateInboundCheckRequestDto,
   Defective,
   InboundCheckDefaultValues,
+  useCreateInboundCheck,
 } from "../../model";
 import { CreateInboundCheckForm } from "../create-inbound-check-form";
 import styles from "./CreateInboundCheckModal.module.css";
@@ -57,9 +59,11 @@ export const CreateInboundCheckModal = ({
   );
 
   const { closeModal } = useModalStore();
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-  const handleSubmitValid = (checkDate: string) => {
+  const { mutate: createInboundCheck } = useCreateInboundCheck(queryClient);
+
+  const handleSubmitValid = () => {
     const defectiveList: Defective[] = [];
 
     productList.forEach((product) => {
@@ -70,28 +74,18 @@ export const CreateInboundCheckModal = ({
     });
 
     const data: CreateInboundCheckRequestDto = {
-      inboundId,
-      checkDate,
-      scheduleNumber,
       checkedProductList: defectiveList,
     };
 
-    console.log(data);
+    if (inboundSchedule) {
+      // 입하검사 생성
+      createInboundCheck({
+        inboundId,
+        reqDto: data,
+      });
 
-    // if (outboundPlan) {
-    //   queryClient.invalidateQueries({
-    //     predicate: (q) => {
-    //       const isOutboundPlan = (q.queryKey[0] as string) === "outboundPlan";
-    //       const isNotCount =
-    //         q.queryKey[1] === undefined ||
-    //         !((q.queryKey[1] as string) === "count");
-
-    //       return isOutboundPlan && isNotCount;
-    //     },
-    //   });
-
-    //   closeModal();
-    // }
+      closeModal();
+    }
   };
 
   const handleChangeDefectiveCount = useCallback(

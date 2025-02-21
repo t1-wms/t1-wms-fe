@@ -1,12 +1,18 @@
-import { Sort } from "@/shared";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { afterMutate, Sort } from "@/shared";
 import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import {
+  createInboundCheck,
   getInboundChart,
   getInboundChecksPaged,
   getInboundPutAwaysPaged,
   getInboundSchedulesPaged,
 } from "../api";
-import { InboundFilter } from "./types";
+import { InboundFilter, UseCreateInboundCheckParams } from "./types";
 
 export const createUseInboundQueryKey = (
   key: string,
@@ -62,5 +68,13 @@ export const useInboundPutAways = (
   return useQuery({
     queryKey: createUseInboundQueryKey("inboundPutAway", page!, sort, filter),
     queryFn: () => getInboundPutAwaysPaged(page!, sort, filter),
+  });
+};
+
+export const useCreateInboundCheck = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: ({ inboundId, reqDto }: UseCreateInboundCheckParams) =>
+      createInboundCheck(inboundId, reqDto),
+    onSuccess: afterMutate(queryClient, "inboundCheck"),
   });
 };

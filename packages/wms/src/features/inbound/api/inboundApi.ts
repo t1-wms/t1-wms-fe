@@ -1,6 +1,7 @@
 import { PageResponse, Sort } from "@/shared";
 import { noAuthAxios } from "@/shared/api/base";
 import {
+  CreateInboundCheckRequestDto,
   InboundChartData,
   InboundCheckResponseDto,
   InboundFilter,
@@ -12,22 +13,6 @@ export const getInboundChart = async () => {
   const response = await noAuthAxios.get<InboundChartData>(
     `api/dashboard/inbound-status`
   );
-
-  return response.data;
-};
-
-export const getInboundScheduleCount = async () => {
-  const response = await noAuthAxios.get<
-    PageResponse<InboundScheduleResponseDto>
-  >(`api/inbound?page=0&size=1`);
-
-  return response.data;
-};
-
-export const getInboundSchedules = async (size: number) => {
-  const response = await noAuthAxios.get<
-    PageResponse<InboundScheduleResponseDto>
-  >(`api/inbound?page=0&size=${size}`);
 
   return response.data;
 };
@@ -54,22 +39,6 @@ export const getInboundSchedulesPaged = async (
   return response.data;
 };
 
-export const getInboundCheckCount = async () => {
-  const response = await noAuthAxios.get<PageResponse<InboundCheckResponseDto>>(
-    `api/inboundCheck?page=0&size=1`
-  );
-
-  return response.data;
-};
-
-export const getInboundChecks = async (size: number) => {
-  const response = await noAuthAxios.get<PageResponse<InboundCheckResponseDto>>(
-    `api/inboundCheck?page=0&size=${size}`
-  );
-
-  return response.data;
-};
-
 export const getInboundChecksPaged = async (
   page: number,
   sort?: Sort,
@@ -86,22 +55,6 @@ export const getInboundChecksPaged = async (
         : ""
     }`
   );
-
-  return response.data;
-};
-
-export const getInboundPutAwayCount = async () => {
-  const response = await noAuthAxios.get<
-    PageResponse<InboundPutAwayResponseDto>
-  >(`api/inboundPutAway?page=0&size=1`);
-
-  return response.data;
-};
-
-export const getInboundPutAways = async (size: number) => {
-  const response = await noAuthAxios.get<
-    PageResponse<InboundPutAwayResponseDto>
-  >(`api/inboundPutAway?page=0&size=${size}`);
 
   return response.data;
 };
@@ -126,4 +79,16 @@ export const getInboundPutAwaysPaged = async (
   );
 
   return response.data;
+};
+
+export const createInboundCheck = async (
+  inboundId: number,
+  reqDto: CreateInboundCheckRequestDto
+) => {
+  const response = await noAuthAxios.post<void>(
+    `/api/inboundCheck/${inboundId}`,
+    reqDto
+  );
+
+  return response;
 };
