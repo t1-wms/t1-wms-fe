@@ -1,8 +1,10 @@
 export * from "./queryHooks";
 export type * from "./types";
 export * from "./useCreateInboundCheckForm";
+export * from "./useCreateInboundPutAwayForm";
 export * from "./useInboundCheckProductTable";
 export * from "./useInboundCheckTable";
+export * from "./useInboundLotTable";
 export * from "./useInboundScheduleTable";
 export * from "./useInboundTable";
 export * from "./useSearchInboundForm";

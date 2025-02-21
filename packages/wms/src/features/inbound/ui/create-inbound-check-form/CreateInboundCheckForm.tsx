@@ -1,5 +1,5 @@
 import { MainInput } from "@/shared";
-import styles from "./CreateOutboundPlanForm.module.css";
+import styles from "./CreateInboundCheckForm.module.css";
 import {
   InboundCheckDefaultValues,
   useCreateInboundCheckForm,

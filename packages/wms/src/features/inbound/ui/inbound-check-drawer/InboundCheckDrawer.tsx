@@ -1,11 +1,12 @@
-import styles from "./InboundCheckDrawer.module.css";
 import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
+import { useCallback } from "react";
 import {
   CreateInboundCheckModalInfo,
   InboundCheckResponseDto,
 } from "../../model";
-import { useCallback } from "react";
 import { InboundCheckProductTable } from "../inbound-check-product-table";
+import { InboundLotTable } from "../inbound-lot-table";
+import styles from "./InboundCheckDrawer.module.css";
 
 interface InboundCheckDrawerProps {
   data: InboundCheckResponseDto;
@@ -16,7 +17,7 @@ export const InboundCheckDrawer = ({
   data,
   onClose,
 }: InboundCheckDrawerProps) => {
-  const { scheduleNumber, checkNumber, checkDate, productList } = data;
+  const { scheduleNumber, checkNumber, checkDate, productList, lotList } = data;
 
   const { openModal } = useModalStore();
 
@@ -27,7 +28,8 @@ export const InboundCheckDrawer = ({
     };
 
     openModal(modalInfo);
-  }, [openModal, data]);
+    onClose();
+  }, [openModal, data, onClose]);
 
   return (
     <BaseDrawer title={`입하검사 조회`} onClose={onClose}>
@@ -57,6 +59,8 @@ export const InboundCheckDrawer = ({
         </div>
         <p className={`font-b-md ${styles.header}}`}>입하검사 품목</p>
         <InboundCheckProductTable data={productList} />
+        <p className={`font-b-md ${styles.header}}`}>입고적치 위치</p>
+        <InboundLotTable data={lotList} />
         <div className={styles["button-box"]}>
           <MainButton size="sm" padding="sm" onClick={handleClickUpdate}>
             수정

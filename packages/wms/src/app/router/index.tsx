@@ -1,6 +1,7 @@
 import BinPage from "@/pages/bin";
 import DashBoardPage from "@/pages/dashboard/ui/DashboardPage";
 import { InboundCheckPage } from "@/pages/inbound-check";
+import { InboundPutAwayPage } from "@/pages/inbound-put-away";
 import { InboundSchedulePage } from "@/pages/inbound-schedule";
 import OrderPage from "@/pages/order";
 import { OutboundAssignPage } from "@/pages/outbound-assign";
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "/inbound/check",
         element: <InboundCheckPage />,
+      },
+      {
+        path: "/inbound/put-away",
+        element: <InboundPutAwayPage />,
       },
       {
         path: "/outbound/plan",

@@ -1,12 +1,12 @@
-import styles from "./SideBar.module.css";
-import { SideBarItem } from "./SideBarItem";
+import { useUserStore } from "@/features";
+import InventoryIcon from "@assets/box.svg?react";
 import DashboardIcon from "@assets/graph.svg?react";
-import UserSearchIcon from "@assets/user-search.svg?react";
 import InboundIcon from "@assets/inbound.svg?react";
 import OutboundIcon from "@assets/outbound.svg?react";
-import InventoryIcon from "@assets/box.svg?react";
 import ToolIcon from "@assets/tool.svg?react";
-import { useUserStore } from "@/features";
+import UserSearchIcon from "@assets/user-search.svg?react";
+import styles from "./SideBar.module.css";
+import { SideBarItem } from "./SideBarItem";
 import { SideBarItemSkeleton } from "./SideBarItemSkeleton";
 
 export const SideBar = () => {
@@ -61,9 +61,6 @@ export const SideBar = () => {
                   { label: "입하 예정", path: "/inbound/schedule" },
                   { label: "입하 검사", path: "/inbound/check" },
                   { label: "입고 적치", path: "/inbound/put-away" },
-                  { label: "품목별 입고조회", path: "/inbound/product" },
-                  { label: "납품업체별 입고조회", path: "/inbound/supplier" },
-                  { label: "진행상황별 입고조회", path: "/inbound/process" },
                 ],
               }}
             />
@@ -77,8 +74,6 @@ export const SideBar = () => {
                   { label: "출고 피킹", path: "/outbound/picking" },
                   { label: "출고 패킹", path: "/outbound/packing" },
                   { label: "출하 상차", path: "/outbound/loading" },
-                  { label: "품목별 출고조회", path: "/outbound/product" },
-                  { label: "진행상황별 출고조회", path: "/outbound/process" },
                 ],
               }}
             />
