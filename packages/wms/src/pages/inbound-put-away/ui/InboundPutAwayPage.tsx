@@ -1,20 +1,18 @@
-import { PageContentBox, Spinner } from "@/shared";
-import styles from "./InboundPutAwayPage.module.css";
 import {
+  InboundCheckListDrawer,
   InboundControlPanel,
   InboundPutAwayDrawer,
-  InboundPutAwayResponseDto,
-  InboundPutAwayTableWrapper,
-  InboundCheckListDrawer,
+  InboundPutAwayTable,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { useInboundPutAwayTable } from "@/features/inbound/model/useInboundPutAwayTable";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./InboundPutAwayPage.module.css";
 
 export const InboundPutAwayPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [selectedRow, setSelectedRow] =
-    useState<InboundPutAwayResponseDto | null>(null);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
@@ -30,12 +28,29 @@ export const InboundPutAwayPage = () => {
     setDrawerOpen(true);
   }, [setDrawerOpen]);
 
-  const handleChangeSelectedRow = useCallback(
-    (row: InboundPutAwayResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useInboundPutAwayTable(columnFilters);
+
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
+
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -47,21 +62,29 @@ export const InboundPutAwayPage = () => {
         />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="입고적치 품목을 세는 중" />}>
-          <InboundPutAwayTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <InboundPutAwayTable
+          tableParams={{
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            data,
+            isPending,
+            isError,
+            error,
+            refetch,
+          }}
+        />
       </PageContentBox>
       {isDrawerOpen && (
         <InboundCheckListDrawer onClose={() => setDrawerOpen(false)} />
       )}
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <InboundPutAwayDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>

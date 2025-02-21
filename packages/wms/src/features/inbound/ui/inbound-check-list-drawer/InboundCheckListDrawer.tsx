@@ -1,10 +1,10 @@
-import { BaseDrawer, Spinner, useModalStore } from "@/shared";
-import { Suspense, useCallback, useEffect, useState } from "react";
 import {
   CreateInboundPutAwayModalInfo,
-  InboundCheckTableWrapper,
-  InboundCheckResponseDto,
+  InboundCheckTable,
+  useInboundCheckTable,
 } from "@/features";
+import { BaseDrawer, useModalStore } from "@/shared";
+import { useEffect } from "react";
 
 interface InboundCheckListDrawerProps {
   onClose: () => void;
@@ -13,36 +13,61 @@ interface InboundCheckListDrawerProps {
 export const InboundCheckListDrawer = ({
   onClose,
 }: InboundCheckListDrawerProps) => {
-  const [selectedRow, setSelectedRow] =
-    useState<InboundCheckResponseDto | null>(null);
-
   const { openModal } = useModalStore();
 
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useInboundCheckTable();
+
   useEffect(() => {
-    if (selectedRow) {
-      const modalInfo: CreateInboundPutAwayModalInfo = {
-        key: "createInboundPutAway",
-        inboundCheck: selectedRow,
-      };
+    if (isFetched) {
+      const rowId =
+        Object.keys(rowSelection).length > 0
+          ? parseInt(Object.keys(rowSelection)[0])
+          : null;
 
-      openModal(modalInfo);
+      if (rowId || rowId === 0) {
+        const row = data!.content[rowId];
+
+        const modalInfo: CreateInboundPutAwayModalInfo = {
+          key: "createInboundPutAway",
+          inboundCheck: row,
+        };
+
+        openModal(modalInfo);
+        onClose();
+      }
     }
-  }, [selectedRow, openModal]);
-
-  const handleChangeSelectedRow = useCallback(
-    (row: InboundCheckResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  }, [isFetched, rowSelection, data, onClose, openModal]);
 
   return (
     <BaseDrawer title="입하검사 선택" onClose={onClose}>
-      <Suspense fallback={<Spinner message="입하검사 개수를 가져오는 중" />}>
-        <InboundCheckTableWrapper
-          onChangeSelectedRow={handleChangeSelectedRow}
-        />
-      </Suspense>
+      <InboundCheckTable
+        tableParams={{
+          pagination,
+          setPagination,
+          sorting,
+          setSorting,
+          rowSelection,
+          setRowSelection,
+          data,
+          isPending,
+          isError,
+          error,
+          refetch,
+        }}
+      />
     </BaseDrawer>
   );
 };

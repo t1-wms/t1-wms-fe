@@ -1,23 +1,6 @@
-import { BaseTable } from "@/shared";
-import {
-  ColumnFiltersState,
-  createColumnHelper,
-  FilterFn,
-} from "@tanstack/react-table";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import {
-  InboundPutAwayResponseDto,
-  useInboundPutAways,
-  useInboundTable,
-} from "../../model";
-
-interface InboundPutAwayTableProps {
-  columnFilters?: ColumnFiltersState;
-  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
-  isServerSide: boolean;
-  onChangeSelectedRow: (rowId: InboundPutAwayResponseDto | null) => void;
-  totalElements: number;
-}
+import { BaseTable, PageResponse, TableParams } from "@/shared";
+import { createColumnHelper, FilterFn } from "@tanstack/react-table";
+import { InboundPutAwayResponseDto } from "../../model";
 
 const columnHelper = createColumnHelper<InboundPutAwayResponseDto>();
 
@@ -70,53 +53,26 @@ const defaultColumns = [
   }),
 ];
 
+interface InboundPutAwayTableProps {
+  tableParams: Omit<
+    TableParams<
+      InboundPutAwayResponseDto,
+      PageResponse<InboundPutAwayResponseDto>
+    >,
+    "columns"
+  >;
+}
+
 export const InboundPutAwayTable = ({
-  columnFilters,
-  setColumnFilters,
-  isServerSide,
-  onChangeSelectedRow,
-  totalElements,
+  tableParams,
 }: InboundPutAwayTableProps) => {
-  const {
-    pagination,
-    setPagination,
-    sorting,
-    setSorting,
-    rowSelection,
-    setRowSelection,
-    data,
-  } = useInboundTable({
-    columnFilters,
-    isServerSide,
-    inboundNumberKey: "checkNumber",
-    inboundDateKey: "checkDate",
-    totalElements,
-    useData: useInboundPutAways,
-  });
-
-  useEffect(() => {
-    const rowId =
-      Object.keys(rowSelection).length > 0
-        ? parseInt(Object.keys(rowSelection)[0])
-        : null;
-
-    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
-  }, [rowSelection, onChangeSelectedRow]);
-
   return (
     <>
       <BaseTable
-        serverSide={isServerSide}
-        data={data}
-        columns={defaultColumns}
-        columnFilters={columnFilters}
-        setColumnFilters={setColumnFilters}
-        pagination={pagination}
-        setPagination={setPagination}
-        sorting={sorting}
-        setSorting={setSorting}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
+        tableParams={{
+          ...tableParams,
+          columns: defaultColumns,
+        }}
       />
     </>
   );

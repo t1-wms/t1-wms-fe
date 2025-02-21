@@ -3,6 +3,7 @@ import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import {
   getInboundChart,
   getInboundChecksPaged,
+  getInboundPutAwaysPaged,
   getInboundSchedulesPaged,
 } from "../api";
 import { InboundFilter } from "./types";
@@ -54,56 +55,12 @@ export const useInboundChecks = (
 };
 
 export const useInboundPutAways = (
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
   filter?: InboundFilter
 ) => {
-  const queryKey = createUseInboundQueryKey(
-    "inboundPutAway",
-    isServerSide,
-    page!,
-    sort,
-    filter
-  );
-
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getInboundPutAwaysPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getInboundPutAways(size!),
-    });
-  }
-};
-
-export const useInboundPutAways = (
-  isServerSide: boolean,
-  page?: number,
-  sort?: Sort,
-  filter?: InboundFilter,
-  size?: number
-) => {
-  const queryKey = createUseInboundQueryKey(
-    "inboundPutAway",
-    isServerSide,
-    page!,
-    sort,
-    filter
-  );
-
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getInboundPutAwaysPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getInboundPutAways(size!),
-    });
-  }
+  return useQuery({
+    queryKey: createUseInboundQueryKey("inboundPutAway", page!, sort, filter),
+    queryFn: () => getInboundPutAwaysPaged(page!, sort, filter),
+  });
 };
