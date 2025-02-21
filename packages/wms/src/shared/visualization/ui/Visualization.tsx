@@ -60,8 +60,6 @@ const WarehouseVisualization = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [selectedRack, setSelectedRack] = useState<RackProps | null>(null);
   const [racks, setRacks] = useState<RackProps[]>(newRacks);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
