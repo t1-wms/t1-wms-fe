@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import {
   createInboundCheck,
+  createInboundPutAway,
   getInboundChart,
   getInboundChecksPaged,
   getInboundPutAwaysPaged,
@@ -76,5 +77,12 @@ export const useCreateInboundCheck = (queryClient: QueryClient) => {
     mutationFn: ({ inboundId, reqDto }: UseCreateInboundCheckParams) =>
       createInboundCheck(inboundId, reqDto),
     onSuccess: afterMutate(queryClient, "inboundCheck"),
+  });
+};
+
+export const useCreateInboundPutAway = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (inboundId: number) => createInboundPutAway(inboundId),
+    onSuccess: afterMutate(queryClient, "inboundPutAway"),
   });
 };

@@ -92,3 +92,11 @@ export const createInboundCheck = async (
 
   return response;
 };
+
+export const createInboundPutAway = async (inboundId: number) => {
+  const response = await noAuthAxios.post<void>(
+    `/api/inboundPutAway/${inboundId}`
+  );
+
+  return response;
+};

@@ -44,14 +44,15 @@ export interface InboundCheckResponseDto {
   supplierId: 0;
   supplierName: string;
   productList: InboundCheckProductListDto[];
+  lotList: InboundLotDto[];
 }
 
 export interface InboundPutAwayResponseDto {
   inboundId: number;
-  process: string;
+  inboundStatus: string;
   createdAt: string;
   scheduleNumber: string;
-  checkNumber: string;
+  inboundCheckNumber: string;
   putAwayNumber: string;
   putAwayDate: string;
   orderId: number;
@@ -59,7 +60,17 @@ export interface InboundPutAwayResponseDto {
   orderDate: string;
   supplierId: number;
   supplierName: string;
-  productList: ProductListDto[];
+  lotList: InboundLotDto[];
+}
+
+export interface InboundLotDto {
+  lotId: number;
+  lotNumber: string;
+  productId: number;
+  productCode: string;
+  productName: string;
+  productCount: number;
+  locationBinCode: string;
 }
 
 export interface InboundCheckDefaultValues {
@@ -67,6 +78,14 @@ export interface InboundCheckDefaultValues {
   checkDate: string;
   scheduleNumber: string;
   checkedProductList: InboundCheckProductListDto[];
+}
+
+export interface InboundPutAwayDefaultValues {
+  inboundId: number;
+  checkDate: string;
+  scheduleNumber: string;
+  checkNumber: string;
+  lotList: InboundLotDto[];
 }
 
 export interface Defective {

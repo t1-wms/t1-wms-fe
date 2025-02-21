@@ -1,5 +1,7 @@
 import {
   CreateInboundCheckModalInfo,
+  CreateInboundPutAwayModal,
+  CreateInboundPutAwayModalInfo,
   CreateOrderModalInfo,
   CreateOutboundAssignModal,
   CreateOutboundAssignModalInfo,
@@ -17,10 +19,10 @@ import {
 import { CreateInboundCheckModal } from "@/features/inbound/ui/create-inbound-check-modal";
 import { CreateOrderModal } from "@/features/order/ui/create-order-modal";
 import {
-  ModalInfoBase,
-  useModalStore,
   BasicModal,
   BasicModalInfo,
+  ModalInfoBase,
+  useModalStore,
 } from "@/shared";
 
 const isBasicModalInfo = (info: ModalInfoBase): info is BasicModalInfo => {
@@ -75,6 +77,12 @@ const isCreateInboundCheckModalInfo = (
   return info.key === "createInboundCheck";
 };
 
+const isCreateInboundPutAwayModalInfo = (
+  info: ModalInfoBase
+): info is CreateInboundPutAwayModalInfo => {
+  return info.key === "createInboundPutAway";
+};
+
 export const AppModal = () => {
   const { openedModal } = useModalStore();
 
@@ -101,6 +109,8 @@ export const AppModal = () => {
       <CreateOrderModal modalInfo={openedModal} />
     ) : isCreateInboundCheckModalInfo(openedModal) ? (
       <CreateInboundCheckModal modalInfo={openedModal} />
+    ) : isCreateInboundPutAwayModalInfo(openedModal) ? (
+      <CreateInboundPutAwayModal modalInfo={openedModal} />
     ) : (
       <></>
     )
