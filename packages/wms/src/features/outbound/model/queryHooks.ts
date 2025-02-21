@@ -6,27 +6,27 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
-  getOutboundAssignsPaged,
-  getOutboundPlansPaged,
-  getOutboundPickingsPaged,
-  getOutboundPackingsPaged,
-  getOutboundLoadingsPaged,
-  createOutboundPlan,
-  updateOutboundPlan,
-  getOutboundChart,
-  deleteOutboundPlan,
   createOutboundAssign,
-  updateOutboundAssign,
+  createOutboundLoading,
+  createOutboundPacking,
+  createOutboundPicking,
+  createOutboundPlan,
   deleteOutboundAssign,
   deleteOutboundLoading,
-  updateOutboundLoading,
-  createOutboundLoading,
   deleteOutboundPacking,
-  updateOutboundPacking,
-  createOutboundPacking,
   deleteOutboundPicking,
+  deleteOutboundPlan,
+  getOutboundAssignsPaged,
+  getOutboundChart,
+  getOutboundLoadingsPaged,
+  getOutboundPackingsPaged,
+  getOutboundPickingsPaged,
+  getOutboundPlansPaged,
+  updateOutboundAssign,
+  updateOutboundLoading,
+  updateOutboundPacking,
   updateOutboundPicking,
-  createOutboundPicking,
+  updateOutboundPlan,
 } from "../api";
 import {
   OutboundFilter,
@@ -69,7 +69,8 @@ export const useOutboundPlans = (
   return useQuery({
     queryKey: createUseOutboundQueryKey("outboundPlan", page!, sort, filter),
     queryFn: () => getOutboundPlansPaged(page!, sort, filter),
-  });
+    placeholderData: (previousData) => previousData,
+  }).isLoading;
 };
 
 export const useOutboundAssigns = (

@@ -1,32 +1,19 @@
-import { getFilterValue, Sort, useTable } from "@/shared";
-import { useMemo } from "react";
+import { getFilterValue, useTable } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useMemo } from "react";
 import { InboundFilter } from "./types";
-import { UseSuspenseQueryResult } from "@tanstack/react-query";
 
-interface UseInboundTableParams<InboundResponseDto> {
+interface UseInboundTableParams {
   columnFilters?: ColumnFiltersState;
-  isServerSide: boolean;
   inboundNumberKey: string;
   inboundDateKey: string;
-  totalElements: number;
-  useData: (
-    isServerSide: boolean,
-    page?: number,
-    sort?: Sort,
-    filter?: InboundFilter,
-    size?: number
-  ) => UseSuspenseQueryResult<InboundResponseDto>;
 }
 
-export const useInboundTable = <InboundResponseDto extends unknown>({
+export const useInboundTable = ({
   columnFilters,
-  isServerSide,
   inboundDateKey,
   inboundNumberKey,
-  totalElements,
-  useData,
-}: UseInboundTableParams<InboundResponseDto>) => {
+}: UseInboundTableParams) => {
   // 서버사이드 필터링에서만 사용
   const filter: InboundFilter | undefined = useMemo(() => {
     if (!columnFilters || columnFilters.length === 0) return undefined;
@@ -53,14 +40,6 @@ export const useInboundTable = <InboundResponseDto extends unknown>({
     sort,
   } = useTable();
 
-  const { data } = useData(
-    isServerSide,
-    pagination.pageIndex,
-    sort,
-    filter,
-    totalElements
-  );
-
   return {
     pagination,
     setPagination,
@@ -68,6 +47,7 @@ export const useInboundTable = <InboundResponseDto extends unknown>({
     setSorting,
     rowSelection,
     setRowSelection,
-    data,
+    filter,
+    sort,
   };
 };
