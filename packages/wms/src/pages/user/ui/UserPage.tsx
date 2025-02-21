@@ -1,8 +1,8 @@
-import styles from "./UserPage.module.css";
 import { UserControlPanel, UserTable, useUserTable } from "@/features";
 import { PageContentBox } from "@/shared";
-import { useCallback, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useState } from "react";
+import styles from "./UserPage.module.css";
 
 export default function UserPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
