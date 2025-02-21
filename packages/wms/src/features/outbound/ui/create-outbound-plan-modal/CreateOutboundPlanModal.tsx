@@ -1,12 +1,14 @@
 import styles from "./CreateOutboundPlanModal.module.css";
-import { BasicModal, Spinner, useModalStore } from "@/shared";
+import { BasicModal, useModalStore } from "@/shared";
 import {
   CreateOutboundPlanModalInfo,
   CreateOutboundPlanRequestDto,
   OutboundPlanResponseDto,
+  useCreateOutboundPlan,
+  useUpdateOutboundPlan,
 } from "../../model";
 import { CreateOutboundPlanForm } from "../create-outbound-plan-form";
-import { Suspense, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ProductListDto } from "@/entities";
 import { OutboundProductTable } from "@/features/product/ui";
 import { SimpleProductTable } from "@/features/product/ui/simple-product-table";
@@ -27,6 +29,7 @@ export const CreateOutboundPlanModal = ({
           ...outboundPlan,
         }
       : {
+          outboundPlanId: -1,
           process: "",
           outboundScheduleNumber: "",
           outboundScheduleDate: new Date(Date.now())
@@ -44,6 +47,8 @@ export const CreateOutboundPlanModal = ({
 
   const { closeModal } = useModalStore();
   const queryClient = useQueryClient();
+  const { mutate: createOutboundPlan } = useCreateOutboundPlan(queryClient);
+  const { mutate: updateOutboundPlan } = useUpdateOutboundPlan(queryClient);
 
   const handleSubmitValid = (
     productionPlanNumber: string,
@@ -64,19 +69,17 @@ export const CreateOutboundPlanModal = ({
       productList,
     };
 
-    console.log(data);
-
     if (outboundPlan) {
-      queryClient.invalidateQueries({
-        predicate: (q) => {
-          const isOutboundPlan = (q.queryKey[0] as string) === "outboundPlan";
-          const isNotCount =
-            q.queryKey[1] === undefined ||
-            !((q.queryKey[1] as string) === "count");
-
-          return isOutboundPlan && isNotCount;
-        },
+      // 출고예정 수정
+      updateOutboundPlan({
+        outboundPlanId: outboundPlan.outboundPlanId,
+        newOutboundPlan: data,
       });
+
+      closeModal();
+    } else {
+      // 출고예정 생성
+      createOutboundPlan({ newOutboundPlan: data });
 
       closeModal();
     }
@@ -125,11 +128,7 @@ export const CreateOutboundPlanModal = ({
         />
         <div className={styles["table-box"]}>
           <div className={`${styles.products} shadow-md`}>
-            <Suspense
-              fallback={<Spinner message="품목 리스트를 가져오는 중" />}
-            >
-              <SimpleProductTable onClickAdd={handleClickRow} />
-            </Suspense>
+            <SimpleProductTable onClickAdd={handleClickRow} />
           </div>
           <div className={`${styles["table-wrapper"]} shadow-md`}>
             <OutboundProductTable

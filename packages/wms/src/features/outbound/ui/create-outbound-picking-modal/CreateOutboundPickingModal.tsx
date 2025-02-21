@@ -4,10 +4,13 @@ import {
   CreateOutboundPickingModalInfo,
   OutboundPickingResponseDto,
   OutboundAssignResponseDto,
+  useCreateOutboundPicking,
+  useUpdateOutboundPicking,
 } from "../../model";
 import { useMemo } from "react";
 import { OutboundProductTable } from "@/features/product";
 import { CreateOutboundPickingForm } from "../create-outbound-picking-form";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateOutboundPickingModalProps {
   modalInfo: CreateOutboundPickingModalInfo;
@@ -39,10 +42,28 @@ export const CreateOutboundPickingModal = ({
   }, [outbound]);
 
   const { closeModal } = useModalStore();
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+
+  const { mutate: createOutboundPicking } =
+    useCreateOutboundPicking(queryClient);
+  const { mutate: updateOutboundPicking } =
+    useUpdateOutboundPicking(queryClient);
 
   const handleSubmitValid = (outboundPickingDate: string) => {
-    console.log(outboundPickingDate);
+    if (!isOutboundPicking(outbound)) {
+      // 출고지시 생성
+      createOutboundPicking(outbound.outboundPlanId);
+
+      closeModal();
+    } else {
+      // 출고지시 수정
+      updateOutboundPicking({
+        outboundId: outbound.outboundId,
+        outboundPickingDate,
+      });
+
+      closeModal();
+    }
   };
 
   return (

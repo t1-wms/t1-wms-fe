@@ -3,9 +3,11 @@ import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
 import {
   CreateOutboundLoadingModalInfo,
   OutboundLoadingResponseDto,
+  useDeleteOutboundLoading,
 } from "../../model";
 import { OutboundProductTable } from "@/features";
 import { useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface OutboundLoadingDrawerProps {
   data: OutboundLoadingResponseDto;
@@ -29,6 +31,14 @@ export const OutboundLoadingDrawer = ({
   } = data;
 
   const { openModal } = useModalStore();
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteOutboundLoading } =
+    useDeleteOutboundLoading(queryClient);
+
+  const handleClickDelete = useCallback(() => {
+    deleteOutboundLoading(data.outboundId);
+  }, [data, deleteOutboundLoading]);
 
   const handleClickUpdate = useCallback(() => {
     const modalInfo: CreateOutboundLoadingModalInfo = {
@@ -37,7 +47,8 @@ export const OutboundLoadingDrawer = ({
     };
 
     openModal(modalInfo);
-  }, [openModal, data]);
+    onClose();
+  }, [onClose, openModal, data]);
 
   return (
     <BaseDrawer title={`출하상차 조회`} onClose={onClose}>
@@ -106,7 +117,7 @@ export const OutboundLoadingDrawer = ({
           <MainButton size="sm" padding="sm" onClick={handleClickUpdate}>
             수정
           </MainButton>
-          <MainButton size="sm" padding="sm">
+          <MainButton size="sm" padding="sm" onClick={handleClickDelete}>
             삭제
           </MainButton>
         </div>

@@ -1,10 +1,8 @@
-import { BaseDrawer, Spinner, useModalStore } from "@/shared";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { OutboundPickingTableWrapper } from "../../outbound-picking-table";
-import {
-  CreateOutboundPackingModalInfo,
-  OutboundPickingResponseDto,
-} from "@/features";
+import { BaseDrawer, useModalStore } from "@/shared";
+import { useEffect } from "react";
+import { OutboundPickingTable } from "../../outbound-picking-table";
+import { CreateOutboundPackingModalInfo } from "@/features";
+import { useOutboundPickingTable } from "@/features/outbound/model/useOutboundPickingTable";
 
 interface OutboundPickingListDrawerProps {
   onClose: () => void;
@@ -13,36 +11,61 @@ interface OutboundPickingListDrawerProps {
 export const OutboundPickingListDrawer = ({
   onClose,
 }: OutboundPickingListDrawerProps) => {
-  const [selectedRow, setSelectedRow] =
-    useState<OutboundPickingResponseDto | null>(null);
-
   const { openModal } = useModalStore();
 
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useOutboundPickingTable();
+
   useEffect(() => {
-    if (selectedRow) {
-      const modalInfo: CreateOutboundPackingModalInfo = {
-        key: "createOutboundPacking",
-        outbound: selectedRow,
-      };
+    if (isFetched) {
+      const rowId =
+        Object.keys(rowSelection).length > 0
+          ? parseInt(Object.keys(rowSelection)[0])
+          : null;
 
-      openModal(modalInfo);
+      if (rowId || rowId === 0) {
+        const row = data!.content[rowId];
+
+        const modalInfo: CreateOutboundPackingModalInfo = {
+          key: "createOutboundPacking",
+          outbound: row,
+        };
+
+        openModal(modalInfo);
+        onClose();
+      }
     }
-  }, [selectedRow, openModal]);
-
-  const handleChangeSelectedRow = useCallback(
-    (row: OutboundPickingResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  }, [isFetched, rowSelection, data, onClose, openModal]);
 
   return (
     <BaseDrawer title="출고피킹 선택" onClose={onClose}>
-      <Suspense fallback={<Spinner message="출고피킹 개수를 가져오는 중" />}>
-        <OutboundPickingTableWrapper
-          onChangeSelectedRow={handleChangeSelectedRow}
-        />
-      </Suspense>
+      <OutboundPickingTable
+        tableParams={{
+          data: data,
+          pagination: pagination,
+          setPagination: setPagination,
+          sorting: sorting,
+          setSorting: setSorting,
+          rowSelection: rowSelection,
+          setRowSelection: setRowSelection,
+          isPending: isPending,
+          isError,
+          error,
+          refetch,
+        }}
+      />
     </BaseDrawer>
   );
 };

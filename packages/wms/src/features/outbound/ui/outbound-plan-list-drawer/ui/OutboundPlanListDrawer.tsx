@@ -1,10 +1,8 @@
-import { BaseDrawer, Spinner, useModalStore } from "@/shared";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { OutboundPlanTableWrapper } from "../../outbound-plan-table";
-import {
-  CreateOutboundAssignModalInfo,
-  OutboundPlanResponseDto,
-} from "@/features/outbound/model";
+import { BaseDrawer, useModalStore } from "@/shared";
+import { useEffect } from "react";
+import { CreateOutboundAssignModalInfo } from "@/features/outbound/model";
+import { OutboundPlanTable } from "../../outbound-plan-table";
+import { useOutboundPlanTable } from "@/features/outbound/model/useOutboundPlanTable";
 
 interface OutboundPlanListDrawerProps {
   onClose: () => void;
@@ -13,36 +11,61 @@ interface OutboundPlanListDrawerProps {
 export const OutboundPlanListDrawer = ({
   onClose,
 }: OutboundPlanListDrawerProps) => {
-  const [selectedRow, setSelectedRow] =
-    useState<OutboundPlanResponseDto | null>(null);
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useOutboundPlanTable();
 
   const { openModal } = useModalStore();
 
   useEffect(() => {
-    if (selectedRow) {
-      const modalInfo: CreateOutboundAssignModalInfo = {
-        key: "createOutboundAssign",
-        outbound: selectedRow,
-      };
+    if (isFetched) {
+      const rowId =
+        Object.keys(rowSelection).length > 0
+          ? parseInt(Object.keys(rowSelection)[0])
+          : null;
 
-      openModal(modalInfo);
+      if (rowId || rowId === 0) {
+        const row = data!.content[rowId];
+
+        const modalInfo: CreateOutboundAssignModalInfo = {
+          key: "createOutboundAssign",
+          outbound: row,
+        };
+
+        openModal(modalInfo);
+        onClose();
+      }
     }
-  }, [selectedRow, openModal]);
-
-  const handleChangeSelectedRow = useCallback(
-    (row: OutboundPlanResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  }, [isFetched, rowSelection, data, onClose, openModal]);
 
   return (
     <BaseDrawer title="출고예정 선택" onClose={onClose}>
-      <Suspense fallback={<Spinner message="출고예정 개수를 가져오는 중" />}>
-        <OutboundPlanTableWrapper
-          onChangeSelectedRow={handleChangeSelectedRow}
-        />
-      </Suspense>
+      <OutboundPlanTable
+        tableParams={{
+          data: data,
+          pagination: pagination,
+          setPagination: setPagination,
+          sorting: sorting,
+          setSorting: setSorting,
+          rowSelection: rowSelection,
+          setRowSelection: setRowSelection,
+          isPending: isPending,
+          isError,
+          error,
+          refetch,
+        }}
+      />
     </BaseDrawer>
   );
 };

@@ -1,17 +1,21 @@
-import { createBrowserRouter } from "react-router";
-import { App } from "../App";
-import { LoginPage } from "@pages/login";
-import UserPage from "@pages/user/ui/UserPage";
-import { OutBoundPlanPage } from "@/pages/outbound-plan";
-import { OutboundAssignPage } from "@/pages/outbound-assign";
-import { OutboundPickingPage } from "@/pages/outbound-picking";
-import { OutboundPackingPage } from "@/pages/outbound-packing";
-import { OutboundLoadingPage } from "@/pages/outbound-loading";
-import OrderPage from "@/pages/order";
-import ReceivedOrder from "@/pages/received-order";
-import { InboundSchedulePage } from "@/pages/inbound-schedule";
+import DashBoardPage from "@/pages/dashboard/ui/DashboardPage";
 import { InboundCheckPage } from "@/pages/inbound-check";
 import { InboundPutAwayPage } from "@/pages/inbound-put-away";
+import { InboundSchedulePage } from "@/pages/inbound-schedule";
+import OrderPage from "@/pages/order";
+import { OutboundAssignPage } from "@/pages/outbound-assign";
+import { OutboundLoadingPage } from "@/pages/outbound-loading";
+import { OutboundPackingPage } from "@/pages/outbound-packing";
+import { OutboundPickingPage } from "@/pages/outbound-picking";
+import { OutBoundPlanPage } from "@/pages/outbound-plan";
+import ProductPage from "@/pages/product";
+import ReceivedOrder from "@/pages/received-order";
+import SupplierPage from "@/pages/supplier";
+import ThresholdPage from "@/pages/threshold";
+import { LoginPage } from "@pages/login";
+import UserPage from "@pages/user/ui/UserPage";
+import { createBrowserRouter } from "react-router";
+import { App } from "../App";
 
 const router = createBrowserRouter([
   {
@@ -23,8 +27,16 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
+        path: "/dashboard",
+        element: <DashBoardPage />,
+      },
+      {
         path: "/user",
         element: <UserPage />,
+      },
+      {
+        path: "/master/supplier",
+        element: <SupplierPage />,
       },
       {
         path: "/order",
@@ -65,6 +77,14 @@ const router = createBrowserRouter([
       {
         path: "/outbound/loading",
         element: <OutboundLoadingPage />,
+      },
+      {
+        path: "/inventory/product",
+        element: <ProductPage />,
+      },
+      {
+        path: "/inventory/threshold",
+        element: <ThresholdPage />,
       },
     ],
   },

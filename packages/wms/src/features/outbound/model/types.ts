@@ -1,7 +1,16 @@
-import { ProductListDto } from "@/entities/product";
+import { ProductListDto } from "@/entities";
 import { ModalInfoBase } from "@/shared";
 
+export interface OutboundChartData {
+  outboundSchedule: number;
+  outboundAssign: number;
+  outboundPicking: number;
+  outboundPacking: number;
+  outboundLoading: number;
+}
+
 export interface OutboundPlanResponseDto {
+  outboundPlanId: number;
   process: string;
   outboundScheduleNumber: string;
   outboundScheduleDate: string;
@@ -11,6 +20,8 @@ export interface OutboundPlanResponseDto {
 }
 
 export interface OutboundAssignResponseDto {
+  outboundId: number;
+  outboundPlanId: number;
   process: string;
   outboundScheduleNumber: string;
   outboundAssignNumber: string;
@@ -21,6 +32,8 @@ export interface OutboundAssignResponseDto {
 }
 
 export interface OutboundPickingResponseDto {
+  outboundId: number;
+  outboundPlanId: number;
   process: string;
   outboundScheduleNumber: string;
   outboundAssignNumber: string;
@@ -32,6 +45,8 @@ export interface OutboundPickingResponseDto {
 }
 
 export interface OutboundPackingResponseDto {
+  outboundId: number;
+  outboundPlanId: number;
   process: string;
   outboundScheduleNumber: string;
   outboundAssignNumber: string;
@@ -44,6 +59,8 @@ export interface OutboundPackingResponseDto {
 }
 
 export interface OutboundLoadingResponseDto {
+  outboundId: number;
+  outboundPlanId: number;
   process: string;
   outboundScheduleNumber: string;
   outboundAssignNumber: string;
@@ -92,4 +109,33 @@ export interface CreateOutboundPackingModalInfo extends ModalInfoBase {
 export interface CreateOutboundLoadingModalInfo extends ModalInfoBase {
   key: "createOutboundLoading";
   outbound: OutboundPackingResponseDto | OutboundLoadingResponseDto;
+}
+
+export interface UseCreateOutboundPlanParams {
+  newOutboundPlan: CreateOutboundPlanRequestDto;
+}
+
+export interface UseUpdateOutboundPlanParams {
+  outboundPlanId: number;
+  newOutboundPlan: CreateOutboundPlanRequestDto;
+}
+
+export interface UseUpdateOutboundAssignParams {
+  outboundId: number;
+  outboundAssignDate: string;
+}
+
+export interface UseUpdateOutboundPickingParams {
+  outboundId: number;
+  outboundPickingDate: string;
+}
+
+export interface UseUpdateOutboundPackingParams {
+  outboundId: number;
+  outboundPackingDate: string;
+}
+
+export interface UseUpdateOutboundLoadingParams {
+  outboundId: number;
+  outboundLoadingDate: string;
 }

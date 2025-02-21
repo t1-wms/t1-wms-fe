@@ -1,23 +1,6 @@
-import { BaseTable } from "@/shared";
-import {
-  ColumnFiltersState,
-  createColumnHelper,
-  FilterFn,
-} from "@tanstack/react-table";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import {
-  InboundScheduleResponseDto,
-  useInboundSchedules,
-  useInboundTable,
-} from "../../model";
-
-interface InboundScheduleTableProps {
-  columnFilters?: ColumnFiltersState;
-  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
-  isServerSide: boolean;
-  onChangeSelectedRow: (rowId: InboundScheduleResponseDto | null) => void;
-  totalElements: number;
-}
+import { BaseTable, PageResponse, TableParams } from "@/shared";
+import { createColumnHelper, FilterFn } from "@tanstack/react-table";
+import { InboundScheduleResponseDto } from "../../model";
 
 const columnHelper = createColumnHelper<InboundScheduleResponseDto>();
 
@@ -62,53 +45,26 @@ const defaultColumns = [
   }),
 ];
 
+interface InboundScheduleTableProps {
+  tableParams: Omit<
+    TableParams<
+      InboundScheduleResponseDto,
+      PageResponse<InboundScheduleResponseDto>
+    >,
+    "columns"
+  >;
+}
+
 export const InboundScheduleTable = ({
-  columnFilters,
-  setColumnFilters,
-  isServerSide,
-  onChangeSelectedRow,
-  totalElements,
+  tableParams,
 }: InboundScheduleTableProps) => {
-  const {
-    pagination,
-    setPagination,
-    sorting,
-    setSorting,
-    rowSelection,
-    setRowSelection,
-    data,
-  } = useInboundTable({
-    columnFilters,
-    isServerSide,
-    inboundNumberKey: "scheduleNumber",
-    inboundDateKey: "scheduleDate",
-    totalElements,
-    useData: useInboundSchedules,
-  });
-
-  useEffect(() => {
-    const rowId =
-      Object.keys(rowSelection).length > 0
-        ? parseInt(Object.keys(rowSelection)[0])
-        : null;
-
-    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
-  }, [rowSelection, onChangeSelectedRow]);
-
   return (
     <>
       <BaseTable
-        serverSide={isServerSide}
-        data={data}
-        columns={defaultColumns}
-        columnFilters={columnFilters}
-        setColumnFilters={setColumnFilters}
-        pagination={pagination}
-        setPagination={setPagination}
-        sorting={sorting}
-        setSorting={setSorting}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
+        tableParams={{
+          ...tableParams,
+          columns: defaultColumns,
+        }}
       />
     </>
   );

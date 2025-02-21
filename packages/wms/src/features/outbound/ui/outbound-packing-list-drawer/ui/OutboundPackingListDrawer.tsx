@@ -1,10 +1,8 @@
-import { BaseDrawer, Spinner, useModalStore } from "@/shared";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { OutboundPackingTableWrapper } from "../../outbound-packing-table";
-import {
-  CreateOutboundLoadingModalInfo,
-  OutboundPackingResponseDto,
-} from "@/features";
+import { BaseDrawer, useModalStore } from "@/shared";
+import { useEffect } from "react";
+import { OutboundPackingTable } from "../../outbound-packing-table";
+import { CreateOutboundLoadingModalInfo } from "@/features";
+import { useOutboundPackingTable } from "@/features/outbound/model/useOutboundPackingTable";
 
 interface OutboundPackingListDrawerProps {
   onClose: () => void;
@@ -13,36 +11,61 @@ interface OutboundPackingListDrawerProps {
 export const OutboundPackingListDrawer = ({
   onClose,
 }: OutboundPackingListDrawerProps) => {
-  const [selectedRow, setSelectedRow] =
-    useState<OutboundPackingResponseDto | null>(null);
-
   const { openModal } = useModalStore();
 
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useOutboundPackingTable();
+
   useEffect(() => {
-    if (selectedRow) {
-      const modalInfo: CreateOutboundLoadingModalInfo = {
-        key: "createOutboundLoading",
-        outbound: selectedRow,
-      };
+    if (isFetched) {
+      const rowId =
+        Object.keys(rowSelection).length > 0
+          ? parseInt(Object.keys(rowSelection)[0])
+          : null;
 
-      openModal(modalInfo);
+      if (rowId || rowId === 0) {
+        const row = data!.content[rowId];
+
+        const modalInfo: CreateOutboundLoadingModalInfo = {
+          key: "createOutboundLoading",
+          outbound: row,
+        };
+
+        openModal(modalInfo);
+        onClose();
+      }
     }
-  }, [selectedRow, openModal]);
-
-  const handleChangeSelectedRow = useCallback(
-    (row: OutboundPackingResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  }, [isFetched, rowSelection, data, onClose, openModal]);
 
   return (
     <BaseDrawer title="출고패킹 선택" onClose={onClose}>
-      <Suspense fallback={<Spinner message="출고패킹 개수를 가져오는 중" />}>
-        <OutboundPackingTableWrapper
-          onChangeSelectedRow={handleChangeSelectedRow}
-        />
-      </Suspense>
+      <OutboundPackingTable
+        tableParams={{
+          data: data,
+          pagination: pagination,
+          setPagination: setPagination,
+          sorting: sorting,
+          setSorting: setSorting,
+          rowSelection: rowSelection,
+          setRowSelection: setRowSelection,
+          isPending: isPending,
+          isError,
+          error,
+          refetch,
+        }}
+      />
     </BaseDrawer>
   );
 };

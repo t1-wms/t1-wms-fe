@@ -1,18 +1,16 @@
-import { PageContentBox, Spinner } from "@/shared";
-import styles from "./InboundSchedulePage.module.css";
 import {
   InboundControlPanel,
   InboundScheduleDrawer,
-  InboundScheduleResponseDto,
-  InboundScheduleTableWrapper,
+  InboundScheduleTable,
+  useInboundScheduleTable,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./InboundSchedulePage.module.css";
 
 export const InboundSchedulePage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [selectedRow, setSelectedRow] =
-    useState<InboundScheduleResponseDto | null>(null);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
@@ -24,12 +22,29 @@ export const InboundSchedulePage = () => {
     [setColumnFilters]
   );
 
-  const handleChangeSelectedRow = useCallback(
-    (row: InboundScheduleResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useInboundScheduleTable(columnFilters);
+
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
+
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -41,18 +56,26 @@ export const InboundSchedulePage = () => {
         />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="입하예정 품목을 세는 중" />}>
-          <InboundScheduleTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <InboundScheduleTable
+          tableParams={{
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            data,
+            isPending,
+            isError,
+            error,
+            refetch,
+          }}
+        />
       </PageContentBox>
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <InboundScheduleDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>

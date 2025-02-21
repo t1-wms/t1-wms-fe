@@ -1,20 +1,18 @@
-import { PageContentBox, Spinner } from "@/shared";
-import styles from "./InboundCheckPage.module.css";
 import {
-  InboundControlPanel,
   InboundCheckDrawer,
-  InboundCheckResponseDto,
-  InboundCheckTableWrapper,
+  InboundCheckTable,
+  InboundControlPanel,
   InboundScheduleListDrawer,
+  useInboundCheckTable,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./InboundCheckPage.module.css";
 
 export const InboundCheckPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [selectedRow, setSelectedRow] =
-    useState<InboundCheckResponseDto | null>(null);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
@@ -30,12 +28,29 @@ export const InboundCheckPage = () => {
     setDrawerOpen(true);
   }, [setDrawerOpen]);
 
-  const handleChangeSelectedRow = useCallback(
-    (row: InboundCheckResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useInboundCheckTable(columnFilters);
+
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
+
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -47,21 +62,29 @@ export const InboundCheckPage = () => {
         />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="입하검사 품목을 세는 중" />}>
-          <InboundCheckTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <InboundCheckTable
+          tableParams={{
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            data,
+            isPending,
+            isError,
+            error,
+            refetch,
+          }}
+        />
       </PageContentBox>
       {isDrawerOpen && (
         <InboundScheduleListDrawer onClose={() => setDrawerOpen(false)} />
       )}
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <InboundCheckDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>

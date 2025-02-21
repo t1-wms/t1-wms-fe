@@ -30,16 +30,21 @@ export const OutboundProductTable = ({
   return (
     <>
       <BaseTable
-        serverSide={false}
-        data={pagedData}
-        columns={defaultColumns}
-        pagination={pagination}
-        setPagination={setPagination}
-        sorting={sorting}
-        setSorting={setSorting}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
+        tableParams={{
+          data: pagedData,
+          columns: defaultColumns,
+          pagination: pagination,
+          setPagination: setPagination,
+          sorting: sorting,
+          setSorting: setSorting,
+          rowSelection: rowSelection,
+          setRowSelection: setRowSelection,
+          isPending: false,
+          isError: false,
+          error: null,
+        }}
         hasMinHeight={hasMinHeight}
+        isClientSide
       />
     </>
   );

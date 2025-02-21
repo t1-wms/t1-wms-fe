@@ -1,10 +1,10 @@
-import { BaseDrawer, Spinner, useModalStore } from "@/shared";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { InboundScheduleTableWrapper } from "../../inbound-schedule-table";
 import {
   CreateInboundCheckModalInfo,
-  InboundScheduleResponseDto,
+  InboundScheduleTable,
+  useInboundScheduleTable,
 } from "@/features";
+import { BaseDrawer, useModalStore } from "@/shared";
+import { useEffect } from "react";
 
 interface InboundScheduleListDrawerProps {
   onClose: () => void;
@@ -13,36 +13,61 @@ interface InboundScheduleListDrawerProps {
 export const InboundScheduleListDrawer = ({
   onClose,
 }: InboundScheduleListDrawerProps) => {
-  const [selectedRow, setSelectedRow] =
-    useState<InboundScheduleResponseDto | null>(null);
-
   const { openModal } = useModalStore();
 
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useInboundScheduleTable();
+
   useEffect(() => {
-    if (selectedRow) {
-      const modalInfo: CreateInboundCheckModalInfo = {
-        key: "createInboundCheck",
-        inboundSchedule: selectedRow,
-      };
+    if (isFetched) {
+      const rowId =
+        Object.keys(rowSelection).length > 0
+          ? parseInt(Object.keys(rowSelection)[0])
+          : null;
 
-      openModal(modalInfo);
+      if (rowId || rowId === 0) {
+        const row = data!.content[rowId];
+
+        const modalInfo: CreateInboundCheckModalInfo = {
+          key: "createInboundCheck",
+          inboundSchedule: row,
+        };
+
+        openModal(modalInfo);
+        onClose();
+      }
     }
-  }, [selectedRow, openModal]);
-
-  const handleChangeSelectedRow = useCallback(
-    (row: InboundScheduleResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  }, [isFetched, rowSelection, data, onClose, openModal]);
 
   return (
     <BaseDrawer title="입하예정 선택" onClose={onClose}>
-      <Suspense fallback={<Spinner message="입하예정 개수를 가져오는 중" />}>
-        <InboundScheduleTableWrapper
-          onChangeSelectedRow={handleChangeSelectedRow}
-        />
-      </Suspense>
+      <InboundScheduleTable
+        tableParams={{
+          pagination,
+          setPagination,
+          sorting,
+          setSorting,
+          rowSelection,
+          setRowSelection,
+          data,
+          isPending,
+          isError,
+          error,
+          refetch,
+        }}
+      />
     </BaseDrawer>
   );
 };
