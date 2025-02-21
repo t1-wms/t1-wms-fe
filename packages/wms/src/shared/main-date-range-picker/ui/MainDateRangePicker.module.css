@@ -1,0 +1,50 @@
+.container {
+  width: auto;
+
+  & > label > div {
+    padding-left: 8px;
+    margin-bottom: 4px;
+  }
+
+  input {
+    width: 100%;
+    padding: 4px;
+    border-radius: 4px;
+    border: 1px solid var(--color-gray-300);
+    color: var(--color-gray-900);
+    background-color: var(--color-gray-50);
+
+    &::placeholder {
+      color: var(--color-gray-500);
+    }
+
+    &:focus {
+      outline: 2px solid var(--color-primary);
+    }
+
+    &.error {
+      outline: 2px solid var(--color-error) !important;
+    }
+  }
+}
+
+.inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  span {
+    padding-bottom: 18px;
+  }
+}
+
+.full-width {
+  width: 100%;
+  flex-grow: 1;
+}
+
+.hint {
+  color: var(--color-error);
+  height: 14px;
+  margin-top: 4px;
+}

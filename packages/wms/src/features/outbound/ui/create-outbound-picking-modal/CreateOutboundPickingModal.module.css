@@ -1,0 +1,38 @@
+.container {
+  width: auto;
+  & > p {
+    padding-left: 8px;
+    margin-top: 16px;
+    margin-bottom: 4px;
+  }
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.table-box {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  border-radius: 4px;
+  background-color: var(--color-gray-200);
+  padding: 16px;
+
+  & > div {
+    background-color: var(--color-gray-50);
+    border-radius: 4px;
+    padding: 16px;
+  }
+}
+
+.products {
+  flex: auto 0 0;
+}
+
+.table-wrapper {
+  flex: 1;
+}
