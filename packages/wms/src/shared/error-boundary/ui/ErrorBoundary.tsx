@@ -1,7 +1,8 @@
 import { Component, ReactNode } from "react";
 
 interface ErrorBoundaryProps {
-  fallback: ReactNode;
+  fallback?: ReactNode;
+  fallbackRender?: (onReset: () => void) => ReactNode;
   children: ReactNode;
 }
 
@@ -22,13 +23,17 @@ export class ErrorBoundary extends Component<
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error): void {
-    console.log(error);
-  }
+  // componentDidCatch(error: Error): void {}
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback;
+      if (typeof this.props.fallbackRender === "function") {
+        return this.props.fallbackRender(() => {
+          this.setState({ hasError: false });
+        });
+      } else {
+        return undefined;
+      }
     }
 
     return this.props.children;
