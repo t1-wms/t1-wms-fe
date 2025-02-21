@@ -18,4 +18,3 @@ export * from "./pie-chart";
 export * from "./skeleton";
 export * from "./spinner";
 export * from "./ui";
-export * from "./visualization";
