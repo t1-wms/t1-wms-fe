@@ -1,0 +1,12 @@
+.input-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.button-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

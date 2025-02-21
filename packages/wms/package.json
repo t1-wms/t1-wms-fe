@@ -8,5 +8,11 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite-plugin-svgr": "^4.3.0"
+  },
+  "dependencies": {
+    "@tanstack/react-table": "^8.20.6"
   }
 }
