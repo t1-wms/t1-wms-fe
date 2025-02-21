@@ -15,8 +15,8 @@ export const InboundSchedulePage = () => {
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
       setColumnFilters([
-        { id: "inboundScheduleDate", value: `${startDate},${endDate}` },
-        { id: "inboundScheduleNumber", value: number },
+        { id: "scheduleDate", value: `${startDate},${endDate}` },
+        { id: "scheduleNumber", value: number },
       ]);
     },
     [setColumnFilters]

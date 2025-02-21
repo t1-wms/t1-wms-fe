@@ -1,4 +1,4 @@
-import { formMessages } from "@/shared";
+import { formMessages, Gender } from "@/shared";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 interface CreateUserFormInputs {
@@ -6,20 +6,32 @@ interface CreateUserFormInputs {
   staffNumber: string;
   phone: string;
   birthDate: string;
-  gender: "M" | "F";
-  userRole: string;
-  supplierId: string;
+  gender: Gender;
 }
 
-export const useCreateUserForm = () => {
+export const useCreateUserForm = (
+  onValid: (
+    name: string,
+    staffNumber: string,
+    phone: string,
+    birthDate: string,
+    gender: Gender
+  ) => void
+) => {
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<CreateUserFormInputs>();
 
-  const onSubmit: SubmitHandler<CreateUserFormInputs> = (data) => {
-    console.log(data);
+  const handleValid: SubmitHandler<CreateUserFormInputs> = (data) => {
+    onValid(
+      data.name,
+      data.staffNumber,
+      data.phone,
+      data.birthDate,
+      data.gender
+    );
   };
 
   return {
@@ -53,9 +65,7 @@ export const useCreateUserForm = () => {
         error: errors.birthDate,
       },
       gender: { ...register("gender"), error: errors.gender },
-      userRole: { ...register("userRole"), error: errors.userRole },
-      supplierId: { ...register("supplierId"), error: errors.supplierId },
     },
-    onSubmit: handleSubmit(onSubmit),
+    onSubmit: handleSubmit(handleValid),
   };
 };

@@ -7,6 +7,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
+  getBins,
   getProductThresholdChart,
   getProductThresholdsPaged,
   updateThreshold,
@@ -41,6 +42,13 @@ export const useProductThresholds = (
   return useQuery({
     queryKey: createUseProductThresholdQueryKey(page!, sort, filter),
     queryFn: () => getProductThresholdsPaged(page!, sort, filter),
+  });
+};
+
+export const useBins = () => {
+  return useSuspenseQuery({
+    queryKey: ["bin"],
+    queryFn: () => getBins(),
   });
 };
 

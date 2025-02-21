@@ -7,9 +7,17 @@ const authAxios = axios.create({
 });
 
 authAxios.interceptors.request.use((config) => {
-  const at = localStorage.getItem("at") || "";
+  const localStorageValue = localStorage.getItem("loginUser");
 
-  config.headers.setAuthorization(`Bearer ${at}`);
+  if (localStorageValue) {
+    const localStorage = JSON.parse(localStorageValue);
+
+    const token = localStorage?.state?.user?.at;
+
+    if (token) {
+      config.headers.setAuthorization(`Bearer ${token}`);
+    }
+  }
 
   return config;
 });

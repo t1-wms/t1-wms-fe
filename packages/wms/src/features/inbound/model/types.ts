@@ -44,6 +44,33 @@ export interface InboundCheckResponseDto {
   supplierId: 0;
   supplierName: string;
   productList: InboundCheckProductListDto[];
+  lotList: InboundLotDto[];
+}
+
+export interface InboundPutAwayResponseDto {
+  inboundId: number;
+  inboundStatus: string;
+  createdAt: string;
+  scheduleNumber: string;
+  inboundCheckNumber: string;
+  putAwayNumber: string;
+  putAwayDate: string;
+  orderId: number;
+  orderNumber: string;
+  orderDate: string;
+  supplierId: number;
+  supplierName: string;
+  lotList: InboundLotDto[];
+}
+
+export interface InboundLotDto {
+  lotId: number;
+  lotNumber: string;
+  productId: number;
+  productCode: string;
+  productName: string;
+  productCount: number;
+  locationBinCode: string;
 }
 
 export interface InboundCheckDefaultValues {
@@ -53,22 +80,37 @@ export interface InboundCheckDefaultValues {
   checkedProductList: InboundCheckProductListDto[];
 }
 
+export interface InboundPutAwayDefaultValues {
+  inboundId: number;
+  checkDate: string;
+  scheduleNumber: string;
+  checkNumber: string;
+  lotList: InboundLotDto[];
+}
+
 export interface Defective {
   productId: number;
   defectiveCount: number;
 }
 
 export interface CreateInboundCheckRequestDto {
-  inboundId: number;
-  checkDate: string;
-  scheduleNumber: string;
   checkedProductList: Defective[];
+}
+
+export interface UseCreateInboundCheckParams {
+  inboundId: number;
+  reqDto: CreateInboundCheckRequestDto;
 }
 
 export interface CreateInboundCheckModalInfo extends ModalInfoBase {
   key: "createInboundCheck";
   inboundSchedule?: InboundScheduleResponseDto;
   inboundCheck?: InboundCheckResponseDto;
+}
+
+export interface CreateInboundPutAwayModalInfo extends ModalInfoBase {
+  key: "createInboundPutAway";
+  inboundCheck: InboundCheckResponseDto;
 }
 
 export interface InboundFilter {

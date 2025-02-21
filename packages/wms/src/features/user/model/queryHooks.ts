@@ -1,7 +1,33 @@
+import {
+  CurrentUser,
+  LoginDto,
+  RegisterUserRequestDto,
+  UserFilter,
+  UserListDto,
+} from "@/features";
 import { PageResponse, Sort } from "@shared/model";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import { getRoles, getUsersPaged, updateUserActive } from "../api/UserApi";
-import { UserFilter, UserListDto } from "@/features";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
+import {
+  getRoles,
+  getUserCount,
+  getUsersPaged,
+  login,
+  registerUser,
+  updateUserActive,
+} from "../api/UserApi";
+
+export const useUserCount = () => {
+  return useSuspenseQuery({
+    queryKey: ["user", "count"],
+    queryFn: () => getUserCount(),
+  });
+};
 
 export const createUseUsersQueryKey = (
   page?: number,
@@ -55,5 +81,25 @@ export const useRoles = () => {
   return useQuery({
     queryKey: ["role"],
     queryFn: () => getRoles(),
+  });
+};
+
+export const useLogin = (
+  onSuccess: (data: AxiosResponse<CurrentUser>) => void
+) => {
+  return useMutation({
+    mutationFn: (loginDto: LoginDto) => login(loginDto),
+    onSuccess,
+  });
+};
+
+export const useRegisterUser = (queryClient: QueryClient) => {
+  return useMutation({
+    mutationFn: (newUser: RegisterUserRequestDto) => registerUser(newUser),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
+    },
   });
 };

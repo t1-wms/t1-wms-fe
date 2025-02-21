@@ -22,6 +22,10 @@ const defaultColumns = [
     header: "재고량",
     cell: (row) => row.getValue(),
   }),
+  columnHelper.accessor("availableQuantity", {
+    header: "가용재고량",
+    cell: (row) => row.getValue(),
+  }),
   columnHelper.accessor("locationBinCode", {
     header: "BIN",
     cell: (row) => row.getValue(),
