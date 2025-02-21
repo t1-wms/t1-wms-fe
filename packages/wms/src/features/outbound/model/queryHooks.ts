@@ -70,7 +70,7 @@ export const useOutboundPlans = (
     queryKey: createUseOutboundQueryKey("outboundPlan", page!, sort, filter),
     queryFn: () => getOutboundPlansPaged(page!, sort, filter),
     placeholderData: (previousData) => previousData,
-  }).isLoading;
+  });
 };
 
 export const useOutboundAssigns = (
