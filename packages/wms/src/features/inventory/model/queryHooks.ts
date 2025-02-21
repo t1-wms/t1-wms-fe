@@ -1,17 +1,16 @@
+import { ProductFilter } from "@/features/product";
+import { afterMutate, Sort } from "@/shared";
 import {
   QueryClient,
   useMutation,
+  useQuery,
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
   getProductThresholdChart,
-  getProductThresholdCount,
-  getProductThresholds,
   getProductThresholdsPaged,
   updateThreshold,
 } from "../api/inventoryApis";
-import { afterMutate, Sort } from "@/shared";
-import { ProductFilter } from "@/features/product";
 import { UpdateThresholdRequestDto } from "./types";
 
 export const useProductThresholdChart = () => {
@@ -22,53 +21,27 @@ export const useProductThresholdChart = () => {
 };
 
 export const createUseProductThresholdQueryKey = (
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
   filter?: ProductFilter
 ) => {
-  return isServerSide
-    ? [
-        "productThreshold",
-        page!,
-        sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
-        filter ? `${filter.productCode}` : "not-filtering",
-      ]
-    : ["productThreshold"];
-};
-
-export const useProductThresholdCount = () => {
-  return useSuspenseQuery({
-    queryKey: ["productThreshold", "count"],
-    queryFn: () => getProductThresholdCount(),
-  });
+  return [
+    "productThreshold",
+    page!,
+    sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
+    filter ? `p=${filter.productCode}` : "not-filtering",
+  ];
 };
 
 export const useProductThresholds = (
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: ProductFilter,
-  size?: number
+  filter?: ProductFilter
 ) => {
-  const queryKey = createUseProductThresholdQueryKey(
-    isServerSide,
-    page!,
-    sort,
-    filter
-  );
-
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getProductThresholdsPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getProductThresholds(size!),
-    });
-  }
+  return useQuery({
+    queryKey: createUseProductThresholdQueryKey(page!, sort, filter),
+    queryFn: () => getProductThresholdsPaged(page!, sort, filter),
+  });
 };
 
 export const useUpdateThreshold = (queryClient: QueryClient) => {

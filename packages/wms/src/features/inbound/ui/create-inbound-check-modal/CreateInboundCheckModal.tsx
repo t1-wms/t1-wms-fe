@@ -1,5 +1,9 @@
-import styles from "./CreateInboundCheckModal.module.css";
+import {
+  InboundCheckProductListDto,
+  InboundCheckProductTable,
+} from "@/features";
 import { BasicModal, useModalStore } from "@/shared";
+import { useCallback, useMemo, useState } from "react";
 import {
   CreateInboundCheckModalInfo,
   CreateInboundCheckRequestDto,
@@ -7,11 +11,7 @@ import {
   InboundCheckDefaultValues,
 } from "../../model";
 import { CreateInboundCheckForm } from "../create-inbound-check-form";
-import { useCallback, useMemo, useState } from "react";
-import {
-  InboundCheckProductListDto,
-  InboundCheckProductTable,
-} from "@/features";
+import styles from "./CreateInboundCheckModal.module.css";
 
 interface CreateInboundCheckModalProps {
   modalInfo: CreateInboundCheckModalInfo;

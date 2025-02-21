@@ -1,24 +1,21 @@
-import { PageContentBox, Spinner } from "@/shared";
+import { PageContentBox } from "@/shared";
 import styles from "./OutboundPackingPage.module.css";
 import {
   OutboundPackingDrawer,
-  OutboundPackingResponseDto,
-  OutboundPackingTableWrapper,
   OutboundControlPanel,
   OutboundPickingListDrawer,
+  OutboundPackingTable,
+  useOutboundPackingTable,
 } from "@/features";
-import { Suspense, useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
 export const OutboundPackingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [selectedRow, setSelectedRow] =
-    useState<OutboundPackingResponseDto | null>(null);
 
   const handleSearch = useCallback(
     (number: string, startDate: string, endDate: string) => {
-      console.log("asdf");
       setColumnFilters([
         { id: "outboundPackingDate", value: `${startDate},${endDate}` },
         { id: "outboundPackingNumber", value: number },
@@ -31,12 +28,29 @@ export const OutboundPackingPage = () => {
     setDrawerOpen(true);
   }, [setDrawerOpen]);
 
-  const handleChangeSelectedRow = useCallback(
-    (row: OutboundPackingResponseDto | null) => {
-      setSelectedRow(row);
-    },
-    [setSelectedRow]
-  );
+  const {
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    rowSelection,
+    setRowSelection,
+    data,
+    isFetched,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useOutboundPackingTable(columnFilters);
+
+  const selectedRow = useMemo(() => {
+    const rowId =
+      Object.keys(rowSelection).length > 0
+        ? parseInt(Object.keys(rowSelection)[0])
+        : null;
+
+    return rowId || rowId === 0 ? data!.content[rowId] : null;
+  }, [rowSelection, data]);
 
   return (
     <div className={styles.container}>
@@ -48,21 +62,31 @@ export const OutboundPackingPage = () => {
         />
       </PageContentBox>
       <PageContentBox>
-        <Suspense fallback={<Spinner message="출고패킹 품목을 세는 중" />}>
-          <OutboundPackingTableWrapper
-            columnFilters={columnFilters}
-            setColumnFilters={setColumnFilters}
-            onChangeSelectedRow={handleChangeSelectedRow}
-          />
-        </Suspense>
+        <OutboundPackingTable
+          tableParams={{
+            data,
+            columnFilters,
+            setColumnFilters,
+            pagination,
+            setPagination,
+            sorting,
+            setSorting,
+            rowSelection,
+            setRowSelection,
+            isPending,
+            isError,
+            error,
+            refetch,
+          }}
+        />
       </PageContentBox>
       {isDrawerOpen && (
         <OutboundPickingListDrawer onClose={() => setDrawerOpen(false)} />
       )}
-      {selectedRow && (
+      {isFetched && selectedRow && (
         <OutboundPackingDrawer
           data={selectedRow}
-          onClose={() => setSelectedRow(null)}
+          onClose={() => setRowSelection({})}
         />
       )}
     </div>

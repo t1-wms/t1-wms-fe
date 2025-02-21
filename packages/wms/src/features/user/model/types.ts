@@ -1,4 +1,11 @@
-import { Gender, ModalInfoBase, UserRole } from "@/shared";
+import {
+  Gender,
+  ModalInfoBase,
+  PageResponse,
+  Sort,
+  TableParams,
+  UserRole,
+} from "@/shared";
 
 export interface CurrentUser {
   at: string;
@@ -56,4 +63,10 @@ export interface UpdateActiveResDto {
 
 export interface CreateUserModalInfo extends ModalInfoBase {
   key: "createUser";
+}
+
+export interface UserTableParams
+  extends TableParams<UserListDto, PageResponse<UserListDto>> {
+  sort?: Sort;
+  filter?: UserFilter;
 }

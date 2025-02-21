@@ -2,40 +2,31 @@ import { afterMutate, Sort } from "@/shared";
 import {
   QueryClient,
   useMutation,
+  useQuery,
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
-  getOutboundAssignCount,
-  getOutboundAssigns,
-  getOutboundAssignsPaged,
-  getOutboundPlanCount,
-  getOutboundPlans,
-  getOutboundPlansPaged,
-  getOutboundPickingCount,
-  getOutboundPickings,
-  getOutboundPickingsPaged,
-  getOutboundPackingCount,
-  getOutboundPackingsPaged,
-  getOutboundPackings,
-  getOutboundLoadingCount,
-  getOutboundLoadingsPaged,
-  getOutboundLoadings,
-  createOutboundPlan,
-  updateOutboundPlan,
-  getOutboundChart,
-  deleteOutboundPlan,
   createOutboundAssign,
-  updateOutboundAssign,
+  createOutboundLoading,
+  createOutboundPacking,
+  createOutboundPicking,
+  createOutboundPlan,
   deleteOutboundAssign,
   deleteOutboundLoading,
-  updateOutboundLoading,
-  createOutboundLoading,
   deleteOutboundPacking,
-  updateOutboundPacking,
-  createOutboundPacking,
   deleteOutboundPicking,
+  deleteOutboundPlan,
+  getOutboundAssignsPaged,
+  getOutboundChart,
+  getOutboundLoadingsPaged,
+  getOutboundPackingsPaged,
+  getOutboundPickingsPaged,
+  getOutboundPlansPaged,
+  updateOutboundAssign,
+  updateOutboundLoading,
+  updateOutboundPacking,
   updateOutboundPicking,
-  createOutboundPicking,
+  updateOutboundPlan,
 } from "../api";
 import {
   OutboundFilter,
@@ -54,218 +45,76 @@ export const useOutboundChart = () => {
   });
 };
 
-export const useOutboundPlanCount = () => {
-  return useSuspenseQuery({
-    queryKey: ["outboundPlan", "count"],
-    queryFn: () => getOutboundPlanCount(),
-  });
-};
-
 export const createUseOutboundQueryKey = (
   key: string,
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
   filter?: OutboundFilter
 ) => {
-  return isServerSide
-    ? [
-        key,
-        page!,
-        sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
-        filter
-          ? `${filter.number}/${filter.startDate}/${filter.endDate}`
-          : "not-filtering",
-      ]
-    : [key];
+  return [
+    key,
+    page!,
+    sort ? `${sort.sortField}-${sort.sortOrder}` : "not-sorting",
+    filter
+      ? `n=${filter.number}/s=${filter.startDate}/e=${filter.endDate}`
+      : "not-filtering",
+  ];
 };
 
 export const useOutboundPlans = (
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter,
-  size?: number
+  filter?: OutboundFilter
 ) => {
-  console.log("useOutboundPlans");
-  console.log(size);
-
-  const queryKey = createUseOutboundQueryKey(
-    "outboundPlan",
-    isServerSide,
-    page!,
-    sort,
-    filter
-  );
-
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getOutboundPlansPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey,
-      queryFn: () => getOutboundPlans(size!),
-    });
-  }
-};
-
-export const useOutboundAssignCount = () => {
-  return useSuspenseQuery({
-    queryKey: ["outboundAssign", "count"],
-    queryFn: () => getOutboundAssignCount(),
+  return useQuery({
+    queryKey: createUseOutboundQueryKey("outboundPlan", page!, sort, filter),
+    queryFn: () => getOutboundPlansPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 
 export const useOutboundAssigns = (
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter,
-  size?: number
+  filter?: OutboundFilter
 ) => {
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundAssign",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
-      queryFn: () => getOutboundAssignsPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundAssign",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
-      queryFn: () => getOutboundAssigns(size!),
-    });
-  }
-};
-
-export const useOutboundPickingCount = () => {
-  return useSuspenseQuery({
-    queryKey: ["outboundPicking", "count"],
-    queryFn: () => getOutboundPickingCount(),
+  return useQuery({
+    queryKey: createUseOutboundQueryKey("outboundAssign", page!, sort, filter),
+    queryFn: () => getOutboundAssignsPaged(page!, sort, filter),
   });
 };
 
 export const useOutboundPickings = (
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter,
-  size?: number
+  filter?: OutboundFilter
 ) => {
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundPicking",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
-      queryFn: () => getOutboundPickingsPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundPicking",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
-      queryFn: () => getOutboundPickings(size!),
-    });
-  }
-};
-
-export const useOutboundPackingCount = () => {
-  return useSuspenseQuery({
-    queryKey: ["outboundPacking", "count"],
-    queryFn: () => getOutboundPackingCount(),
+  return useQuery({
+    queryKey: createUseOutboundQueryKey("outboundPicking", page!, sort, filter),
+    queryFn: () => getOutboundPickingsPaged(page!, sort, filter),
   });
 };
 
 export const useOutboundPackings = (
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter,
-  size?: number
+  filter?: OutboundFilter
 ) => {
-  console.log(filter);
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundPacking",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
-      queryFn: () => getOutboundPackingsPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundPacking",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
-      queryFn: () => getOutboundPackings(size!),
-    });
-  }
-};
-
-export const useOutboundLoadingCount = () => {
-  return useSuspenseQuery({
-    queryKey: ["outboundLoading", "count"],
-    queryFn: () => getOutboundLoadingCount(),
+  return useQuery({
+    queryKey: createUseOutboundQueryKey("outboundPacking", page!, sort, filter),
+    queryFn: () => getOutboundPackingsPaged(page!, sort, filter),
   });
 };
 
 export const useOutboundLoadings = (
-  isServerSide: boolean,
   page?: number,
   sort?: Sort,
-  filter?: OutboundFilter,
-  size?: number
+  filter?: OutboundFilter
 ) => {
-  if (isServerSide) {
-    return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundLoading",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
-      queryFn: () => getOutboundLoadingsPaged(page!, sort, filter),
-    });
-  } else {
-    return useSuspenseQuery({
-      queryKey: createUseOutboundQueryKey(
-        "outboundLoading",
-        isServerSide,
-        page!,
-        sort,
-        filter
-      ),
-      queryFn: () => getOutboundLoadings(size!),
-    });
-  }
+  return useQuery({
+    queryKey: createUseOutboundQueryKey("outboundLoading", page!, sort, filter),
+    queryFn: () => getOutboundLoadingsPaged(page!, sort, filter),
+  });
 };
 
 export const useCreateOutboundPlan = (queryClient: QueryClient) => {

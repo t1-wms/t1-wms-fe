@@ -1,8 +1,30 @@
-# Dockerfile
+# 빌드 스테이지
+FROM node:20 AS build
+
+RUN apt-get update && apt-get install -y \
+    g++ \
+    build-essential
+
+WORKDIR /app
+
+# 루트 package.json만 복사 및 설치
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
+RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
+
+# WMS 폴더만 복사
+COPY packages/wms ./packages/wms
+
+# WMS 빌드
+RUN npm run build:wms
+
+# 프로덕션 스테이지
 FROM nginx:alpine
 
-# 빌드된 React 프로젝트 파일들을 Nginx의 기본 서비스 디렉토리로 복사
-COPY ./dist /usr/share/nginx/html
+RUN apk update && apk add --no-cache ca-certificates curl
+RUN rm -rf /usr/share/nginx/html/*
 
-# Nginx 실행 (기본 명령어 사용)
+COPY --from=build /app/packages/wms/dist /home/ec2-user/frontend/wms/dist
+
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,15 +1,6 @@
-import { BaseTable } from "@/shared";
-import { ColumnFiltersState, createColumnHelper } from "@tanstack/react-table";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { ProductResponseDto, useProducts, useProductTable } from "../../model";
-
-interface ProductTableProps {
-  columnFilters?: ColumnFiltersState;
-  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
-  isServerSide: boolean;
-  onChangeSelectedRow?: (rowId: ProductResponseDto | null) => void;
-  totalElements: number;
-}
+import { BaseTable, PageResponse, TableParams } from "@/shared";
+import { createColumnHelper } from "@tanstack/react-table";
+import { ProductResponseDto } from "../../model";
 
 const columnHelper = createColumnHelper<ProductResponseDto>();
 
@@ -41,52 +32,21 @@ const defaultColumns = [
   }),
 ];
 
-export const ProductTable = ({
-  columnFilters,
-  setColumnFilters,
-  isServerSide,
-  onChangeSelectedRow,
-  totalElements,
-}: ProductTableProps) => {
-  const {
-    pagination,
-    setPagination,
-    sorting,
-    setSorting,
-    rowSelection,
-    setRowSelection,
-    data,
-  } = useProductTable({
-    columnFilters,
-    isServerSide,
-    totalElements,
-    useData: useProducts,
-  });
+interface ProductTableProps {
+  tableParams: Omit<
+    TableParams<ProductResponseDto, PageResponse<ProductResponseDto>>,
+    "columns"
+  >;
+}
 
-  useEffect(() => {
-    if (!onChangeSelectedRow) return;
-    const rowId =
-      Object.keys(rowSelection).length > 0
-        ? parseInt(Object.keys(rowSelection)[0])
-        : null;
-
-    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
-  }, [rowSelection, onChangeSelectedRow]);
-
+export const ProductTable = ({ tableParams }: ProductTableProps) => {
   return (
     <>
       <BaseTable
-        serverSide={isServerSide}
-        data={data}
-        columns={defaultColumns}
-        columnFilters={columnFilters}
-        setColumnFilters={setColumnFilters}
-        pagination={pagination}
-        setPagination={setPagination}
-        sorting={sorting}
-        setSorting={setSorting}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
+        tableParams={{
+          ...tableParams,
+          columns: defaultColumns,
+        }}
       />
     </>
   );

@@ -1,23 +1,6 @@
-import { BaseTable } from "@/shared";
-import {
-  ColumnFiltersState,
-  createColumnHelper,
-  FilterFn,
-} from "@tanstack/react-table";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import {
-  OutboundPlanResponseDto,
-  useOutboundPlans,
-  useOutboundTable,
-} from "../../model";
-
-interface OutboundPlanTableProps {
-  columnFilters?: ColumnFiltersState;
-  setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
-  isServerSide: boolean;
-  onChangeSelectedRow: (rowId: OutboundPlanResponseDto | null) => void;
-  totalElements: number;
-}
+import { BaseTable, PageResponse, TableParams } from "@/shared";
+import { createColumnHelper, FilterFn } from "@tanstack/react-table";
+import { OutboundPlanResponseDto } from "../../model";
 
 const columnHelper = createColumnHelper<OutboundPlanResponseDto>();
 
@@ -49,7 +32,7 @@ const defaultColumns = [
     filterFn: dateFilterFn,
   }),
   columnHelper.accessor("process", {
-    header: "진헹상태",
+    header: "진행상태",
     cell: (row) => row.getValue(),
   }),
   columnHelper.accessor("productionPlanNumber", {
@@ -62,55 +45,17 @@ const defaultColumns = [
   }),
 ];
 
-export const OutboundPlanTable = ({
-  columnFilters,
-  setColumnFilters,
-  isServerSide,
-  onChangeSelectedRow,
-  totalElements,
-}: OutboundPlanTableProps) => {
-  console.log("Table Render");
-  const {
-    pagination,
-    setPagination,
-    sorting,
-    setSorting,
-    rowSelection,
-    setRowSelection,
-    data,
-  } = useOutboundTable({
-    columnFilters,
-    isServerSide,
-    outboundNumberKey: "outboundScheduleNumber",
-    outboundDateKey: "outboundScheduleDate",
-    totalElements,
-    useData: useOutboundPlans,
-  });
+interface OutboundPlanTableProps {
+  tableParams: Omit<
+    TableParams<OutboundPlanResponseDto, PageResponse<OutboundPlanResponseDto>>,
+    "columns"
+  >;
+}
 
-  useEffect(() => {
-    const rowId =
-      Object.keys(rowSelection).length > 0
-        ? parseInt(Object.keys(rowSelection)[0])
-        : null;
-
-    onChangeSelectedRow(rowId || rowId === 0 ? data.content[rowId] : null);
-  }, [rowSelection, onChangeSelectedRow]);
-
+export const OutboundPlanTable = ({ tableParams }: OutboundPlanTableProps) => {
   return (
     <>
-      <BaseTable
-        serverSide={isServerSide}
-        data={data}
-        columns={defaultColumns}
-        columnFilters={columnFilters}
-        setColumnFilters={setColumnFilters}
-        pagination={pagination}
-        setPagination={setPagination}
-        sorting={sorting}
-        setSorting={setSorting}
-        rowSelection={rowSelection}
-        setRowSelection={setRowSelection}
-      />
+      <BaseTable tableParams={{ ...tableParams, columns: defaultColumns }} />
     </>
   );
 };
