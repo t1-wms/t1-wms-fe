@@ -1,6 +1,7 @@
-import styles from "./InboundPutAwayDrawer.module.css";
 import { BaseDrawer, MainInput } from "@/shared";
 import { InboundPutAwayResponseDto } from "../../model";
+import { InboundLotTable } from "../inbound-lot-table";
+import styles from "./InboundPutAwayDrawer.module.css";
 
 interface InboundPutAwayDrawerProps {
   data: InboundPutAwayResponseDto;
@@ -11,13 +12,7 @@ export const InboundPutAwayDrawer = ({
   data,
   onClose,
 }: InboundPutAwayDrawerProps) => {
-  const {
-    scheduleNumber,
-    checkNumber,
-    putAwayNumber,
-    putAwayDate,
-    // productList,
-  } = data;
+  const { scheduleNumber, putAwayNumber, putAwayDate, lotList } = data;
 
   return (
     <BaseDrawer title={`입하검사 조회`} onClose={onClose}>
@@ -26,13 +21,6 @@ export const InboundPutAwayDrawer = ({
           <MainInput
             defaultValue={scheduleNumber}
             label="입하예정번호"
-            error={null}
-            width="fullWidth"
-            disabled
-          />
-          <MainInput
-            defaultValue={checkNumber}
-            label="입하검사번호"
             error={null}
             width="fullWidth"
             disabled
@@ -53,7 +41,7 @@ export const InboundPutAwayDrawer = ({
           />
         </div>
         <p className={`font-b-md ${styles.header}}`}>입고적치 품목</p>
-        {/* <InboundCheckProductTable data={productList} /> */}
+        <InboundLotTable data={lotList} />
       </div>
     </BaseDrawer>
   );
