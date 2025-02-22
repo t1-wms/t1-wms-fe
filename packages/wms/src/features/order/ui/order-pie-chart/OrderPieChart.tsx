@@ -1,6 +1,8 @@
-import { ChartData, PieChart } from "@/shared";
-import { useMemo } from "react";
+import { ChartData } from "@/shared";
+import { lazy, useMemo } from "react";
 import { useOrderChart } from "../../model";
+
+const PieChart = lazy(() => import("@shared/pie-chart/ui/PieChart"));
 
 export const OrderPieChart = () => {
   const { data } = useOrderChart();

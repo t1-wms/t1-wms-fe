@@ -9,7 +9,6 @@ export * from "./data-display";
 export * from "./error-boundary";
 export * from "./error-fallback";
 export * from "./error-fallback-page";
-export * from "./horizontal-bar-chart";
 export * from "./lib";
 export * from "./main-button";
 export * from "./main-date-range-picker";

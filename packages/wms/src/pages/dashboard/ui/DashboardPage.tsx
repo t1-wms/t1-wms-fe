@@ -1,13 +1,13 @@
 import {
-  InboundPieChart,
-  OrderPieChart,
-  OutboundPieChart,
-  ProductThresholdBarChart,
   useCompletedInboundToday,
   useCompletedOutboundToday,
   useReceivedInboundToday,
   useReceivedOutboundToday,
 } from "@/features";
+import InboundPieChart from "@/features/inbound/ui/inbound-pie-chart";
+import ProductThresholdBarChart from "@/features/inventory/ui/product-threshold-bar-chart";
+import OrderPieChart from "@/features/order/ui/order-pie-chart";
+import OutboundPieChart from "@/features/outbound/ui/outbound-pie-chart";
 import {
   DataDisplay,
   ErrorBoundary,
@@ -18,6 +18,17 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { Suspense, useCallback } from "react";
 import styles from "./DashboardPage.module.css";
+
+// const InboundPieChart = lazy(
+//   () => import("@features/inbound/ui/inbound-pie-chart")
+// );
+// const OrderPieChart = lazy(() => import("@/features/order/ui/order-pie-chart"));
+// const OutboundPieChart = lazy(
+//   () => import("@features/outbound/ui/outbound-pie-chart")
+// );
+// const ProductThresholdBarChart = lazy(
+//   () => import("@features/inventory/ui/product-threshold-bar-chart")
+// );
 
 export default function DashBoardPage() {
   const queryClient = useQueryClient();

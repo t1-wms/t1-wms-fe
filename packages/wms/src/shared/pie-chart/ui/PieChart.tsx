@@ -5,7 +5,7 @@ interface PieChartProps {
   data: ChartData[];
 }
 
-export const PieChart = ({ data }: PieChartProps) => {
+const PieChart = ({ data }: PieChartProps) => {
   return (
     <ResponsivePie
       data={data.filter((item) => item.value > 0)}
@@ -44,3 +44,5 @@ export const PieChart = ({ data }: PieChartProps) => {
     />
   );
 };
+
+export default PieChart;
