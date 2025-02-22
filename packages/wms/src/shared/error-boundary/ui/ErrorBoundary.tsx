@@ -32,7 +32,7 @@ export class ErrorBoundary extends Component<
           this.setState({ hasError: false });
         });
       } else {
-        return undefined;
+        return this.props.fallback;
       }
     }
 
