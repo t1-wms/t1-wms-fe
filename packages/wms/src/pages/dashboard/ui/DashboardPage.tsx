@@ -20,6 +20,8 @@ import { Suspense, useCallback } from "react";
 import styles from "./DashboardPage.module.css";
 
 export default function DashBoardPage() {
+  throw new Error();
+
   const queryClient = useQueryClient();
 
   const handleRetry = useCallback(
