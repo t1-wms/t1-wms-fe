@@ -19,6 +19,22 @@ export const getOutboundChart = async () => {
   return response.data;
 };
 
+export const getReceivedOutboundToday = async () => {
+  const response = await noAuthAxios.get<{ data: number }>(
+    `api/dashboard/today-received-outbound`
+  );
+
+  return response.data;
+};
+
+export const getCompletedOutboundToday = async () => {
+  const response = await noAuthAxios.get<{ data: number }>(
+    `api/dashboard/today-completed-outbound`
+  );
+
+  return response.data;
+};
+
 export const getOutboundPlanCount = async () => {
   const response = await noAuthAxios.get<PageResponse<OutboundPlanResponseDto>>(
     `api/outbound?page=0&size=1`

@@ -3,8 +3,12 @@ import {
   OrderPieChart,
   OutboundPieChart,
   ProductThresholdBarChart,
+  useCompletedInboundToday,
+  useCompletedOutboundToday,
+  useReceivedInboundToday,
+  useReceivedOutboundToday,
 } from "@/features";
-import { ErrorBoundary, ErrorFallback, Spinner } from "@/shared";
+import { DataDisplay, ErrorBoundary, ErrorFallback, Spinner } from "@/shared";
 import { SseProvider } from "@/widgets";
 import { useQueryClient } from "@tanstack/react-query";
 import { Suspense, useCallback } from "react";
@@ -14,9 +18,9 @@ export default function DashBoardPage() {
   const queryClient = useQueryClient();
 
   const handleRetry = useCallback(
-    async (queryKey: string, onReset: () => void) => {
+    async (queryKey: string[], onReset: () => void) => {
       await queryClient.resetQueries({
-        queryKey: [queryKey],
+        queryKey: queryKey,
       });
       onReset();
     },
@@ -28,12 +32,86 @@ export default function DashBoardPage() {
       <div className={styles.container}>
         <div className={styles.line}>
           <div className={`${styles.box} shadow-md`}>
+            <h4 className="font-h4">금일 입고 예정</h4>
+            <ErrorBoundary
+              fallbackRender={(onReset) => (
+                <ErrorFallback
+                  onRetry={() => {
+                    handleRetry(["inbound", "today", "received"], onReset);
+                  }}
+                />
+              )}
+            >
+              <Suspense
+                fallback={<Spinner message="금일 입고 예정을 가져오는 중" />}
+              >
+                <DataDisplay useData={useReceivedInboundToday} />
+              </Suspense>
+            </ErrorBoundary>
+          </div>
+          <div className={`${styles.box} shadow-md`}>
+            <h4 className="font-h4">금일 출고 예정</h4>
+            <ErrorBoundary
+              fallbackRender={(onReset) => (
+                <ErrorFallback
+                  onRetry={() => {
+                    handleRetry(["outbound", "today", "received"], onReset);
+                  }}
+                />
+              )}
+            >
+              <Suspense
+                fallback={<Spinner message="금일 출고 예정을 가져오는 중" />}
+              >
+                <DataDisplay useData={useReceivedOutboundToday} />
+              </Suspense>
+            </ErrorBoundary>
+          </div>
+          <div className={`${styles.box} shadow-md`}>
+            <h4 className="font-h4">금일 입고 완료</h4>
+            <ErrorBoundary
+              fallbackRender={(onReset) => (
+                <ErrorFallback
+                  onRetry={() => {
+                    handleRetry(["inbound", "today", "completed"], onReset);
+                  }}
+                />
+              )}
+            >
+              <Suspense
+                fallback={<Spinner message="금일 입고 완료를 가져오는 중" />}
+              >
+                <DataDisplay useData={useCompletedInboundToday} />
+              </Suspense>
+            </ErrorBoundary>
+          </div>
+          <div className={`${styles.box} shadow-md`}>
+            <h4 className="font-h4">금일 출고 완료</h4>
+            <ErrorBoundary
+              fallbackRender={(onReset) => (
+                <ErrorFallback
+                  onRetry={() => {
+                    handleRetry(["outbound", "today", "completed"], onReset);
+                  }}
+                />
+              )}
+            >
+              <Suspense
+                fallback={<Spinner message="금일 출고 예정을 가져오는 중" />}
+              >
+                <DataDisplay useData={useCompletedOutboundToday} />
+              </Suspense>
+            </ErrorBoundary>
+          </div>
+        </div>
+        <div className={styles.line}>
+          <div className={`${styles.box} shadow-md`}>
             <h3 className="font-h3">입고현황</h3>
             <ErrorBoundary
               fallbackRender={(onReset) => (
                 <ErrorFallback
                   onRetry={() => {
-                    handleRetry("inboundChart", onReset);
+                    handleRetry(["inboundChart"], onReset);
                   }}
                 />
               )}
@@ -49,7 +127,7 @@ export default function DashBoardPage() {
               fallbackRender={(onReset) => (
                 <ErrorFallback
                   onRetry={() => {
-                    handleRetry("outboundChart", onReset);
+                    handleRetry(["outboundChart"], onReset);
                   }}
                 />
               )}
@@ -65,7 +143,7 @@ export default function DashBoardPage() {
               fallbackRender={(onReset) => (
                 <ErrorFallback
                   onRetry={() => {
-                    handleRetry("orderChart", onReset);
+                    handleRetry(["orderChart"], onReset);
                   }}
                 />
               )}
@@ -84,7 +162,7 @@ export default function DashBoardPage() {
                 fallbackRender={(onReset) => (
                   <ErrorFallback
                     onRetry={() => {
-                      handleRetry("productThresholdChart", onReset);
+                      handleRetry(["productThresholdChart"], onReset);
                     }}
                   />
                 )}
@@ -102,7 +180,7 @@ export default function DashBoardPage() {
               fallbackRender={(onReset) => (
                 <ErrorFallback
                   onRetry={() => {
-                    handleRetry("productThresholdChart", onReset);
+                    handleRetry(["productThresholdChart"], onReset);
                   }}
                 />
               )}
