@@ -16,12 +16,14 @@ import {
   deleteOutboundPacking,
   deleteOutboundPicking,
   deleteOutboundPlan,
+  getCompletedOutboundToday,
   getOutboundAssignsPaged,
   getOutboundChart,
   getOutboundLoadingsPaged,
   getOutboundPackingsPaged,
   getOutboundPickingsPaged,
   getOutboundPlansPaged,
+  getReceivedOutboundToday,
   updateOutboundAssign,
   updateOutboundLoading,
   updateOutboundPacking,
@@ -42,6 +44,20 @@ export const useOutboundChart = () => {
   return useSuspenseQuery({
     queryKey: ["outboundChart"],
     queryFn: () => getOutboundChart(),
+  });
+};
+
+export const useReceivedOutboundToday = () => {
+  return useSuspenseQuery({
+    queryKey: ["outbound", "today", "received"],
+    queryFn: () => getReceivedOutboundToday(),
+  });
+};
+
+export const useCompletedOutboundToday = () => {
+  return useSuspenseQuery({
+    queryKey: ["outbound", "today", "completed"],
+    queryFn: () => getCompletedOutboundToday(),
   });
 };
 

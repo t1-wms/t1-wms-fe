@@ -1,18 +1,19 @@
 import type { Size } from "@shared/ui/types";
-import styles from "./MainInput.module.css";
 import { ForwardedRef, forwardRef, InputHTMLAttributes } from "react";
 import { FieldError } from "react-hook-form";
+import styles from "./MainInput.module.css";
 
 interface MainInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   width: string | "fullWidth";
   fontSize?: Size;
   error?: FieldError | null;
+  shrink?: boolean;
 }
 
 export const Input = forwardRef(
   (
-    { label, width, fontSize = "md", error, ...props }: MainInputProps,
+    { label, width, fontSize = "md", error, shrink, ...props }: MainInputProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
     return (
@@ -25,7 +26,13 @@ export const Input = forwardRef(
           } ${error ? styles.error : ""}`}
         />
         {error !== null && (
-          <p className={`${styles.hint} font-r-xs`}>{error && error.message}</p>
+          <p
+            className={`${styles.hint} ${
+              shrink ? "" : styles["no-shrink"]
+            } font-r-xs`}
+          >
+            {error && error.message}
+          </p>
         )}
       </>
     );
@@ -34,7 +41,7 @@ export const Input = forwardRef(
 
 export const MainInput = forwardRef(
   (
-    { label, width, fontSize = "md", error, ...props }: MainInputProps,
+    { label, width, fontSize = "md", error, shrink, ...props }: MainInputProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
     return (
@@ -51,6 +58,7 @@ export const MainInput = forwardRef(
               width={width}
               fontSize={fontSize}
               error={error}
+              shrink={shrink}
               {...props}
             />
           </label>
@@ -61,6 +69,7 @@ export const MainInput = forwardRef(
             width={width}
             fontSize={fontSize}
             error={error}
+            shrink={shrink}
             {...props}
           />
         )}

@@ -17,6 +17,22 @@ export const getInboundChart = async () => {
   return response.data;
 };
 
+export const getReceivedInboundToday = async () => {
+  const response = await noAuthAxios.get<{ data: number }>(
+    `api/dashboard/today-received-inbound`
+  );
+
+  return response.data;
+};
+
+export const getCompletedInboundToday = async () => {
+  const response = await noAuthAxios.get<{ data: number }>(
+    `api/dashboard/today-completed-inbound`
+  );
+
+  return response.data;
+};
+
 export const getInboundSchedulesPaged = async (
   page: number,
   sort?: Sort,

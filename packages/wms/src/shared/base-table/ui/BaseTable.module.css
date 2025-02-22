@@ -9,7 +9,6 @@
   .table-wrapper {
     width: 100%;
     border-radius: 4px;
-    overflow: hidden;
 
     &.min-height {
       min-height: 528px;
@@ -83,8 +82,8 @@
   background-color: var(--color-primary-25);
 }
 
-.paginaiton-wrapper {
-  position: absolute;
+.pagination-wrapper {
+  position: sticky;
   bottom: 0;
   left: 0;
   width: 100%;

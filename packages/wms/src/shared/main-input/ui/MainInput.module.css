@@ -41,5 +41,8 @@
 
 .hint {
   color: var(--color-error);
+}
+
+.no-shrink {
   height: 14px;
 }

@@ -8,10 +8,12 @@ import {
 import {
   createInboundCheck,
   createInboundPutAway,
+  getCompletedInboundToday,
   getInboundChart,
   getInboundChecksPaged,
   getInboundPutAwaysPaged,
   getInboundSchedulesPaged,
+  getReceivedInboundToday,
 } from "../api";
 import { InboundFilter, UseCreateInboundCheckParams } from "./types";
 
@@ -36,6 +38,20 @@ export const useInboundChart = () => {
     queryKey: ["inboundChart"],
     queryFn: () => getInboundChart(),
     staleTime: 1000,
+  });
+};
+
+export const useReceivedInboundToday = () => {
+  return useSuspenseQuery({
+    queryKey: ["inbound", "today", "received"],
+    queryFn: () => getReceivedInboundToday(),
+  });
+};
+
+export const useCompletedInboundToday = () => {
+  return useSuspenseQuery({
+    queryKey: ["inbound", "today", "completed"],
+    queryFn: () => getCompletedInboundToday(),
   });
 };
 
