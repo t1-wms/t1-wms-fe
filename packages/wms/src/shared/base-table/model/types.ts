@@ -20,6 +20,7 @@ export interface TableParams<TData, QueryResult> {
   setSorting: Dispatch<SetStateAction<SortingState>>;
   rowSelection: RowSelectionState;
   setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
+  isLoading: boolean;
   isPending: boolean;
   isError: boolean;
   error: Error | null;

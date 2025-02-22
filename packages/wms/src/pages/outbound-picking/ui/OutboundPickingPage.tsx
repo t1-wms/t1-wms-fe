@@ -1,14 +1,14 @@
-import { PageContentBox } from "@/shared";
-import styles from "./OutboundPickingPage.module.css";
 import {
-  OutboundPickingDrawer,
-  OutboundControlPanel,
   OutboundAssignListDrawer,
+  OutboundControlPanel,
+  OutboundPickingDrawer,
   OutboundPickingTable,
   useOutboundPickingTable,
 } from "@/features";
-import { useCallback, useMemo, useState } from "react";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./OutboundPickingPage.module.css";
 
 export const OutboundPickingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -37,6 +37,7 @@ export const OutboundPickingPage = () => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -73,6 +74,7 @@ export const OutboundPickingPage = () => {
             setSorting,
             rowSelection,
             setRowSelection,
+            isLoading,
             isPending,
             isError,
             error,

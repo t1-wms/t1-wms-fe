@@ -26,7 +26,7 @@ export const useProductThresholdTable = (columnFilters: ColumnFiltersState) => {
     sort,
   } = useTable();
 
-  const { data, isFetched, isPending, isError, error, refetch } =
+  const { data, isFetched, isLoading, isPending, isError, error, refetch } =
     useProductThresholds(pagination.pageIndex, sort, filter);
 
   return {
@@ -38,6 +38,7 @@ export const useProductThresholdTable = (columnFilters: ColumnFiltersState) => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,

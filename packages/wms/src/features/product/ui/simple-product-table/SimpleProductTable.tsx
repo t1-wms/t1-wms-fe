@@ -1,6 +1,6 @@
 import { ProductListDto } from "@/entities";
-import { useSimpleProducts, useSimpleProductTable } from "../../model";
 import { BaseTable, createPageResponse } from "@/shared";
+import { useSimpleProducts, useSimpleProductTable } from "../../model";
 
 interface SimpleProductTableProps {
   onClickAdd: (product: ProductListDto) => void;
@@ -17,7 +17,8 @@ export const SimpleProductTable = ({ onClickAdd }: SimpleProductTableProps) => {
     defaultColumns,
   } = useSimpleProductTable(onClickAdd);
 
-  const { data, isPending, isError, error, refetch } = useSimpleProducts();
+  const { data, isLoading, isPending, isError, error, refetch } =
+    useSimpleProducts();
 
   return (
     <>
@@ -25,12 +26,13 @@ export const SimpleProductTable = ({ onClickAdd }: SimpleProductTableProps) => {
         tableParams={{
           data: createPageResponse(data),
           columns: defaultColumns,
-          pagination: pagination,
-          setPagination: setPagination,
-          sorting: sorting,
-          setSorting: setSorting,
-          rowSelection: rowSelection,
-          setRowSelection: setRowSelection,
+          pagination,
+          setPagination,
+          sorting,
+          setSorting,
+          rowSelection,
+          setRowSelection,
+          isLoading,
           isPending,
           isError,
           error,

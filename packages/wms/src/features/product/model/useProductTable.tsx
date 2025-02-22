@@ -1,8 +1,8 @@
 import { getFilterValue, useTable } from "@/shared";
-import { useMemo } from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
-import { ProductFilter } from "./types";
+import { useMemo } from "react";
 import { useProducts } from "./queryHooks";
+import { ProductFilter } from "./types";
 
 export const useProductTable = (columnFilters: ColumnFiltersState) => {
   // 서버사이드 필터링에서만 사용
@@ -26,7 +26,7 @@ export const useProductTable = (columnFilters: ColumnFiltersState) => {
     sort,
   } = useTable();
 
-  const { data, isPending, isError, error, refetch } = useProducts(
+  const { data, isPending, isLoading, isError, error, refetch } = useProducts(
     pagination.pageIndex,
     sort,
     filter
@@ -40,6 +40,7 @@ export const useProductTable = (columnFilters: ColumnFiltersState) => {
     rowSelection,
     setRowSelection,
     data,
+    isLoading,
     isPending,
     isError,
     error,

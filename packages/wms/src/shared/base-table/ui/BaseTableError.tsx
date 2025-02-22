@@ -1,4 +1,4 @@
-import EmptyBoxImg from "@assets/empty-box.svg?react";
+import ErrorImg from "@assets/error.svg?react";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useNavigate } from "react-router";
@@ -26,11 +26,11 @@ export const BaseTableError = <QueryResult extends unknown>({
   return (
     <div className={styles["error-container"]}>
       <div className={styles.img}>
-        <EmptyBoxImg />
+        <ErrorImg />
       </div>
-      <p>데이터를 불러오는 데 실패했습니다</p>
+      <p className="font-r-md">데이터를 불러오는 데 실패했습니다</p>
       <button onClick={handleRefetch} className="font-b-md shadow-md">
-        새로고침
+        재시도
       </button>
     </div>
   );

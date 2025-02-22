@@ -1,8 +1,8 @@
+import { CreateOutboundLoadingModalInfo } from "@/features";
+import { useOutboundPackingTable } from "@/features/outbound/model/useOutboundPackingTable";
 import { BaseDrawer, useModalStore } from "@/shared";
 import { useEffect } from "react";
 import { OutboundPackingTable } from "../../outbound-packing-table";
-import { CreateOutboundLoadingModalInfo } from "@/features";
-import { useOutboundPackingTable } from "@/features/outbound/model/useOutboundPackingTable";
 
 interface OutboundPackingListDrawerProps {
   onClose: () => void;
@@ -22,6 +22,7 @@ export const OutboundPackingListDrawer = ({
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -60,6 +61,7 @@ export const OutboundPackingListDrawer = ({
           setSorting: setSorting,
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
+          isLoading,
           isPending: isPending,
           isError,
           error,

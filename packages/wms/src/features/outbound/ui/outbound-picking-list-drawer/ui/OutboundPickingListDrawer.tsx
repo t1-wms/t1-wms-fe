@@ -1,8 +1,8 @@
+import { CreateOutboundPackingModalInfo } from "@/features";
+import { useOutboundPickingTable } from "@/features/outbound/model/useOutboundPickingTable";
 import { BaseDrawer, useModalStore } from "@/shared";
 import { useEffect } from "react";
 import { OutboundPickingTable } from "../../outbound-picking-table";
-import { CreateOutboundPackingModalInfo } from "@/features";
-import { useOutboundPickingTable } from "@/features/outbound/model/useOutboundPickingTable";
 
 interface OutboundPickingListDrawerProps {
   onClose: () => void;
@@ -23,6 +23,7 @@ export const OutboundPickingListDrawer = ({
     data,
     isFetched,
     isPending,
+    isLoading,
     isError,
     error,
     refetch,
@@ -53,14 +54,15 @@ export const OutboundPickingListDrawer = ({
     <BaseDrawer title="출고피킹 선택" onClose={onClose}>
       <OutboundPickingTable
         tableParams={{
-          data: data,
-          pagination: pagination,
-          setPagination: setPagination,
-          sorting: sorting,
-          setSorting: setSorting,
-          rowSelection: rowSelection,
-          setRowSelection: setRowSelection,
-          isPending: isPending,
+          data,
+          pagination,
+          setPagination,
+          sorting,
+          setSorting,
+          rowSelection,
+          setRowSelection,
+          isPending,
+          isLoading,
           isError,
           error,
           refetch,

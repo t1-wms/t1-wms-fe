@@ -18,7 +18,7 @@ export const useOutboundPackingTable = (columnFilters?: ColumnFiltersState) => {
     outboundDateKey: "outboundPackingDate",
   });
 
-  const { data, isFetched, isPending, isError, error, refetch } =
+  const { data, isFetched, isLoading, isPending, isError, error, refetch } =
     useOutboundPackings(pagination.pageIndex, sort, filter);
 
   return {
@@ -29,6 +29,7 @@ export const useOutboundPackingTable = (columnFilters?: ColumnFiltersState) => {
     rowSelection,
     setRowSelection,
     data,
+    isLoading,
     isFetched,
     isPending,
     isError,

@@ -1,5 +1,3 @@
-import { PageContentBox, useModalStore } from "@/shared";
-import styles from "./OutBoundPlanPage.module.css";
 import {
   CreateOutboundPlanModalInfo,
   OutboundControlPanel,
@@ -7,8 +5,10 @@ import {
   OutboundPlanTable,
   useOutboundPlanTable,
 } from "@/features";
-import { useCallback, useMemo, useState } from "react";
+import { PageContentBox, useModalStore } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./OutBoundPlanPage.module.css";
 
 export const OutBoundPlanPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -42,6 +42,7 @@ export const OutBoundPlanPage = () => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -78,6 +79,7 @@ export const OutBoundPlanPage = () => {
             setSorting,
             rowSelection,
             setRowSelection,
+            isLoading,
             isPending,
             isError,
             error,

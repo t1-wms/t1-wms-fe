@@ -18,7 +18,7 @@ export const useOutboundPickingTable = (columnFilters?: ColumnFiltersState) => {
     outboundDateKey: "outboundPickingDate",
   });
 
-  const { data, isFetched, isPending, isError, error, refetch } =
+  const { data, isFetched, isLoading, isPending, isError, error, refetch } =
     useOutboundPickings(pagination.pageIndex, sort, filter);
 
   return {
@@ -29,6 +29,7 @@ export const useOutboundPickingTable = (columnFilters?: ColumnFiltersState) => {
     rowSelection,
     setRowSelection,
     data,
+    isLoading,
     isFetched,
     isPending,
     isError,

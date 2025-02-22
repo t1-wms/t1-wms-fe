@@ -1,19 +1,19 @@
+import { Skeleton } from "@/shared/skeleton/ui/Skeleton";
 import { flexRender, Table } from "@tanstack/react-table";
 import styles from "./BaseTable.module.css";
-import { Skeleton } from "@/shared/skeleton/ui/Skeleton";
 
 interface BaseTableProps<TData> {
   table: Table<TData>;
-  isPending: boolean;
+  isLoading: boolean;
 }
 
 export const BaseTableContent = <TData extends unknown>({
   table,
-  isPending,
+  isLoading,
 }: BaseTableProps<TData>) => {
   return (
     <tbody>
-      {isPending
+      {isLoading
         ? Array.from({ length: 10 }, (_, i) => i).map((row) => (
             <tr key={row}>
               {table.getAllColumns().map((col) => (
@@ -31,7 +31,7 @@ export const BaseTableContent = <TData extends unknown>({
             >
               {row.getAllCells().map((cell) => (
                 <td key={cell.id}>
-                  {isPending ? (
+                  {isLoading ? (
                     <Skeleton />
                   ) : (
                     flexRender(cell.column.columnDef.cell, cell.getContext())

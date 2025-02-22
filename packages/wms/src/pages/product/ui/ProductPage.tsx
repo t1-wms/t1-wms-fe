@@ -1,8 +1,8 @@
-import { PageContentBox } from "@/shared";
-import styles from "./ProductPage.module.css";
 import { ProductControlPanel, ProductTable, useProductTable } from "@/features";
-import { useCallback, useState } from "react";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useState } from "react";
+import styles from "./ProductPage.module.css";
 
 export default function ProductPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -22,6 +22,7 @@ export default function ProductPage() {
     rowSelection,
     setRowSelection,
     data,
+    isLoading,
     isPending,
     isError,
     error,
@@ -43,6 +44,7 @@ export default function ProductPage() {
             rowSelection,
             setRowSelection,
             data,
+            isLoading,
             isPending,
             isError,
             error,

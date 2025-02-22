@@ -1,6 +1,6 @@
-import { useOutboundProductTable } from "../../model";
 import { ProductListDto } from "@/entities";
 import { BaseTable, createPageResponse } from "@/shared";
+import { useOutboundProductTable } from "../../model";
 
 interface OutboundProductTableProps {
   data: ProductListDto[];
@@ -39,6 +39,7 @@ export const OutboundProductTable = ({
           setSorting: setSorting,
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
+          isLoading: false,
           isPending: false,
           isError: false,
           error: null,

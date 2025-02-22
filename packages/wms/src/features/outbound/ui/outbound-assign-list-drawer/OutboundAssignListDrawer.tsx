@@ -1,8 +1,8 @@
+import { CreateOutboundPickingModalInfo } from "@/features";
 import { BaseDrawer, useModalStore } from "@/shared";
 import { useEffect } from "react";
-import { OutboundAssignTable } from "../outbound-assign-table";
-import { CreateOutboundPickingModalInfo } from "@/features";
 import { useOutboundAssignTable } from "../../model/useOutboundAssignTable";
+import { OutboundAssignTable } from "../outbound-assign-table";
 
 interface OutboundAssignListDrawerProps {
   onClose: () => void;
@@ -21,6 +21,7 @@ export const OutboundAssignListDrawer = ({
     rowSelection,
     setRowSelection,
     data,
+    isLoading,
     isFetched,
     isPending,
     isError,
@@ -60,6 +61,7 @@ export const OutboundAssignListDrawer = ({
           setSorting: setSorting,
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
+          isLoading,
           isPending: isPending,
           isError,
           error,

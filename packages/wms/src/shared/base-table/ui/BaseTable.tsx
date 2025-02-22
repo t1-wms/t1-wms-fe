@@ -1,3 +1,6 @@
+import SortAscIcon from "@assets/sort-asc.svg?react";
+import SortDescIcon from "@assets/sort-desc.svg?react";
+import { Pagination } from "@shared/pagination";
 import {
   flexRender,
   getCoreRowModel,
@@ -6,12 +9,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import styles from "./BaseTable.module.css";
-import SortAscIcon from "@assets/sort-asc.svg?react";
-import SortDescIcon from "@assets/sort-desc.svg?react";
-import { Pagination } from "@shared/pagination";
-import { BaseTableContent } from "./BaseTableContent";
 import { TableParams } from "../model";
+import styles from "./BaseTable.module.css";
+import { BaseTableContent } from "./BaseTableContent";
 import { BaseTableError } from "./BaseTableError";
 
 interface BaseTableProps<TData, QueryResult> {
@@ -37,7 +37,7 @@ export const BaseTable = <TData extends unknown, QueryResult>({
     setSorting,
     rowSelection,
     setRowSelection,
-    isPending,
+    isLoading,
     isError,
     error,
     refetch,
@@ -106,7 +106,7 @@ export const BaseTable = <TData extends unknown, QueryResult>({
               </tr>
             ))}
           </thead>
-          {!isError && <BaseTableContent table={table} isPending={isPending} />}
+          {!isError && <BaseTableContent table={table} isLoading={isLoading} />}
         </table>
         {isError && <BaseTableError error={error} refetch={refetch} />}
       </div>

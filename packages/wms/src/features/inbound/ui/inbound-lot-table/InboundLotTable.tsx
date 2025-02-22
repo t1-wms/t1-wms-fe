@@ -30,6 +30,7 @@ export const InboundLotTable = ({ data }: InboundLotTableProps) => {
           setSorting: setSorting,
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
+          isLoading: false,
           isPending: false,
           isError: false,
           error: null,

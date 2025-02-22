@@ -1,5 +1,5 @@
-import { BaseTable, createPageResponse } from "@/shared";
 import { ProductInSupplierDto } from "@/features/order";
+import { BaseTable, createPageResponse } from "@/shared";
 import { useSupplierProductTable } from "../../model";
 
 interface SupplierProductTableProps {
@@ -30,6 +30,7 @@ export const SupplierProductTable = ({ data }: SupplierProductTableProps) => {
           rowSelection: rowSelection,
           setRowSelection: setRowSelection,
           isError: false,
+          isLoading: false,
           isPending: false,
           error: null,
         }}

@@ -26,11 +26,8 @@ export const useSupplierTable = (columnFilters?: ColumnFiltersState) => {
     sort,
   } = useTable();
 
-  const { data, isFetched, isPending, isError, error, refetch } = useSuppliers(
-    pagination.pageIndex,
-    sort,
-    filter
-  );
+  const { data, isFetched, isLoading, isPending, isError, error, refetch } =
+    useSuppliers(pagination.pageIndex, sort, filter);
 
   return {
     pagination,
@@ -40,6 +37,7 @@ export const useSupplierTable = (columnFilters?: ColumnFiltersState) => {
     rowSelection,
     setRowSelection,
     data,
+    isLoading,
     isFetched,
     isPending,
     isError,
