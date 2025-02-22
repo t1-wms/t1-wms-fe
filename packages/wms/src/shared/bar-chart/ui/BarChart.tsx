@@ -63,7 +63,6 @@ export const BarChart = ({ indexBy, keys, data }: BarChartProps) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "country",
         legendPosition: "middle",
         legendOffset: 32,
         truncateTickAt: 0,
@@ -72,11 +71,11 @@ export const BarChart = ({ indexBy, keys, data }: BarChartProps) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "food",
         legendPosition: "middle",
         legendOffset: -40,
         truncateTickAt: 0,
       }}
+      enableLabel={false}
       labelSkipWidth={12}
       labelSkipHeight={12}
       labelTextColor={{
@@ -108,10 +107,6 @@ export const BarChart = ({ indexBy, keys, data }: BarChartProps) => {
         },
       ]}
       role="application"
-      ariaLabel="Nivo bar chart demo"
-      barAriaLabel={(e) =>
-        e.id + ": " + e.formattedValue + " in country: " + e.indexValue
-      }
     />
   );
 };

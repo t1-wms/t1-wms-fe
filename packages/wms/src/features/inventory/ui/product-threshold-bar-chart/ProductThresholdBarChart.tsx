@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useProductThresholdChart } from "../../model";
 
 const indexBy = "productName";
-const keys: string[] = ["productCount", "availableQuantity"];
+const keys: string[] = ["재고량", "가용재고량"];
 
 export const ProductThresholdBarChart = () => {
   const { data } = useProductThresholdChart();
@@ -14,8 +14,8 @@ export const ProductThresholdBarChart = () => {
     data.content.forEach((product) => {
       newChartData.push({
         productName: product.productName,
-        productCount: product.productCount,
-        availableQuantity: product.availableQuantity,
+        재고량: product.productCount,
+        가용재고량: product.availableQuantity,
       });
     });
 

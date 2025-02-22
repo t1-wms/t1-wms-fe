@@ -8,5 +8,9 @@ interface DataDisplayProps {
 export const DataDisplay = ({ useData }: DataDisplayProps) => {
   const { data } = useData();
 
-  return <div className={styles.container}>{data.data}</div>;
+  return (
+    <div className={`${styles.container} font-h1`}>
+      {data.data} <span className="font-h3">건</span>
+    </div>
+  );
 };

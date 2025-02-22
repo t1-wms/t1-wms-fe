@@ -1,18 +1,14 @@
-import { serverUrl } from "@/shared";
-import { ReactNode, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { serverUrl } from "../api";
 
-interface SseProviderProps {
-  children: ReactNode;
-}
-
-export function SseProvider({ children }: SseProviderProps) {
-  const userId = sessionStorage.getItem("userId");
-
+export const useSSE = (onOutboundChange: () => void) => {
   const eventSource = useRef<EventSource>();
 
   useEffect(() => {
     console.log("Try SSE Connection");
-    eventSource.current = new EventSource(`${serverUrl}/api/sse/USER_ADMIN`);
+    eventSource.current = new EventSource(
+      `${serverUrl}/api/sse?role=ROLE_ADMIN`
+    );
 
     eventSource.current.onopen = () => {
       console.log("SSE Connection Success");
@@ -26,12 +22,9 @@ export function SseProvider({ children }: SseProviderProps) {
       console.log("SSE got message");
     });
 
-    eventSource.current.addEventListener(
-      "AWARDS_NOTIFICATION",
-      (event: MessageEvent<string>) => {
-        console.log(event);
-      }
-    );
+    eventSource.current.addEventListener("NOTIFICATION", () => {
+      onOutboundChange();
+    });
 
     eventSource.current.onerror = () => {
       console.log("SSE Connection Failed");
@@ -47,7 +40,5 @@ export function SseProvider({ children }: SseProviderProps) {
         eventSource.current = undefined;
       }
     };
-  }, [userId]);
-
-  return <>{children}</>;
-}
+  }, [onOutboundChange]);
+};
