@@ -71,11 +71,11 @@ pipeline {
                        echo "===== Before build ====="
                        ls -la packages/wms/
 
-                         echo "VITE_SERVER_URL=${VITE_SERVER_URL}" > packages/wms/.env
+                       echo "VITE_SERVER_URL=${VITE_SERVER_URL}" > packages/wms/.env
                        echo "===== Created .env file ====="
                        cat packages/wms/.env
                        
-             npm run build:wms
+                       npm run build:wms
 
                        echo "===== After build ====="
                        echo "WMS dist directory contents:"
@@ -99,7 +99,6 @@ pipeline {
                                        sourceFiles: "nginx/frontend.conf,nginx/nginx.conf,packages/wms/dist/**",
                                        remoteDirectory: "",
                                        execCommand: '''
-
                                            echo "===== Cleaning up old directories ====="
                                            rm -rf ~/frontend/wms/dist/*
                                            rm -rf ~/frontend/dist
@@ -134,17 +133,29 @@ pipeline {
            }
        }
    }
-   post {
-       always {
-           echo "===== Workspace contents after build ====="
-           sh 'ls -la'
-           cleanWs()
-       }
-       success {
-           echo 'Pipeline succeeded!'
-       }
-       failure {
-           echo 'Pipeline failed!'
-       }
-   }
+    post {
+        success {
+            slackSend (
+                message: """
+                    :white_check_mark: 배포 성공 ! :white_check_mark:
+
+                    *Job*: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
+                    *빌드 URL*: <${env.BUILD_URL}|링크>
+                    *최근 커밋 메시지*: ${env.GIT_COMMIT_MESSAGE}
+                """
+            )
+        }
+
+        failure {
+            slackSend (
+                message: """
+                    :x: 배포 실패 :x:
+
+                    *Job*: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
+                    *빌드 URL*: <${env.BUILD_URL}|링크>
+                    *최근 커밋 메시지*: ${env.GIT_COMMIT_MESSAGE}
+                """
+            )
+        }
+    }
 }
