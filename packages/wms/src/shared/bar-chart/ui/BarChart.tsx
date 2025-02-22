@@ -7,7 +7,7 @@ interface BarChartProps {
   data: BarChartData[];
 }
 
-export const BarChart = ({ indexBy, keys, data }: BarChartProps) => {
+const BarChart = ({ indexBy, keys, data }: BarChartProps) => {
   return (
     <ResponsiveBar
       data={data}
@@ -110,3 +110,5 @@ export const BarChart = ({ indexBy, keys, data }: BarChartProps) => {
     />
   );
 };
+
+export default BarChart;

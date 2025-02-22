@@ -1,1 +1,3 @@
-export * from "./InboundPieChart";
+import { InboundPieChart } from "./InboundPieChart";
+
+export default InboundPieChart;

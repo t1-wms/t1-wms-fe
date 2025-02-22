@@ -1,6 +1,8 @@
-import { BarChart, BarChartData } from "@/shared";
-import { useMemo } from "react";
+import { BarChartData } from "@/shared";
+import { lazy, useMemo } from "react";
 import { useProductThresholdChart } from "../../model";
+
+const BarChart = lazy(() => import("@shared/bar-chart/ui/BarChart"));
 
 const indexBy = "productName";
 const keys: string[] = ["재고량", "가용재고량"];
