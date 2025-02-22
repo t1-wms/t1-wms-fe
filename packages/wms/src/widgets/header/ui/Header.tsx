@@ -1,6 +1,7 @@
 import { useUserStore } from "@/features";
-import styles from "./Header.module.css";
+import LogoImg from "@assets/logo.svg?react";
 import NotiIcon from "@assets/notification.svg?react";
+import styles from "./Header.module.css";
 
 export const Header = () => {
   const { user } = useUserStore();
@@ -8,7 +9,10 @@ export const Header = () => {
 
   return (
     <header className={styles.container}>
-      <div className={`${styles["logo-box"]} font-h4`}>T1-WMS</div>
+      <div className={`${styles["logo-box"]}`}>
+        <LogoImg />
+        <span className="font-b-md">StockHolmes</span>
+      </div>
       {user && (
         <div className={styles["profile-box"]}>
           <span className={`${styles["profile-name"]}`}>

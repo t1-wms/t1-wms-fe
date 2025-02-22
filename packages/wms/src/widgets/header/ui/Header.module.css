@@ -11,8 +11,21 @@
 
 .logo-box {
   flex: auto 0 0;
-
   user-select: none;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.25s;
+
+  svg {
+    width: auto;
+    height: 28px;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .profile-box {

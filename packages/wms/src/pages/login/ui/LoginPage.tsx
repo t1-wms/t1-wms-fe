@@ -1,10 +1,11 @@
-import { MainButton } from "@shared/main-button";
-import styles from "./LoginPage.module.css";
-import { MainInput } from "@shared/main-input";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { CurrentUser, useLogin, useUserStore } from "@/features";
+import LogoImg from "@assets/logo.svg?react";
+import { MainButton } from "@shared/main-button";
+import { MainInput } from "@shared/main-input";
 import { AxiosResponse } from "axios";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import styles from "./LoginPage.module.css";
 
 interface LoginFormInputs {
   email: string;
@@ -43,27 +44,29 @@ export const LoginPage = () => {
     <div className={styles.container}>
       <div className={`${styles["login-box"]} shadow-md`}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h1 className="font-h4">T1-WMS</h1>
+          <div className={styles["logo-box"]}>
+            <LogoImg />
+            <span className="font-h3">StockHolmes</span>
+            <div className="shadow-md" />
+          </div>
           <MainInput
             {...register("email", {
               required: true,
-              // maxLength: 10,
-              // minLength: 10,
             })}
             placeholder="사원번호"
             autoFocus
             width="fullWidth"
+            shrink
             error={errors.email}
           />
           <MainInput
             placeholder="비밀번호"
             {...register("password", {
               required: true,
-              // maxLength: 16,
-              // minLength: 6,
             })}
             type="password"
             width="fullWidth"
+            shrink
             error={errors.password}
           />
           <MainButton>Login</MainButton>
