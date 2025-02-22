@@ -49,6 +49,7 @@ export const useUsers = (page?: number, sort?: Sort, filter?: UserFilter) => {
   return useQuery({
     queryKey: createUseUsersQueryKey(page!, sort, filter),
     queryFn: () => getUsersPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 

@@ -32,5 +32,6 @@ export const useProducts = (
   return useQuery({
     queryKey: createUseProductQueryKey(page!, sort, filter),
     queryFn: () => getProductsPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };

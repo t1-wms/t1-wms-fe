@@ -64,6 +64,7 @@ export const useSimpleSuppliers = () => {
   return useQuery({
     queryKey: ["supplier", "simple"],
     queryFn: () => getSimpleSuppliers(),
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -75,6 +76,7 @@ export const useSuppliers = (
   return useQuery({
     queryKey: createUseSupplierQueryKey("supplier", page!, sort, filter),
     queryFn: () => getSuppliersPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -82,6 +84,7 @@ export const useOrders = (page?: number, sort?: Sort, filter?: OrderFilter) => {
   return useQuery({
     queryKey: createUseOrderQueryKey("order", page!, sort, filter),
     queryFn: () => getOrdersPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -93,6 +96,7 @@ export const useReceivedOrdes = (
   return useQuery({
     queryKey: createUseOrderQueryKey("receivedOrder", page!, sort, filter),
     queryFn: () => getReceivedOrdersPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 
