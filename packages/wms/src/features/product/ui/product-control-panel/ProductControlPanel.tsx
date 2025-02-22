@@ -1,12 +1,16 @@
-import styles from "./ProductControlPanel.module.css";
 import { MainButton, MainInput } from "@/shared";
 import { useSearchProductForm } from "../../model";
+import styles from "./ProductControlPanel.module.css";
 
 interface ProductControlPanelProps {
   onSearch: (productCode: string) => void;
+  isLoading: boolean;
 }
 
-export const ProductControlPanel = ({ onSearch }: ProductControlPanelProps) => {
+export const ProductControlPanel = ({
+  onSearch,
+  isLoading,
+}: ProductControlPanelProps) => {
   const { inputProps, onSubmit } = useSearchProductForm(onSearch);
 
   return (
@@ -21,7 +25,9 @@ export const ProductControlPanel = ({ onSearch }: ProductControlPanelProps) => {
         />
       </div>
       <div className={styles["button-box"]}>
-        <MainButton size="sm">조회</MainButton>
+        <MainButton size="sm" isLoading={isLoading}>
+          조회
+        </MainButton>
       </div>
     </form>
   );

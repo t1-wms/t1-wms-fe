@@ -1,5 +1,9 @@
 import styles from "./MiniSpinner.module.css";
 
-export const MiniSpinner = () => {
-  return <span className={styles.container} />;
+interface MiniSpinnerProps {
+  color?: "900" | "50";
+}
+
+export const MiniSpinner = ({ color = "900" }: MiniSpinnerProps) => {
+  return <span className={`${styles.container} ${styles[`c-${color}`]}`} />;
 };

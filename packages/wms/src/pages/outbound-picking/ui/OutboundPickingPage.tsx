@@ -60,6 +60,8 @@ export const OutboundPickingPage = () => {
           label="출고피킹"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>

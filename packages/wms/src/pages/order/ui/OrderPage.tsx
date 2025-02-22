@@ -59,6 +59,8 @@ export default function OrderPage() {
         <OrderControlPanel
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>

@@ -50,7 +50,10 @@ export default function ReceivedOrderPage() {
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <ReceivedOrderControlPanel onSearch={handleSearch} />
+        <ReceivedOrderControlPanel
+          onSearch={handleSearch}
+          isLoading={isLoading}
+        />
       </PageContentBox>
       <PageContentBox>
         <ReceivedOrderTable

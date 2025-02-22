@@ -1,7 +1,8 @@
-import { ButtonHTMLAttributes } from "react";
-import styles from "./MainButton.module.css";
+import { MiniSpinner } from "@/shared/mini-spinner";
 import type { Size } from "@shared/ui/types";
+import { ButtonHTMLAttributes } from "react";
 import { MainButtonColor } from "../model/types";
+import styles from "./MainButton.module.css";
 
 interface MainButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: MainButtonColor;
@@ -9,6 +10,7 @@ interface MainButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   bold?: boolean;
   size?: Size;
   padding?: Size;
+  isLoading?: boolean;
 }
 
 export const MainButton = ({
@@ -17,6 +19,7 @@ export const MainButton = ({
   bold,
   size = "md",
   padding = "md",
+  isLoading,
   ...props
 }: MainButtonProps) => {
   return (
@@ -27,8 +30,15 @@ export const MainButton = ({
       } ${styles[color]} ${bold ? styles.bold : ""} font-r-${size} ${
         styles[`padding-${padding}`]
       }`}
+      onClick={isLoading ? undefined : props.onClick}
     >
-      {props.children}
+      {isLoading ? (
+        <div className={`${styles["spinner-container"]} ${styles[size]}`}>
+          <MiniSpinner color="50" />
+        </div>
+      ) : (
+        props.children
+      )}
     </button>
   );
 };

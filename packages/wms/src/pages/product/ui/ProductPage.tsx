@@ -32,7 +32,7 @@ export default function ProductPage() {
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <ProductControlPanel onSearch={handleSearch} />
+        <ProductControlPanel onSearch={handleSearch} isLoading={isLoading} />
       </PageContentBox>
       <PageContentBox>
         <ProductTable

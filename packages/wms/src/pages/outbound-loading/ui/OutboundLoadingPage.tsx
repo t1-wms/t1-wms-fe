@@ -60,6 +60,8 @@ export const OutboundLoadingPage = () => {
           label="출하상차"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>

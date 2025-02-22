@@ -47,7 +47,7 @@ export function ThresholdPage() {
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <ThresholdControlPanel onSearch={handleSearch} />
+        <ThresholdControlPanel onSearch={handleSearch} isLoading={isLoading} />
       </PageContentBox>
       <PageContentBox>
         <ThresholdTable

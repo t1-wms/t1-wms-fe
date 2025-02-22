@@ -65,6 +65,8 @@ export const OutBoundPlanPage = () => {
           label="출고예정"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>

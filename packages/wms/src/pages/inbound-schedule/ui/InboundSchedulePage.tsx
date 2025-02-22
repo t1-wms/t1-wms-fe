@@ -54,6 +54,8 @@ export const InboundSchedulePage = () => {
           label="입하예정"
           onSearch={handleSearch}
           onClickCreate={() => {}}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>

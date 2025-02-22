@@ -60,6 +60,8 @@ export const OutboundAssignPage = () => {
           label="출고지시"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>

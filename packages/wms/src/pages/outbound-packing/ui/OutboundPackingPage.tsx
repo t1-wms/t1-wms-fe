@@ -60,6 +60,8 @@ export const OutboundPackingPage = () => {
           label="출고패킹"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>

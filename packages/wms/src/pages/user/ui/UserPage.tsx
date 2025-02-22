@@ -34,7 +34,11 @@ export default function UserPage() {
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <UserControlPanel onSearch={handleSearch} />
+        <UserControlPanel
+          onSearch={handleSearch}
+          isLoading={isLoading}
+          isError={isError}
+        />
       </PageContentBox>
       <PageContentBox stretch>
         <UserTable

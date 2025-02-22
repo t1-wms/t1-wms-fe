@@ -47,7 +47,7 @@ export default function SupplierPage() {
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <SupplierControlPanel onSearch={handleSearch} />
+        <SupplierControlPanel onSearch={handleSearch} isLoading={isLoading} />
       </PageContentBox>
       <PageContentBox>
         <SupplierTable

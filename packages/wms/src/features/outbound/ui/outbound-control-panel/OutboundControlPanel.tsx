@@ -1,17 +1,21 @@
-import styles from "./OutboundControlPanel.module.css";
 import { MainButton, MainDateRangePicker, MainInput } from "@/shared";
 import { useSearchOutboundForm } from "../../model";
+import styles from "./OutboundControlPanel.module.css";
 
 interface OutboundControlPanelProps {
   label: "출고예정" | "출고지시" | "출고피킹" | "출고패킹" | "출하상차";
   onSearch: (number: string, startDate: string, endDate: string) => void;
   onClickCreate: () => void;
+  isLoading: boolean;
+  isError: boolean;
 }
 
 export const OutboundControlPanel = ({
   label,
   onSearch,
   onClickCreate,
+  isLoading,
+  isError,
 }: OutboundControlPanelProps) => {
   const { inputProps, onSubmit } = useSearchOutboundForm(onSearch);
 
@@ -34,8 +38,15 @@ export const OutboundControlPanel = ({
         />
       </div>
       <div className={styles["button-box"]}>
-        <MainButton size="sm">조회</MainButton>
-        <MainButton size="sm" type="button" onClick={onClickCreate}>
+        <MainButton size="sm" isLoading={isLoading}>
+          조회
+        </MainButton>
+        <MainButton
+          size="sm"
+          type="button"
+          onClick={onClickCreate}
+          disabled={isError || isLoading}
+        >
           추가
         </MainButton>
       </div>

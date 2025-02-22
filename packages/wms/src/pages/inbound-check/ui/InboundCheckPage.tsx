@@ -60,6 +60,8 @@ export const InboundCheckPage = () => {
           label="입하검사"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>

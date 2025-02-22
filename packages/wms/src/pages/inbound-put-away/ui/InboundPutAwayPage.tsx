@@ -60,6 +60,8 @@ export const InboundPutAwayPage = () => {
           label="입고적치"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>

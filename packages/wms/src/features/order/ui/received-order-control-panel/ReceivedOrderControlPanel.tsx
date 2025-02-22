@@ -1,13 +1,15 @@
-import styles from "./ReceivedOrderControlPanel.module.css";
 import { MainButton, MainDateRangePicker, MainInput } from "@/shared";
 import { useSearchOrderForm } from "../../model";
+import styles from "./ReceivedOrderControlPanel.module.css";
 
 interface ReceivedOrderControlPanelProps {
   onSearch: (number: string, startDate: string, endDate: string) => void;
+  isLoading: boolean;
 }
 
 export const ReceivedOrderControlPanel = ({
   onSearch,
+  isLoading,
 }: ReceivedOrderControlPanelProps) => {
   const { inputProps, onSubmit } = useSearchOrderForm(onSearch);
 
@@ -30,7 +32,9 @@ export const ReceivedOrderControlPanel = ({
         />
       </div>
       <div className={styles["button-box"]}>
-        <MainButton size="sm">조회</MainButton>
+        <MainButton size="sm" isLoading={isLoading}>
+          조회
+        </MainButton>
       </div>
     </form>
   );
