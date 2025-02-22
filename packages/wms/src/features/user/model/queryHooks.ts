@@ -85,11 +85,13 @@ export const useRoles = () => {
 };
 
 export const useLogin = (
-  onSuccess: (data: AxiosResponse<CurrentUser>) => void
+  onSuccess: (data: AxiosResponse<CurrentUser>) => void,
+  onError: (error: Error) => void
 ) => {
   return useMutation({
     mutationFn: (loginDto: LoginDto) => login(loginDto),
     onSuccess,
+    onError,
   });
 };
 

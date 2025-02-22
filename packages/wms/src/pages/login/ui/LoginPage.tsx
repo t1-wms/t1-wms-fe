@@ -2,7 +2,7 @@ import { CurrentUser, useLogin, useUserStore } from "@/features";
 import LogoImg from "@assets/logo.svg?react";
 import { MainButton } from "@shared/main-button";
 import { MainInput } from "@shared/main-input";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import styles from "./LoginPage.module.css";
@@ -19,19 +19,32 @@ export const LoginPage = () => {
     register,
     formState: { errors },
     handleSubmit,
+    setError,
   } = useForm<LoginFormInputs>();
 
   const { setUser, setToken } = useUserStore();
 
-  const { mutate: login } = useLogin((data: AxiosResponse<CurrentUser>) => {
-    const authorization: string = (data.headers.getAuthorization as Function)();
-    const at = authorization.substring(7);
+  const { mutate: login } = useLogin(
+    (data: AxiosResponse<CurrentUser>) => {
+      const authorization: string = (
+        data.headers.getAuthorization as Function
+      )();
+      const at = authorization.substring(7);
 
-    setUser(data.data);
-    setToken(at);
+      setUser(data.data);
+      setToken(at);
 
-    navigate("/dashboard");
-  });
+      navigate("/dashboard");
+    },
+    (error: Error) => {
+      const e = error as AxiosError;
+
+      if (e.status === 401) {
+        setError("email", { message: "존재하지 않는 계정입니다" });
+        setError("password", {});
+      }
+    }
+  );
 
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
     login({
