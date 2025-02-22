@@ -1,8 +1,13 @@
-import { BaseTable, CheckBox, MainSelect } from "@/shared";
+import { BaseTable, CheckBox, MainSelect, toRole, UserRole } from "@/shared";
+import { useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { UserListDto, UserTableParams, useUpdateActive } from "../../model";
-import { useQueryClient } from "@tanstack/react-query";
+import {
+  UserListDto,
+  UserTableParams,
+  useUpdateActive,
+  useUpdateUserRole,
+} from "../../model";
 
 const columnHelper = createColumnHelper<UserListDto>();
 
@@ -16,6 +21,13 @@ export const UserTable = ({ tableParams }: UserTableProps) => {
   const queryClient = useQueryClient();
 
   const { mutate: updateActive } = useUpdateActive(
+    queryClient,
+    pagination.pageIndex,
+    sort,
+    filter
+  );
+
+  const { mutate: updateUserRole } = useUpdateUserRole(
     queryClient,
     pagination.pageIndex,
     sort,
@@ -48,23 +60,27 @@ export const UserTable = ({ tableParams }: UserTableProps) => {
       }),
       columnHelper.accessor("isActive", {
         header: "활성화",
-        cell: (row) => (
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <CheckBox
-              type="checkbox"
-              defaultChecked={row.getValue()}
-              onChange={() => updateActive(row.row.getValue("userId"))}
-            />
-          </div>
-        ),
-      }),
-      columnHelper.accessor("address", {
-        header: "주소",
-        cell: (row) => row.getValue(),
+        cell: (row) => {
+          console.log(row.getValue());
+          return (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <CheckBox
+                type="checkbox"
+                defaultChecked={row.getValue()}
+                onChange={() =>
+                  updateActive({
+                    staffNumber: row.row.getValue("staffNumber"),
+                    isActive: !row.row.getValue("isActive"),
+                  })
+                }
+              />
+            </div>
+          );
+        },
       }),
       columnHelper.accessor("userRole", {
         header: "권한",
-        cell: () => (
+        cell: (row) => (
           <div
             style={{
               display: "flex",
@@ -74,10 +90,17 @@ export const UserTable = ({ tableParams }: UserTableProps) => {
           >
             <MainSelect
               width="100px"
-              onChange={() => {}}
+              onChange={(e) => {
+                updateUserRole({
+                  staffNumber: row.row.getValue("staffNumber"),
+                  newRole: toRole(e.target.value as UserRole),
+                });
+              }}
+              defaultValue={row.getValue()}
               options={[
-                { value: "ADMIN", display: "관리자" },
-                { value: "WORKER", display: "작업자" },
+                { value: "작업자", display: "작업자" },
+                { value: "관리자", display: "관리자" },
+                { value: "공급업체", display: "공급업체" },
               ]}
               error={null}
             />
@@ -86,10 +109,6 @@ export const UserTable = ({ tableParams }: UserTableProps) => {
       }),
       columnHelper.accessor("birthDate", {
         header: "생일",
-        cell: (row) => row.getValue(),
-      }),
-      columnHelper.accessor("supplierId", {
-        header: "납품업체",
         cell: (row) => row.getValue(),
       }),
     ];

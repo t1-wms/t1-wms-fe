@@ -70,3 +70,13 @@ export interface UserTableParams
   sort?: Sort;
   filter?: UserFilter;
 }
+
+export interface UseUpdateActiveParams {
+  staffNumber: string;
+  isActive: boolean;
+}
+
+export interface UseUpdateUserRoleParams {
+  staffNumber: string;
+  newRole: string;
+}
