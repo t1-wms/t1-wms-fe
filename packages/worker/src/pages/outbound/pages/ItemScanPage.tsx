@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ItemScan } from '@shared/ui/item/ItemScan';
 import { usePickingStore } from '../store/outboundstore';
@@ -8,8 +8,9 @@ export const ItemScanPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { itemId } = useParams();
+  const [isItemScanned, setIsItemScanned] = useState(false);  // 로컬 스캔 상태 추가
   const { pickingList, setItemScanned, moveToNextItem } = usePickingStore();
-  const currentItem = pickingList.items[Number(itemId) - 1]; // URL의 itemId를 인덱스로 변환
+  const currentItem = pickingList.items[Number(itemId) - 1];
 
   useEffect(() => {
     if (!currentItem) {
@@ -21,25 +22,29 @@ export const ItemScanPage = () => {
   useEffect(() => {
     const state = location.state as { scanSuccess?: boolean };
     if (state?.scanSuccess) {
+      setIsItemScanned(true);  // 로컬 스캔 상태 업데이트
       setItemScanned();
       
-      const nextItemIndex = Number(itemId);
-      if (nextItemIndex < pickingList.items.length) {
-        setTimeout(() => {
-          moveToNextItem(); 
-          navigate(`/outbound/location/${nextItemIndex + 1}`, { 
-            replace: true 
-          });
-        }, 200);
-      } else {
-        setTimeout(() => {
+      setTimeout(() => {
+        const currentIndex = Number(itemId);
+        const nextIndex = currentIndex + 1;
+
+        if (nextIndex > pickingList.items.length) {
+          moveToNextItem();
           navigate('/outbound/complete', { replace: true });
-        }, 200);
-      }
+        } else {
+          moveToNextItem();
+          navigate(`/outbound/location/${nextIndex}`, { 
+            replace: true,
+            state: {} 
+          });
+        }
+      }, 1000);
     }
-  }, [location.state, navigate, setItemScanned, moveToNextItem, itemId]);
+  }, [location.state, navigate, setItemScanned, moveToNextItem, itemId, pickingList.items.length]);
 
   const handleItemScan = () => {
+    console.log('Expected Location:', currentItem.code);
     navigate('/camera', {
       state: {
         expectedCode: currentItem.code,
@@ -54,13 +59,13 @@ export const ItemScanPage = () => {
 
   return (
     <div className="p-4">
-      <div className="mb-2">
+      <div className="mb-6">
         <span className="seq">
           {Number(itemId)} / {pickingList.items.length} 번째 물품
         </span>
       </div>
-      <ItemScan 
-        item={currentItem}
+      <ItemScan
+        item={{ ...currentItem, scanned: isItemScanned }}
         onScanComplete={handleItemScan}
       />
     </div>

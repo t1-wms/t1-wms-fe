@@ -1,43 +1,27 @@
 import { create } from 'zustand';
-import { PickingList, PickingItem } from '@/shared/types/items';
-
-// 더미 데이터
-const dummyPickingItems: PickingItem[] = [
-  {
-    pickingSeq: 1,
-    id: 1,
-    code: "AX-100",
-    name: "부품 A",
-    quantity: 2,
-    location: {
-      zone: "A",
-      aisle: "01",
-      rack: "01",
-      shelf: "03"
-    },
-    isLocationScanned: false,
-    isItemScanned: false
-  },
-  {
-    pickingSeq: 2,
-    id: 2,
-    code: "BX-200",
-    name: "부품 B",
-    quantity: 1,
-    location: {
-      zone: "B",
-      aisle: "02",
-      rack: "03",
-      shelf: "01"
-    },
-    isLocationScanned: false,
-    isItemScanned: false
-  }
-];
-
+import { OutboundTask } from '@/pages/tasklist/types/tasktypes';
 
 interface PickingStore {
-  pickingList: PickingList;
+  pickingList: {
+    pickingId: string;
+    items: Array<{
+      id: number;
+      code: string;
+      name: string;
+      image?: string;
+      location: {
+        zone: string;
+        aisle: string;
+        rack: string;
+        floor: string;
+      };
+      isLocationScanned: boolean;
+      isItemScanned: boolean;
+      quantity: number;
+    }>;
+    currentItemIndex: number;
+  };
+  setPickingList: (task: OutboundTask) => void;
   setLocationScanned: () => void;
   setItemScanned: () => void;
   moveToNextItem: () => void;
@@ -46,10 +30,32 @@ interface PickingStore {
 
 export const usePickingStore = create<PickingStore>((set) => ({
   pickingList: {
-    pickingId: 'P001',
-    items: dummyPickingItems,
+    pickingId: '',
+    items: [],
     currentItemIndex: 0
   },
+
+  setPickingList: (task: OutboundTask) => set({
+    pickingList: {
+      pickingId: task.outboundAssignNumber,
+      items: task.lotLocations.map(lot => ({
+        id: lot.lotId,
+        code: lot.productCode,
+        name: lot.productName,
+        image: lot.productImage,  
+        location: {
+          zone: lot.zone,
+          aisle: lot.aisle.toString(),
+          rack: lot.rowNum.toString(),
+          floor: lot.floor.toString()
+        },
+        isLocationScanned: false,
+        isItemScanned: false,
+        quantity: 1
+      })),
+      currentItemIndex: 0
+    }
+  }),
 
   setLocationScanned: () => set((state) => ({
     pickingList: {
@@ -76,19 +82,25 @@ export const usePickingStore = create<PickingStore>((set) => ({
   moveToNextItem: () => set((state) => ({
     pickingList: {
       ...state.pickingList,
-      currentItemIndex: state.pickingList.currentItemIndex + 1
+      currentItemIndex: state.pickingList.currentItemIndex + 1,
+      items: state.pickingList.items.map((item, index) => 
+        // 다음 아이템의 스캔 상태를 초기화
+        index === state.pickingList.currentItemIndex + 1 
+          ? { 
+              ...item, 
+              isLocationScanned: false, 
+              isItemScanned: false      
+            }
+          : item
+      )
     }
   })),
-
-  resetPicking: () => set((state) => ({
+  
+  resetPicking: () => set({
     pickingList: {
-      ...state.pickingList,
-      currentItemIndex: 0,
-      items: state.pickingList.items.map(item => ({
-        ...item,
-        isLocationScanned: false,
-        isItemScanned: false
-      }))
+      pickingId: '',
+      items: [],
+      currentItemIndex: 0
     }
-  }))
+  })
 }));

@@ -4,10 +4,8 @@ import Home from '@pages/home/Home';
 import { Outbound } from '@/pages/outbound/Outbound';
 import { Camera } from '@/pages/camera/Camera';
 import Chat from '@/pages/chat/Chat';
-// import Task from '@/pages/tasklist/Task';
-import {Inbound} from '../pages/inbound1/Inbound';
-import InboundListPage, { exampleData }  from '@/pages/inbound1/ui/TodayList';
-
+import TaskListPage from '@/pages/tasklist/Task';
+import {Inbound} from '@/pages/inbound1/Inbound';
 
 const router = createBrowserRouter([
   {
@@ -36,7 +34,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/task',
-        element: <InboundListPage inboundWorks={exampleData} />,
+        element: <TaskListPage />,
+      },
+      {
+        path: '/task/inbound',
+        element: <TaskListPage defaultTab="inbound" />,
+      },
+      {
+        path: '/task/outbound',
+        element: <TaskListPage defaultTab="outbound" />,
       },
     ]
   }

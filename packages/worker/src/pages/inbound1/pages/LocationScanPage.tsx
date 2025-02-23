@@ -62,7 +62,7 @@ function LocationScanPage() {
   const handleLocationScan = () => {
     navigate('/camera', {
       state: {
-        expectedCode: `${currentItem.location.zone}-${currentItem.location.aisle}-${currentItem.location.rack}-${currentItem.location.shelf}`,
+        expectedCode: `${currentItem.location.zone}-${currentItem.location.aisle}-${currentItem.location.rack}-${currentItem.location.floor}`,
         returnPath: `/inbound/location/${itemId}`
       }
     });
@@ -70,7 +70,7 @@ function LocationScanPage() {
 
   return (
     <div className="p-4">
-      <div className="mb-4">
+      <div className="mb-6">
         <span className="seq">
           {Number(itemId)} / {inboundList.items.length} 번째 물품
         </span>
