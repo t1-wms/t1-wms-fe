@@ -1,13 +1,13 @@
-import styles from "./OrderDrawer.module.css";
+import { OutboundProductTable } from "@/features";
 import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   CreateOrderModalInfo,
   OrderResponseDto,
   useDeleteOrder,
 } from "../../model";
-import { OutboundProductTable } from "@/features";
-import { useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import styles from "./OrderDrawer.module.css";
 
 interface OrderDrawerProps {
   data: OrderResponseDto;
@@ -45,21 +45,21 @@ export const OrderDrawer = ({ data, onClose }: OrderDrawerProps) => {
             defaultValue={orderNumber}
             label="발주번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={orderDate}
             label="발주날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={supplierName}
             label="납품업체"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
         </div>

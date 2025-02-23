@@ -1,3 +1,4 @@
+import ArrowRightIcon from "@assets/arrow-right.svg?react";
 import { ReactNode } from "react";
 import styles from "./BaseDrawer.module.css";
 
@@ -15,8 +16,13 @@ export const BaseDrawer = ({ title, children, onClose }: BaseDrawerProps) => {
           className={`${styles.box} shadow-md`}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className={`${styles.title} font-h4`}>{title}</div>
-          {children}
+          <div className={`${styles.title} font-h4`}>
+            {title}
+            <button onClick={onClose}>
+              <ArrowRightIcon />
+            </button>
+          </div>
+          <div style={{ padding: 16 }}>{children}</div>
         </div>
       </div>
     </div>

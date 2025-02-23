@@ -22,21 +22,21 @@ export const InboundPutAwayDrawer = ({
             defaultValue={scheduleNumber}
             label="입하예정번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={putAwayNumber}
             label="입고적치번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={putAwayDate}
             label="입고적치날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
         </div>

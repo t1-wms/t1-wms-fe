@@ -1,13 +1,13 @@
-import styles from "./OutboundAssignDrawer.module.css";
+import { OutboundProductTable } from "@/features";
 import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   CreateOutboundAssignModalInfo,
   OutboundAssignResponseDto,
   useDeleteOutboundAssign,
 } from "../../model";
-import { OutboundProductTable } from "@/features";
-import { useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import styles from "./OutboundAssignDrawer.module.css";
 
 interface OutboundAssignDrawerProps {
   data: OutboundAssignResponseDto;
@@ -54,35 +54,35 @@ export const OutboundAssignDrawer = ({
             defaultValue={outboundScheduleNumber}
             label="출고예정번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={outboundAssignNumber}
             label="출고지시번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={outboundAssignDate}
             label="출고지시날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={productionPlanNumber}
             label="주문번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={planDate}
             label="주문날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
         </div>

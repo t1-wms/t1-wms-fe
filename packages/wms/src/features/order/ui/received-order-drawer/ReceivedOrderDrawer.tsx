@@ -1,9 +1,9 @@
-import styles from "./ReceivedOrderDrawer.module.css";
-import { BaseDrawer, MainButton, MainInput } from "@/shared";
-import { OrderResponseDto, useApproveOrder } from "../../model";
 import { OutboundProductTable } from "@/features";
-import { useCallback } from "react";
+import { BaseDrawer, MainButton, MainInput } from "@/shared";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
+import { OrderResponseDto, useApproveOrder } from "../../model";
+import styles from "./ReceivedOrderDrawer.module.css";
 
 interface ReceivedOrderDrawerProps {
   data: OrderResponseDto;
@@ -33,21 +33,21 @@ export const ReceivedOrderDrawer = ({
             defaultValue={orderNumber}
             label="발주번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={orderDate}
             label="발주날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={supplierName}
             label="납품업체"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
         </div>

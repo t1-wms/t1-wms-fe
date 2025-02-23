@@ -1,12 +1,12 @@
-import styles from "./ThresholdDrawer.module.css";
 import { BaseDrawer, MainButton, MainInput } from "@/shared";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   ProductThresholdDto,
   useUpdateThreshold,
   useUpdateThresholdForm,
 } from "../../model";
-import { useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import styles from "./ThresholdDrawer.module.css";
 
 interface ThresholdDrawerProps {
   data: ProductThresholdDto;
@@ -44,27 +44,27 @@ export const ThresholdDrawer = ({ data, onClose }: ThresholdDrawerProps) => {
             defaultValue={productCode}
             label="품목코드"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={productName}
             label="품목이름"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={productCount}
             label="품목 수"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={threshold}
             label="안전재고"
-            width="fullWidth"
+            width="160px"
             {...inputProps.threshold}
           />
           <div className={styles["button-box"]}>

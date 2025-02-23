@@ -1,13 +1,13 @@
-import styles from "./OutboundPlanDrawer.module.css";
+import { OutboundProductTable } from "@/features";
 import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   CreateOutboundPlanModalInfo,
   OutboundPlanResponseDto,
   useDeleteOutboundPlan,
 } from "../../model";
-import { OutboundProductTable } from "@/features";
-import { useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import styles from "./OutboundPlanDrawer.module.css";
 
 interface OutboundPlanDrawerProps {
   data: OutboundPlanResponseDto;
@@ -58,28 +58,28 @@ export const OutboundPlanDrawer = ({
             defaultValue={outboundScheduleNumber}
             label="출고예정번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={outboundScheduleDate}
             label="출고예정날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={productionPlanNumber}
             label="주문번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={planDate}
             label="주문날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
         </div>

@@ -39,21 +39,21 @@ export const InboundCheckDrawer = ({
             defaultValue={scheduleNumber}
             label="입하예정번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={checkNumber}
             label="입하검사번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={checkDate}
             label="입하검사날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
         </div>
