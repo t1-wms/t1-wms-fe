@@ -7,6 +7,7 @@ import RackDetail from "./ReckDetail";
 import ZoneLegend from "./ZoneLegend";
 import { zoneColor } from "./constants";
 import { RackProps } from "./types";
+import "./tailwind.css";
 
 const generateRacksForZone = (
   zone: string,
