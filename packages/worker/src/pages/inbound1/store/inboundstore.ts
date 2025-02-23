@@ -2,38 +2,38 @@ import { create } from 'zustand';
 import { PickingItem } from '@/shared/types/items';
 
 const dummyInboundItems: PickingItem[] = [
-  {
-    pickingSeq: 1,
-    id: 1,
-    code: "AX-100",
-    name: "부품 A",
-    quantity: 2,
-    location: {
-      zone: "A",
-      aisle: "01",
-      rack: "01",
-      shelf: "03"
-    },
-    isLocationScanned: false,
-    isItemScanned: false,
-    isInspectionComplete: false
-  },
-  {
-    pickingSeq: 2,
-    id: 2,
-    code: "BX-200",
-    name: "부품 B",
-    quantity: 1,
-    location: {
-      zone: "B",
-      aisle: "02",
-      rack: "03",
-      shelf: "01"
-    },
-    isLocationScanned: false,
-    isItemScanned: false,
-    isInspectionComplete: false
-  }
+  // {
+  //   pickingSeq: 1,
+  //   id: 1,
+  //   code: "AX-100",
+  //   name: "부품 A",
+  //   quantity: 2,
+  //   location: {
+  //     zone: "A",
+  //     aisle: "01",
+  //     rack: "01",
+  //     shelf: "03"
+  //   },
+  //   isLocationScanned: false,
+  //   isItemScanned: false,
+  //   isInspectionComplete: false
+  // },
+  // {
+  //   pickingSeq: 2,
+  //   id: 2,
+  //   code: "BX-200",
+  //   name: "부품 B",
+  //   quantity: 1,
+  //   location: {
+  //     zone: "B",
+  //     aisle: "02",
+  //     rack: "03",
+  //     shelf: "01"
+  //   },
+  //   isLocationScanned: false,
+  //   isItemScanned: false,
+  //   isInspectionComplete: false
+  // }
 ];
 
 interface InboundStore {

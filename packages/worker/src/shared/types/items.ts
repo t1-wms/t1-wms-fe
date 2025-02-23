@@ -20,7 +20,7 @@ export interface Location {
   zone: string;
   aisle: string;
   rack: string;
-  shelf: string;
+  floor: string;
 }
 
 //스캔 작업용 아이템 타입

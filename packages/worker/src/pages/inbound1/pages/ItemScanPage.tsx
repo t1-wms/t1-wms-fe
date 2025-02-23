@@ -40,7 +40,7 @@ function ItemScanPage() {
 
   return (
     <div className="p-4">
-      <div className="mb-2">
+      <div className="mb-10">
         <span className="seq">
           {Number(itemId)} / {inboundList.items.length} 번째 물품
         </span>

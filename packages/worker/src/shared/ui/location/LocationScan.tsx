@@ -8,7 +8,7 @@ export const LocationScan = ({
   zone, 
   aisle,
   rack,  
-  shelf,
+  floor,
   onLocationScan,
   isLocationScanned 
 }: LocationScanProps) => {
@@ -16,14 +16,14 @@ export const LocationScan = ({
     <div className="flex flex-col h-full">
       <LocationHeader />
       <div className="mb-4">
-        <BinCodeDisplay zone={zone} aisle={aisle} rack={rack} shelf={shelf} />
+        <BinCodeDisplay zone={zone} aisle={aisle} rack={rack} floor={floor} />
       </div>
       <div className="p-2">
         <div className="flex-col space-y-2">
           <LocationInfo label="구역" value={zone} />
-          <LocationInfo label="통로" value={rack} />
-          <LocationInfo label="진열대 번호" value={shelf} />
-          <LocationInfo label="층" value={aisle || "x"} />
+          <LocationInfo label="통로" value={aisle} />
+          <LocationInfo label="진열대 번호" value={rack} />
+          <LocationInfo label="층" value={floor || "x"} />
         </div>
       </div>
       <div className="mt-auto">

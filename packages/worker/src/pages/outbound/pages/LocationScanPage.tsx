@@ -11,7 +11,18 @@ export const LocationScanPage = () => {
   const [isLocationScanned, setIsLocationScanned] = useState(false);
   
   const { pickingList, setLocationScanned } = usePickingStore();
-  const currentItem = pickingList.items[Number(itemId) - 1]; // URL의 itemId를 인덱스로 변환
+  const currentItem = pickingList.items[Number(itemId) - 1];
+
+  useEffect(() => {
+    if (!pickingList.pickingId) {
+      navigate('/tasklist');
+      return;
+    }
+    if (!currentItem) {
+      navigate('/outbound/complete', { replace: true });
+      return;
+    }
+  }, [currentItem, navigate, pickingList]);
 
   useEffect(() => {
     if (!currentItem) {
@@ -20,11 +31,11 @@ export const LocationScanPage = () => {
     }
   }, [currentItem, navigate]);
 
-  useEffect(() => {
-    if (currentItem?.isLocationScanned) {
-      navigate(`/outbound/item/${itemId}`, { replace: true });
-    }
-  }, [currentItem, navigate, itemId]);
+  // useEffect(() => {
+  //   if (currentItem?.isLocationScanned) {
+  //     navigate(`/outbound/item/${itemId}`, { replace: true });
+  //   }
+  // }, [currentItem, navigate, itemId]);
 
   useEffect(() => {
     const state = location.state as { scanSuccess?: boolean };
@@ -35,20 +46,34 @@ export const LocationScanPage = () => {
       setTimeout(() => {
         navigate(`/outbound/item/${itemId}`, { 
           replace: true,
-          state: {} // 이전 state 초기화
+          state: {} 
         });
       }, 1000);
     }
   }, [location.state, navigate, setLocationScanned, itemId]);
+
+  useEffect(() => {
+    if (!pickingList.pickingId) {
+      navigate('/tasklist');
+      return;
+    }
+    // 현재 아이템이 없거나 전체 개수를 초과한 경우
+    if (!currentItem || Number(itemId) > pickingList.items.length) {
+      navigate('/outbound/complete', { replace: true });
+      return;
+    }
+  }, [currentItem, navigate, pickingList, itemId]);
 
   if (!currentItem) {
     return <Spinner />;
   }
 
   const handleLocationScan = () => {
+    const expectedLocation = `${currentItem.location.zone}-${currentItem.location.aisle}-${currentItem.location.rack}-${currentItem.location.floor}`;
+    console.log('Expected Location:', expectedLocation);
     navigate('/camera', {
       state: {
-        expectedCode: `${currentItem.location.zone}-${currentItem.location.aisle}-${currentItem.location.rack}-${currentItem.location.shelf}`,
+        expectedCode: expectedLocation,
         returnPath: `/outbound/location/${itemId}`
       }
     });
@@ -56,7 +81,7 @@ export const LocationScanPage = () => {
 
   return (
     <div className="p-4">
-      <div className="mb-4">
+      <div className="mb-6">
         <span className="seq">
           {Number(itemId)} / {pickingList.items.length} 번째 물품
         </span>

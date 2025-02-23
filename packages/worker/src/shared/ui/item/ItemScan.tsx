@@ -6,12 +6,12 @@ import { HiPlus, HiMinus } from 'react-icons/hi';
 export const ItemScan = ({ item, onScanComplete }: ItemScanProps) => {
   const [quantity, setQuantity] = useState(item.quantity);
 
-  const BinCodeDisplay = ({ zone, aisle, rack, shelf }: Location) => (
+  const BinCodeDisplay = ({ zone, aisle, rack, floor }: Location) => (
     <div className="flex text-gray-50 text-xl font-bold">
       <span className="bg-purple-700 px-4 py-2">Z{zone}</span>
       <span className="bg-gray-600 px-4 py-2">{aisle}</span>
       <span className="bg-gray-400 px-4 py-2">{rack}</span>
-      <span className="bg-green-600 px-4 py-2">{shelf}</span>
+      <span className="bg-green-600 px-4 py-2">{floor}</span>
     </div>
   );
 
@@ -19,7 +19,7 @@ export const ItemScan = ({ item, onScanComplete }: ItemScanProps) => {
     <div className="flex flex-col min-h-auto space-y-6">
       {/* 제품 이미지 */}
       <div className="flex justify-center">
-        <div className="w-40 h-40 bg-gray-200 rounded-md flex items-center justify-center">
+        <div className="w-45 h-45 bg-gray-200 rounded-md flex items-center justify-center">
           {item.image ? (
             <img
               src={item.image}
