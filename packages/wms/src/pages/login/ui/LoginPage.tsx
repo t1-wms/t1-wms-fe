@@ -34,7 +34,9 @@ export const LoginPage = () => {
       setUser(data.data);
       setToken(at);
 
-      navigate("/dashboard");
+      navigate(
+        data.data.userRole === "공급업체" ? "/received-order" : "/dashboard"
+      );
     },
     (error: Error) => {
       const e = error as AxiosError;
