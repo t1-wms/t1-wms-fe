@@ -1,6 +1,6 @@
 import { ReactNode, useCallback, useMemo, useState } from "react";
-import styles from "./SideBarItem.module.css";
 import { Link, useNavigate } from "react-router";
+import styles from "./SideBarItem.module.css";
 
 interface SideBarItemRoute {
   icon: ReactNode;
@@ -37,7 +37,15 @@ export const SideBarItem = ({ routes }: SideBarItemProps) => {
   }, [routes, isFoldable, navigate, toggleFold]);
 
   return (
-    <div className={`${styles.container} ${!isFolded ? styles.folded : ""}`}>
+    <div
+      className={`${styles.container} ${!isFolded ? styles.folded : ""}`}
+      style={{
+        height:
+          routes.subItems && !isFolded
+            ? 56 + 24 * routes.subItems.length + 8
+            : 56,
+      }}
+    >
       <button
         className={`${styles["main-button"]} font-b-md`}
         onClick={handleClickMainButton}
@@ -45,7 +53,7 @@ export const SideBarItem = ({ routes }: SideBarItemProps) => {
         <div className={styles["icon-wrapper"]}>{routes.icon}</div>
         {routes.label}
       </button>
-      {routes.subItems && !isFolded && (
+      {routes.subItems && (
         <div className={styles["sub-items"]}>
           {routes.subItems.map((subItem, i) => (
             <Link
