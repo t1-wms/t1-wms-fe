@@ -1,14 +1,14 @@
-import { PageContentBox } from "@/shared";
-import styles from "./OutboundLoadingPage.module.css";
 import {
-  OutboundLoadingDrawer,
   OutboundControlPanel,
-  OutboundPackingListDrawer,
+  OutboundLoadingDrawer,
   OutboundLoadingTable,
+  OutboundPackingListDrawer,
   useOutboundLoadingTable,
 } from "@/features";
-import { useCallback, useMemo, useState } from "react";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./OutboundLoadingPage.module.css";
 
 export const OutboundLoadingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -37,6 +37,7 @@ export const OutboundLoadingPage = () => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -59,6 +60,8 @@ export const OutboundLoadingPage = () => {
           label="출하상차"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>
@@ -73,6 +76,7 @@ export const OutboundLoadingPage = () => {
             setSorting,
             rowSelection,
             setRowSelection,
+            isLoading,
             isPending,
             isError,
             error,

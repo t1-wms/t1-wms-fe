@@ -8,10 +8,12 @@ import {
 import {
   createInboundCheck,
   createInboundPutAway,
+  getCompletedInboundToday,
   getInboundChart,
   getInboundChecksPaged,
   getInboundPutAwaysPaged,
   getInboundSchedulesPaged,
+  getReceivedInboundToday,
 } from "../api";
 import { InboundFilter, UseCreateInboundCheckParams } from "./types";
 
@@ -39,6 +41,20 @@ export const useInboundChart = () => {
   });
 };
 
+export const useReceivedInboundToday = () => {
+  return useSuspenseQuery({
+    queryKey: ["inbound", "today", "received"],
+    queryFn: () => getReceivedInboundToday(),
+  });
+};
+
+export const useCompletedInboundToday = () => {
+  return useSuspenseQuery({
+    queryKey: ["inbound", "today", "completed"],
+    queryFn: () => getCompletedInboundToday(),
+  });
+};
+
 export const useInboundSchedules = (
   page?: number,
   sort?: Sort,
@@ -47,6 +63,7 @@ export const useInboundSchedules = (
   return useQuery({
     queryKey: createUseInboundQueryKey("inboundSchedule", page!, sort, filter),
     queryFn: () => getInboundSchedulesPaged(page!, sort, filter),
+    placeholderData: (prev) => prev,
   });
 };
 
@@ -58,6 +75,7 @@ export const useInboundChecks = (
   return useQuery({
     queryKey: createUseInboundQueryKey("inboundCheck", page!, sort, filter),
     queryFn: () => getInboundChecksPaged(page!, sort, filter),
+    placeholderData: (prev) => prev,
   });
 };
 
@@ -69,6 +87,7 @@ export const useInboundPutAways = (
   return useQuery({
     queryKey: createUseInboundQueryKey("inboundPutAway", page!, sort, filter),
     queryFn: () => getInboundPutAwaysPaged(page!, sort, filter),
+    placeholderData: (prev) => prev,
   });
 };
 

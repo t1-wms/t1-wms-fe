@@ -1,47 +1,48 @@
-import "chart.js/auto";
-import { Doughnut } from "react-chartjs-2";
-import styles from "./PieChart.module.css";
-import { ChartData, ChartOptions } from "chart.js";
-
-const colors = ["#1C60B8", "#3C71B6", "#A2B3CB", "#F5E0B4", "#C1A694"];
+import { ResponsivePie } from "@nivo/pie";
+import { ChartData } from "../model";
 
 interface PieChartProps {
-  title: string;
-  labels: string[];
-  dataLabel: string;
-  data: number[];
+  data: ChartData[];
 }
 
-export const PieChart = ({ title, labels, dataLabel, data }: PieChartProps) => {
-  const chartData: ChartData<"doughnut"> = {
-    labels,
-    datasets: [
-      {
-        label: dataLabel,
-        // data: [100, 50, 20, 120, 70],
-        data,
-        backgroundColor: colors,
-        hoverOffset: 4,
-      },
-    ],
-  };
-
-  const options: ChartOptions<"doughnut"> = {
-    layout: {
-      padding: 16,
-    },
-    cutout: "20%",
-    plugins: {
-      legend: {
-        display: true,
-      },
-    },
-  };
-
+const PieChart = ({ data }: PieChartProps) => {
   return (
-    <div className={styles.container}>
-      <h1 className="font-h4">{title}</h1>
-      <Doughnut data={chartData} options={options} />
-    </div>
+    <ResponsivePie
+      data={data.filter((item) => item.value > 0)}
+      margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+      innerRadius={0.5}
+      activeOuterRadiusOffset={8}
+      padAngle={1}
+      cornerRadius={4}
+      colors={{ scheme: "tableau10" }}
+      enableArcLinkLabels={false}
+      legends={[
+        {
+          anchor: "bottom",
+          direction: "row",
+          justify: false,
+          translateX: 0,
+          translateY: 56,
+          itemsSpacing: 0,
+          itemWidth: 75,
+          itemHeight: 18,
+          itemTextColor: "#1e293b",
+          itemDirection: "left-to-right",
+          itemOpacity: 1,
+          symbolSize: 18,
+          symbolShape: "circle",
+          effects: [
+            {
+              on: "hover",
+              style: {
+                itemTextColor: "#000",
+              },
+            },
+          ],
+        },
+      ]}
+    />
   );
 };
+
+export default PieChart;

@@ -1,14 +1,14 @@
-import { PageContentBox } from "@/shared";
-import styles from "./OutboundPackingPage.module.css";
 import {
-  OutboundPackingDrawer,
   OutboundControlPanel,
-  OutboundPickingListDrawer,
+  OutboundPackingDrawer,
   OutboundPackingTable,
+  OutboundPickingListDrawer,
   useOutboundPackingTable,
 } from "@/features";
-import { useCallback, useMemo, useState } from "react";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./OutboundPackingPage.module.css";
 
 export const OutboundPackingPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -37,6 +37,7 @@ export const OutboundPackingPage = () => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -59,6 +60,8 @@ export const OutboundPackingPage = () => {
           label="출고패킹"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>
@@ -73,6 +76,7 @@ export const OutboundPackingPage = () => {
             setSorting,
             rowSelection,
             setRowSelection,
+            isLoading,
             isPending,
             isError,
             error,

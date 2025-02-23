@@ -1,7 +1,7 @@
-import styles from "./SupplierDrawer.module.css";
+import { SupplierProductTable } from "@/features";
 import { BaseDrawer, MainInput } from "@/shared";
 import { SupplierResponseDto } from "../../model";
-import { SupplierProductTable } from "@/features";
+import styles from "./SupplierDrawer.module.css";
 
 interface SupplierDrawerProps {
   data: SupplierResponseDto;
@@ -19,14 +19,14 @@ export const SupplierDrawer = ({ data, onClose }: SupplierDrawerProps) => {
             defaultValue={businessNumber}
             label="사업자등록번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={supplierName}
             label="납품업체"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
         </div>

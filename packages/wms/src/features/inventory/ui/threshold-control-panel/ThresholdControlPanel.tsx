@@ -1,13 +1,15 @@
-import styles from "./ThresholdControlPanel.module.css";
 import { MainButton, MainInput } from "@/shared";
 import { useSearchThresholdForm } from "../../model";
+import styles from "./ThresholdControlPanel.module.css";
 
 interface ThresholdControlPanelProps {
   onSearch: (productCode: string) => void;
+  isLoading: boolean;
 }
 
 export const ThresholdControlPanel = ({
   onSearch,
+  isLoading,
 }: ThresholdControlPanelProps) => {
   const { inputProps, onSubmit } = useSearchThresholdForm(onSearch);
 
@@ -23,7 +25,9 @@ export const ThresholdControlPanel = ({
         />
       </div>
       <div className={styles["button-box"]}>
-        <MainButton size="sm">조회</MainButton>
+        <MainButton size="sm" isLoading={isLoading}>
+          조회
+        </MainButton>
       </div>
     </form>
   );

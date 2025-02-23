@@ -1,13 +1,13 @@
-import { PageContentBox } from "@/shared";
-import styles from "./SupplierPage.module.css";
 import {
   SupplierControlPanel,
   SupplierDrawer,
-  useSupplierTable,
   SupplierTable,
+  useSupplierTable,
 } from "@/features";
-import { useCallback, useMemo, useState } from "react";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./SupplierPage.module.css";
 
 export default function SupplierPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -28,6 +28,7 @@ export default function SupplierPage() {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -46,7 +47,7 @@ export default function SupplierPage() {
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <SupplierControlPanel onSearch={handleSearch} />
+        <SupplierControlPanel onSearch={handleSearch} isLoading={isLoading} />
       </PageContentBox>
       <PageContentBox>
         <SupplierTable
@@ -58,6 +59,7 @@ export default function SupplierPage() {
             rowSelection,
             setRowSelection,
             data,
+            isLoading,
             isPending,
             isError,
             error,

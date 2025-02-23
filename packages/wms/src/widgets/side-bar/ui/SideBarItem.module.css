@@ -1,14 +1,15 @@
 .container {
   background-color: var(--color-gray-50);
   color: var(--color-gray-900);
-  transition: background-color 0.25s;
+  transition: background-color 0.25s, height 0.25s;
+  overflow: hidden;
 
   &.folded {
     background-color: var(--color-gray-200);
   }
 
   &:hover {
-    background-color: var(--color-gray-200);
+    background-color: var(--color-gray-300);
   }
 }
 

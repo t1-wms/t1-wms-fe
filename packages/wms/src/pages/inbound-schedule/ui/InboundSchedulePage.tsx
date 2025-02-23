@@ -31,6 +31,7 @@ export const InboundSchedulePage = () => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -53,6 +54,8 @@ export const InboundSchedulePage = () => {
           label="입하예정"
           onSearch={handleSearch}
           onClickCreate={() => {}}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>
@@ -65,6 +68,7 @@ export const InboundSchedulePage = () => {
             rowSelection,
             setRowSelection,
             data,
+            isLoading,
             isPending,
             isError,
             error,

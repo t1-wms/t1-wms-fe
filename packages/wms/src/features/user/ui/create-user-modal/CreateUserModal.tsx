@@ -1,9 +1,4 @@
-import styles from "./CreateUserModal.module.css";
-import {
-  CreateUserModalInfo,
-  RegisterUserRequestDto,
-  useRegisterUser,
-} from "../../model";
+import { useSimpleSuppliers } from "@/features/order";
 import {
   BasicModal,
   Gender,
@@ -13,10 +8,15 @@ import {
   useModalStore,
   UserRole,
 } from "@/shared";
-import { useCreateUserForm } from "../../model/useCreateUserForm";
-import { useSimpleSuppliers } from "@/features/order";
-import { ChangeEventHandler, useCallback, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { ChangeEventHandler, useCallback, useMemo, useState } from "react";
+import {
+  CreateUserModalInfo,
+  RegisterUserRequestDto,
+  useRegisterUser,
+} from "../../model";
+import { useCreateUserForm } from "../../model/useCreateUserForm";
+import styles from "./CreateUserModal.module.css";
 
 interface CreateUserModalProps {
   modalInfo: CreateUserModalInfo;
@@ -66,7 +66,7 @@ export const CreateUserModal = ({}: CreateUserModalProps) => {
 
   const { inputProps, onSubmit } = useCreateUserForm(handleValid);
 
-  const { data, isPending } = useSimpleSuppliers();
+  const { data, isLoading } = useSimpleSuppliers();
 
   const supplierOptions: Option[] = useMemo(() => {
     return userRole === "공급업체" && data
@@ -143,9 +143,9 @@ export const CreateUserModal = ({}: CreateUserModalProps) => {
         <MainSelect
           width={inputWidth}
           label="납품업체"
-          disabled={isPending}
+          disabled={isLoading}
           options={supplierOptions}
-          isPending={isPending}
+          isLoading={isLoading}
           value={supplierId}
           onChange={handleChangeSupplierId}
         />

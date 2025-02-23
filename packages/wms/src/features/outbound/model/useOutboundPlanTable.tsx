@@ -18,7 +18,7 @@ export const useOutboundPlanTable = (columnFilters?: ColumnFiltersState) => {
     outboundDateKey: "outboundScheduleDate",
   });
 
-  const { data, isFetched, isPending, isError, error, refetch } =
+  const { data, isFetched, isLoading, isPending, isError, error, refetch } =
     useOutboundPlans(pagination.pageIndex, sort, filter);
 
   return {
@@ -30,6 +30,7 @@ export const useOutboundPlanTable = (columnFilters?: ColumnFiltersState) => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,

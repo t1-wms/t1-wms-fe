@@ -18,7 +18,7 @@ export const useInboundScheduleTable = (columnFilters?: ColumnFiltersState) => {
     inboundDateKey: "ScheduleDate",
   });
 
-  const { data, isFetched, isPending, isError, error, refetch } =
+  const { data, isFetched, isLoading, isPending, isError, error, refetch } =
     useInboundSchedules(pagination.pageIndex, sort, filter);
 
   return {
@@ -30,6 +30,7 @@ export const useInboundScheduleTable = (columnFilters?: ColumnFiltersState) => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,

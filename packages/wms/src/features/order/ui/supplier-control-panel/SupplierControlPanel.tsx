@@ -1,13 +1,15 @@
-import styles from "./SupplierControlPanel.module.css";
 import { MainButton, MainInput } from "@/shared";
 import { useSearchSupplierForm } from "../../model";
+import styles from "./SupplierControlPanel.module.css";
 
 interface SupplierControlPanelProps {
   onSearch: (businessNumber: string) => void;
+  isLoading: boolean;
 }
 
 export const SupplierControlPanel = ({
   onSearch,
+  isLoading,
 }: SupplierControlPanelProps) => {
   const { inputProps, onSubmit } = useSearchSupplierForm(onSearch);
 
@@ -23,7 +25,9 @@ export const SupplierControlPanel = ({
         />
       </div>
       <div className={styles["button-box"]}>
-        <MainButton size="sm">조회</MainButton>
+        <MainButton size="sm" isLoading={isLoading}>
+          조회
+        </MainButton>
       </div>
     </form>
   );

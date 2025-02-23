@@ -1,8 +1,8 @@
 import { getFilterValue, useTable } from "@/shared";
+import { ColumnFiltersState } from "@tanstack/react-table";
+import { useMemo } from "react";
 import { useUsers } from "./queryHooks";
 import { UserFilter } from "./types";
-import { useMemo } from "react";
-import { ColumnFiltersState } from "@tanstack/react-table";
 
 export const useUserTable = (columnFilters: ColumnFiltersState) => {
   const filter: UserFilter | undefined = useMemo(() => {
@@ -25,11 +25,8 @@ export const useUserTable = (columnFilters: ColumnFiltersState) => {
     sort,
   } = useTable();
 
-  const { data, isFetched, isPending, isError, error, refetch } = useUsers(
-    pagination.pageIndex,
-    sort,
-    filter
-  );
+  const { data, isFetched, isLoading, isPending, isError, error, refetch } =
+    useUsers(pagination.pageIndex, sort, filter);
 
   return {
     pagination,
@@ -40,6 +37,7 @@ export const useUserTable = (columnFilters: ColumnFiltersState) => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,

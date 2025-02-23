@@ -1,15 +1,18 @@
-import styles from "./OrderControlPanel.module.css";
 import { MainButton, MainDateRangePicker, MainInput } from "@/shared";
 import { useSearchOrderForm } from "../../model";
+import styles from "./OrderControlPanel.module.css";
 
 interface OrderControlPanelProps {
   onSearch: (number: string, startDate: string, endDate: string) => void;
   onClickCreate: () => void;
+  isLoading: boolean;
+  isError: boolean;
 }
 
 export const OrderControlPanel = ({
   onSearch,
   onClickCreate,
+  isLoading,
 }: OrderControlPanelProps) => {
   const { inputProps, onSubmit } = useSearchOrderForm(onSearch);
 
@@ -32,8 +35,15 @@ export const OrderControlPanel = ({
         />
       </div>
       <div className={styles["button-box"]}>
-        <MainButton size="sm">조회</MainButton>
-        <MainButton size="sm" type="button" onClick={onClickCreate}>
+        <MainButton size="sm" isLoading={isLoading}>
+          조회
+        </MainButton>
+        <MainButton
+          size="sm"
+          type="button"
+          onClick={onClickCreate}
+          disabled={isLoading}
+        >
           추가
         </MainButton>
       </div>

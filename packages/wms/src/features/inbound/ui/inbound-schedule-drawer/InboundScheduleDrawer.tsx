@@ -1,7 +1,7 @@
-import styles from "./InboundScheduleDrawer.module.css";
+import { OutboundProductTable } from "@/features";
 import { BaseDrawer, MainButton, MainInput } from "@/shared";
 import { InboundScheduleResponseDto } from "../../model";
-import { OutboundProductTable } from "@/features";
+import styles from "./InboundScheduleDrawer.module.css";
 
 interface InboundScheduleDrawerProps {
   data: InboundScheduleResponseDto;
@@ -22,14 +22,14 @@ export const InboundScheduleDrawer = ({
             defaultValue={scheduleNumber}
             label="입하예정번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={scheduleDate}
             label="입하예정날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
         </div>

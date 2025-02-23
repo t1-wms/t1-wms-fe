@@ -22,6 +22,7 @@ export default function UserPage() {
     rowSelection,
     setRowSelection,
     data,
+    isLoading,
     isPending,
     isError,
     error,
@@ -33,7 +34,11 @@ export default function UserPage() {
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <UserControlPanel onSearch={handleSearch} />
+        <UserControlPanel
+          onSearch={handleSearch}
+          isLoading={isLoading}
+          isError={isError}
+        />
       </PageContentBox>
       <PageContentBox stretch>
         <UserTable
@@ -45,6 +50,7 @@ export default function UserPage() {
             rowSelection,
             setRowSelection,
             data,
+            isLoading,
             isPending,
             isError,
             error,

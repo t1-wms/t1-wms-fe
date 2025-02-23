@@ -18,7 +18,7 @@ export const useInboundCheckTable = (columnFilters?: ColumnFiltersState) => {
     inboundDateKey: "checkDate",
   });
 
-  const { data, isFetched, isPending, isError, error, refetch } =
+  const { data, isFetched, isLoading, isPending, isError, error, refetch } =
     useInboundChecks(pagination.pageIndex, sort, filter);
 
   return {
@@ -30,6 +30,7 @@ export const useInboundCheckTable = (columnFilters?: ColumnFiltersState) => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,

@@ -37,6 +37,7 @@ export default function OrderPage() {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -58,6 +59,8 @@ export default function OrderPage() {
         <OrderControlPanel
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>
@@ -70,6 +73,7 @@ export default function OrderPage() {
             rowSelection,
             setRowSelection,
             data,
+            isLoading,
             isPending,
             isError,
             error,

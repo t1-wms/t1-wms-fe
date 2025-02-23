@@ -43,9 +43,20 @@ export const getUsersPaged = async (
   return response.data;
 };
 
-export const updateUserActive = async (userId: number) => {
+export const updateUserActive = async (
+  staffNumber: string,
+  isActive: boolean
+) => {
   const response = await noAuthAxios.put<UpdateActiveResDto>(
-    `api/user/active/${userId}`
+    `api/auth/active?staffNumber=${staffNumber}&isActive=${isActive}`
+  );
+
+  return response.data;
+};
+
+export const updateUserRole = async (staffNumber: string, newRole: string) => {
+  const response = await noAuthAxios.put<UpdateActiveResDto>(
+    `api/auth/role?staffNumber=${staffNumber}&newRole=${newRole}`
   );
 
   return response.data;

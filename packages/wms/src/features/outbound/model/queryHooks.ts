@@ -16,12 +16,14 @@ import {
   deleteOutboundPacking,
   deleteOutboundPicking,
   deleteOutboundPlan,
+  getCompletedOutboundToday,
   getOutboundAssignsPaged,
   getOutboundChart,
   getOutboundLoadingsPaged,
   getOutboundPackingsPaged,
   getOutboundPickingsPaged,
   getOutboundPlansPaged,
+  getReceivedOutboundToday,
   updateOutboundAssign,
   updateOutboundLoading,
   updateOutboundPacking,
@@ -42,6 +44,20 @@ export const useOutboundChart = () => {
   return useSuspenseQuery({
     queryKey: ["outboundChart"],
     queryFn: () => getOutboundChart(),
+  });
+};
+
+export const useReceivedOutboundToday = () => {
+  return useSuspenseQuery({
+    queryKey: ["outbound", "today", "received"],
+    queryFn: () => getReceivedOutboundToday(),
+  });
+};
+
+export const useCompletedOutboundToday = () => {
+  return useSuspenseQuery({
+    queryKey: ["outbound", "today", "completed"],
+    queryFn: () => getCompletedOutboundToday(),
   });
 };
 
@@ -81,6 +97,7 @@ export const useOutboundAssigns = (
   return useQuery({
     queryKey: createUseOutboundQueryKey("outboundAssign", page!, sort, filter),
     queryFn: () => getOutboundAssignsPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -92,6 +109,7 @@ export const useOutboundPickings = (
   return useQuery({
     queryKey: createUseOutboundQueryKey("outboundPicking", page!, sort, filter),
     queryFn: () => getOutboundPickingsPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -103,6 +121,7 @@ export const useOutboundPackings = (
   return useQuery({
     queryKey: createUseOutboundQueryKey("outboundPacking", page!, sort, filter),
     queryFn: () => getOutboundPackingsPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -114,6 +133,7 @@ export const useOutboundLoadings = (
   return useQuery({
     queryKey: createUseOutboundQueryKey("outboundLoading", page!, sort, filter),
     queryFn: () => getOutboundLoadingsPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 

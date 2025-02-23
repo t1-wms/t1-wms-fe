@@ -1,3 +1,4 @@
+import { ErrorBoundary, ErrorFallback } from "@/shared";
 import { PageFrame } from "@widgets/page-frame";
 import { Outlet, useLocation } from "react-router";
 
@@ -9,7 +10,9 @@ export const App = () => {
   } else {
     return (
       <PageFrame>
-        <Outlet />
+        <ErrorBoundary fallback={<ErrorFallback />}>
+          <Outlet />
+        </ErrorBoundary>
       </PageFrame>
     );
   }

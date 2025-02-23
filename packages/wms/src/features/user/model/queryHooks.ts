@@ -4,6 +4,8 @@ import {
   RegisterUserRequestDto,
   UserFilter,
   UserListDto,
+  UseUpdateActiveParams,
+  UseUpdateUserRoleParams,
 } from "@/features";
 import { PageResponse, Sort } from "@shared/model";
 import {
@@ -20,6 +22,7 @@ import {
   login,
   registerUser,
   updateUserActive,
+  updateUserRole,
 } from "../api/UserApi";
 
 export const useUserCount = () => {
@@ -46,6 +49,7 @@ export const useUsers = (page?: number, sort?: Sort, filter?: UserFilter) => {
   return useQuery({
     queryKey: createUseUsersQueryKey(page!, sort, filter),
     queryFn: () => getUsersPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -56,8 +60,9 @@ export const useUpdateActive = (
   filter?: UserFilter
 ) => {
   return useMutation({
-    mutationFn: (userId: number) => updateUserActive(userId),
-    onMutate: (userId: number) => {
+    mutationFn: ({ staffNumber, isActive }: UseUpdateActiveParams) =>
+      updateUserActive(staffNumber, isActive),
+    onMutate: ({ staffNumber, isActive }) => {
       queryClient.setQueryData<PageResponse<UserListDto>>(
         createUseUsersQueryKey(page, sort, filter),
         (oldData) => {
@@ -66,8 +71,37 @@ export const useUpdateActive = (
           return {
             ...oldData,
             data: oldData.content.map((user) =>
-              user.userId === userId
-                ? { ...user, isActive: !user.isActive }
+              user.staffNumber === staffNumber
+                ? { ...user, isActive: isActive }
+                : user
+            ),
+          };
+        }
+      );
+    },
+  });
+};
+
+export const useUpdateUserRole = (
+  queryClient: QueryClient,
+  page?: number,
+  sort?: Sort,
+  filter?: UserFilter
+) => {
+  return useMutation({
+    mutationFn: ({ staffNumber, newRole }: UseUpdateUserRoleParams) =>
+      updateUserRole(staffNumber, newRole),
+    onMutate: ({ staffNumber, newRole }) => {
+      queryClient.setQueryData<PageResponse<UserListDto>>(
+        createUseUsersQueryKey(page, sort, filter),
+        (oldData) => {
+          if (!oldData) return oldData;
+
+          return {
+            ...oldData,
+            data: oldData.content.map((user) =>
+              user.staffNumber === staffNumber
+                ? { ...user, userRole: newRole }
                 : user
             ),
           };
@@ -85,11 +119,13 @@ export const useRoles = () => {
 };
 
 export const useLogin = (
-  onSuccess: (data: AxiosResponse<CurrentUser>) => void
+  onSuccess: (data: AxiosResponse<CurrentUser>) => void,
+  onError: (error: Error) => void
 ) => {
   return useMutation({
     mutationFn: (loginDto: LoginDto) => login(loginDto),
     onSuccess,
+    onError,
   });
 };
 

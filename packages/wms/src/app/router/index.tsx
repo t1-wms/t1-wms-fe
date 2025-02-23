@@ -13,6 +13,7 @@ import ProductPage from "@/pages/product";
 import ReceivedOrder from "@/pages/received-order";
 import SupplierPage from "@/pages/supplier";
 import ThresholdPage from "@/pages/threshold";
+import { ErrorFallbackPage } from "@/shared";
 import { LoginPage } from "@pages/login";
 import UserPage from "@pages/user/ui/UserPage";
 import { createBrowserRouter } from "react-router";
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorFallbackPage />,
     children: [
       {
         path: "/",

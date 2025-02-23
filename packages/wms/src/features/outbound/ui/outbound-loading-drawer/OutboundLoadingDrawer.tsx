@@ -1,13 +1,13 @@
-import styles from "./OutboundLoadingDrawer.module.css";
+import { OutboundProductTable } from "@/features";
 import { BaseDrawer, MainButton, MainInput, useModalStore } from "@/shared";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   CreateOutboundLoadingModalInfo,
   OutboundLoadingResponseDto,
   useDeleteOutboundLoading,
 } from "../../model";
-import { OutboundProductTable } from "@/features";
-import { useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import styles from "./OutboundLoadingDrawer.module.css";
 
 interface OutboundLoadingDrawerProps {
   data: OutboundLoadingResponseDto;
@@ -58,56 +58,56 @@ export const OutboundLoadingDrawer = ({
             defaultValue={outboundScheduleNumber}
             label="출고예정번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={outboundAssignNumber}
             label="출고지시번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={outboundPickingNumber}
             label="출고피킹번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={outboundPackingNumber}
             label="출고패킹번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={outboundLoadingNumber}
             label="출하상차번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={outboundLoadingDate}
             label="출하상차날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={productionPlanNumber}
             label="주문번호"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
           <MainInput
             defaultValue={planDate}
             label="주문날짜"
             error={null}
-            width="fullWidth"
+            width="160px"
             disabled
           />
         </div>

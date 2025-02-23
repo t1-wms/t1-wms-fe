@@ -37,6 +37,7 @@ export const InboundPutAwayPage = () => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -59,6 +60,8 @@ export const InboundPutAwayPage = () => {
           label="입고적치"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>
@@ -71,6 +74,7 @@ export const InboundPutAwayPage = () => {
             rowSelection,
             setRowSelection,
             data,
+            isLoading,
             isPending,
             isError,
             error,

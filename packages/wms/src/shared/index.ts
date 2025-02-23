@@ -1,11 +1,14 @@
-// export * from './api';
+export * from "./api";
 export * from "./bar-chart";
 export * from "./base-drawer";
 export * from "./base-modal";
 export * from "./base-table";
 export * from "./basic-modal";
 export * from "./check-box";
-export * from "./horizontal-bar-chart";
+export * from "./data-display";
+export * from "./error-boundary";
+export * from "./error-fallback";
+export * from "./error-fallback-page";
 export * from "./lib";
 export * from "./main-button";
 export * from "./main-date-range-picker";

@@ -1,17 +1,21 @@
-import styles from "./InboundControlPanel.module.css";
 import { MainButton, MainDateRangePicker, MainInput } from "@/shared";
 import { useSearchInboundForm } from "../../model";
+import styles from "./InboundControlPanel.module.css";
 
 interface InboundControlPanelProps {
   label: "입하예정" | "입하검사" | "입고적치";
   onSearch: (number: string, startDate: string, endDate: string) => void;
   onClickCreate: () => void;
+  isLoading: boolean;
+  isError: boolean;
 }
 
 export const InboundControlPanel = ({
   label,
   onSearch,
   onClickCreate,
+  isLoading,
+  isError,
 }: InboundControlPanelProps) => {
   const { inputProps, onSubmit } = useSearchInboundForm(onSearch);
 
@@ -34,9 +38,16 @@ export const InboundControlPanel = ({
         />
       </div>
       <div className={styles["button-box"]}>
-        <MainButton size="sm">조회</MainButton>
+        <MainButton size="sm" isLoading={isLoading}>
+          조회
+        </MainButton>
         {label !== "입하예정" && (
-          <MainButton size="sm" type="button" onClick={onClickCreate}>
+          <MainButton
+            size="sm"
+            type="button"
+            onClick={onClickCreate}
+            disabled={isError || isLoading}
+          >
             추가
           </MainButton>
         )}

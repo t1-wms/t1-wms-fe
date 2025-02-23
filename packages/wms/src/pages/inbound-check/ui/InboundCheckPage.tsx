@@ -37,6 +37,7 @@ export const InboundCheckPage = () => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -59,6 +60,8 @@ export const InboundCheckPage = () => {
           label="입하검사"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>
@@ -71,6 +74,7 @@ export const InboundCheckPage = () => {
             rowSelection,
             setRowSelection,
             data,
+            isLoading,
             isPending,
             isError,
             error,

@@ -26,10 +26,6 @@ const defaultColumns = [
     header: "입하예정번호",
     cell: (row) => row.getValue(),
   }),
-  columnHelper.accessor("checkNumber", {
-    header: "입하검사번호",
-    cell: (row) => row.getValue(),
-  }),
   columnHelper.accessor("putAwayNumber", {
     header: "입고적치번호",
     cell: (row) => row.getValue(),

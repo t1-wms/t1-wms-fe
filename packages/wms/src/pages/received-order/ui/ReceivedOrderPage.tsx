@@ -31,6 +31,7 @@ export default function ReceivedOrderPage() {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -49,7 +50,10 @@ export default function ReceivedOrderPage() {
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <ReceivedOrderControlPanel onSearch={handleSearch} />
+        <ReceivedOrderControlPanel
+          onSearch={handleSearch}
+          isLoading={isLoading}
+        />
       </PageContentBox>
       <PageContentBox>
         <ReceivedOrderTable
@@ -61,6 +65,7 @@ export default function ReceivedOrderPage() {
             rowSelection,
             setRowSelection,
             data,
+            isLoading,
             isPending,
             isError,
             error,

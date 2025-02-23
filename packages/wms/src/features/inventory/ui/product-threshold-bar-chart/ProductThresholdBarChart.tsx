@@ -1,27 +1,32 @@
-import { BarChart } from "@/shared";
-import { useMemo } from "react";
+import { BarChartData } from "@/shared";
+import { lazy, useMemo } from "react";
 import { useProductThresholdChart } from "../../model";
+
+const BarChart = lazy(() => import("@shared/bar-chart/ui/BarChart"));
+
+const indexBy = "productName";
+const keys: string[] = ["재고량", "가용재고량"];
 
 export const ProductThresholdBarChart = () => {
   const { data } = useProductThresholdChart();
 
-  const chartData = useMemo(() => {
-    const newChartData: number[][] = [];
-    newChartData.push(data.content.map((product) => product.productCount));
-    newChartData.push(data.content.map((product) => product.availableQuantity));
-    newChartData.push(data.content.map((product) => product.threshold));
+  const chartData: BarChartData[] = useMemo(() => {
+    const newChartData: BarChartData[] = [];
+
+    data.content.forEach((product) => {
+      newChartData.push({
+        productName: product.productName,
+        재고량: product.productCount,
+        가용재고량: product.availableQuantity,
+      });
+    });
 
     return newChartData;
   }, [data]);
 
   return (
-    <div>
-      <BarChart
-        title="재고현황"
-        labels={data.content.map((product) => product.productName)}
-        dataLabel={["재고", "가용재고", "안전재고"]}
-        data={chartData}
-      />
+    <div style={{ width: "100%", aspectRatio: 2 }}>
+      <BarChart indexBy={indexBy} keys={keys} data={chartData} />
     </div>
   );
 };

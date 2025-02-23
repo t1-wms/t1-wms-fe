@@ -47,3 +47,24 @@
 .bold {
   font-weight: bold !important;
 }
+
+.spinner-container {
+  &.md {
+    width: 24px;
+    height: 24px;
+  }
+
+  &.sm {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.container:disabled {
+  background-color: var(--color-gray-300);
+  color: var(--color-gray-500);
+
+  &:hover {
+    background-color: var(--color-gray-300);
+  }
+}

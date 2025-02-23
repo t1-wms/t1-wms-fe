@@ -1,8 +1,8 @@
+import { CreateOutboundAssignModalInfo } from "@/features/outbound/model";
+import { useOutboundPlanTable } from "@/features/outbound/model/useOutboundPlanTable";
 import { BaseDrawer, useModalStore } from "@/shared";
 import { useEffect } from "react";
-import { CreateOutboundAssignModalInfo } from "@/features/outbound/model";
 import { OutboundPlanTable } from "../../outbound-plan-table";
-import { useOutboundPlanTable } from "@/features/outbound/model/useOutboundPlanTable";
 
 interface OutboundPlanListDrawerProps {
   onClose: () => void;
@@ -20,6 +20,7 @@ export const OutboundPlanListDrawer = ({
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -53,14 +54,15 @@ export const OutboundPlanListDrawer = ({
     <BaseDrawer title="출고예정 선택" onClose={onClose}>
       <OutboundPlanTable
         tableParams={{
-          data: data,
-          pagination: pagination,
-          setPagination: setPagination,
-          sorting: sorting,
-          setSorting: setSorting,
-          rowSelection: rowSelection,
-          setRowSelection: setRowSelection,
-          isPending: isPending,
+          data,
+          pagination,
+          setPagination,
+          sorting,
+          setSorting,
+          rowSelection,
+          setRowSelection,
+          isPending,
+          isLoading,
           isError,
           error,
           refetch,

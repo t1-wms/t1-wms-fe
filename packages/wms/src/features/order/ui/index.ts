@@ -1,6 +1,6 @@
-export * from "./order-bar-chart";
 export * from "./order-control-panel";
 export * from "./order-drawer";
+export * from "./order-pie-chart";
 export * from "./order-table";
 export * from "./received-order-control-panel";
 export * from "./received-order-drawer";

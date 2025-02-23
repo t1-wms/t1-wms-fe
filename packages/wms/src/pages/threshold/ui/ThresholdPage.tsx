@@ -28,6 +28,7 @@ export function ThresholdPage() {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -46,7 +47,7 @@ export function ThresholdPage() {
   return (
     <div className={styles.container}>
       <PageContentBox>
-        <ThresholdControlPanel onSearch={handleSearch} />
+        <ThresholdControlPanel onSearch={handleSearch} isLoading={isLoading} />
       </PageContentBox>
       <PageContentBox>
         <ThresholdTable
@@ -58,6 +59,7 @@ export function ThresholdPage() {
             rowSelection,
             setRowSelection,
             data,
+            isLoading,
             isPending,
             isError,
             error,

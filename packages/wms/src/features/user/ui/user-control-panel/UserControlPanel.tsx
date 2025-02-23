@@ -1,13 +1,19 @@
-import styles from "./UserControlPanel.module.css";
-import { useCallback } from "react";
 import { MainButton, MainInput, useModalStore } from "@/shared";
+import { useCallback } from "react";
 import { CreateUserModalInfo, useSearchUserForm } from "../../model";
+import styles from "./UserControlPanel.module.css";
 
 interface UserControlPanelProps {
   onSearch: (staffNumber: string) => void;
+  isLoading: boolean;
+  isError: boolean;
 }
 
-export const UserControlPanel = ({ onSearch }: UserControlPanelProps) => {
+export const UserControlPanel = ({
+  onSearch,
+  isLoading,
+  isError,
+}: UserControlPanelProps) => {
   const { inputProps, onSubmit } = useSearchUserForm(onSearch);
 
   const { openModal } = useModalStore();
@@ -31,8 +37,15 @@ export const UserControlPanel = ({ onSearch }: UserControlPanelProps) => {
         />
       </div>
       <div className={styles["button-box"]}>
-        <MainButton size="sm">조회</MainButton>
-        <MainButton size="sm" type="button" onClick={handleClickAdd}>
+        <MainButton size="sm" isLoading={isLoading}>
+          조회
+        </MainButton>
+        <MainButton
+          size="sm"
+          type="button"
+          onClick={handleClickAdd}
+          disabled={isError || isLoading}
+        >
           추가
         </MainButton>
       </div>

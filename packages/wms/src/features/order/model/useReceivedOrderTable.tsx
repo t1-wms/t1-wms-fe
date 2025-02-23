@@ -31,7 +31,7 @@ export const useReceivedOrderTable = (columnFilters: ColumnFiltersState) => {
     sort,
   } = useTable();
 
-  const { data, isFetched, isPending, isError, error, refetch } =
+  const { data, isFetched, isLoading, isPending, isError, error, refetch } =
     useReceivedOrdes(pagination.pageIndex, sort, filter);
 
   return {
@@ -43,6 +43,7 @@ export const useReceivedOrderTable = (columnFilters: ColumnFiltersState) => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,

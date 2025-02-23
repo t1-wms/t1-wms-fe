@@ -42,6 +42,7 @@ export const useProductThresholds = (
   return useQuery({
     queryKey: createUseProductThresholdQueryKey(page!, sort, filter),
     queryFn: () => getProductThresholdsPaged(page!, sort, filter),
+    placeholderData: (previousData) => previousData,
   });
 };
 

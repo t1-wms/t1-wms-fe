@@ -3,7 +3,7 @@
   height: 100%;
   border-radius: 50%;
   display: inline-block;
-  border-top: 3px solid var(--color-gray-900);
+
   border-right: 3px solid transparent;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
@@ -16,4 +16,12 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.c-900 {
+  border-top: 3px solid var(--color-gray-900);
+}
+
+.c-50 {
+  border-top: 3px solid var(--color-gray-50);
 }

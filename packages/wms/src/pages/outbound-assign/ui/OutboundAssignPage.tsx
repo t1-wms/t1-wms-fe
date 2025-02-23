@@ -1,5 +1,3 @@
-import { PageContentBox } from "@/shared";
-import styles from "./OutboundAssignPage.module.css";
 import {
   OutboundAssignDrawer,
   OutboundAssignTable,
@@ -7,8 +5,10 @@ import {
   OutboundPlanListDrawer,
   useOutboundAssignTable,
 } from "@/features";
-import { useCallback, useMemo, useState } from "react";
+import { PageContentBox } from "@/shared";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { useCallback, useMemo, useState } from "react";
+import styles from "./OutboundAssignPage.module.css";
 
 export const OutboundAssignPage = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -37,6 +37,7 @@ export const OutboundAssignPage = () => {
     setRowSelection,
     data,
     isFetched,
+    isLoading,
     isPending,
     isError,
     error,
@@ -59,6 +60,8 @@ export const OutboundAssignPage = () => {
           label="출고지시"
           onSearch={handleSearch}
           onClickCreate={handleClickCreate}
+          isLoading={isLoading}
+          isError={isError}
         />
       </PageContentBox>
       <PageContentBox>
@@ -73,6 +76,7 @@ export const OutboundAssignPage = () => {
             setSorting,
             rowSelection,
             setRowSelection,
+            isLoading,
             isPending,
             isError,
             error,
