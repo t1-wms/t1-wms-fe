@@ -196,21 +196,6 @@ export default function DashBoardPage() {
             </ErrorBoundary>
           </div>
         </div>
-        <div className={`${styles.box} shadow-md`}>
-          <ErrorBoundary
-            fallbackRender={(onReset) => (
-              <ErrorFallback
-                onRetry={() => {
-                  handleRetry(["productThresholdChart"], onReset);
-                }}
-              />
-            )}
-          >
-            <Suspense fallback={<Spinner message="재고현황을 가져오는 중" />}>
-              <ProductThresholdBarChart />
-            </Suspense>
-          </ErrorBoundary>
-        </div>
       </div>
       <div className={styles.line}></div>
     </div>

@@ -67,6 +67,7 @@ const BarChart = ({ indexBy, keys, data }: BarChartProps) => {
         legendOffset: 32,
         truncateTickAt: 0,
       }}
+      // axisBottom={null}
       axisLeft={{
         tickSize: 5,
         tickPadding: 5,
