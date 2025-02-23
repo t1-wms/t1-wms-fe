@@ -13,7 +13,6 @@ export const OrderControlPanel = ({
   onSearch,
   onClickCreate,
   isLoading,
-  isError,
 }: OrderControlPanelProps) => {
   const { inputProps, onSubmit } = useSearchOrderForm(onSearch);
 
@@ -43,7 +42,7 @@ export const OrderControlPanel = ({
           size="sm"
           type="button"
           onClick={onClickCreate}
-          disabled={isError || isLoading}
+          disabled={isLoading}
         >
           추가
         </MainButton>
