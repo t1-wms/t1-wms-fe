@@ -16,6 +16,7 @@ const PieChart = ({ data }: PieChartProps) => {
       cornerRadius={4}
       colors={{ scheme: "tableau10" }}
       enableArcLinkLabels={false}
+      enableArcLabels={false}
       legends={[
         {
           anchor: "bottom",
