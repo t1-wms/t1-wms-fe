@@ -45,16 +45,12 @@ export const useCreateUserForm = (
       staffNumber: {
         ...register("staffNumber", {
           required: { value: true, message: formMessages.required },
-          minLength: { value: 10, message: formMessages.staffNumberLength },
-          maxLength: { value: 10, message: formMessages.staffNumberLength },
         }),
         error: errors.staffNumber,
       },
       phone: {
         ...register("phone", {
           required: { value: true, message: formMessages.required },
-          minLength: { value: 11, message: formMessages.phoneLength },
-          maxLength: { value: 11, message: formMessages.phoneLength },
         }),
         error: errors.phone,
       },

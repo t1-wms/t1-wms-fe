@@ -140,15 +140,17 @@ export const CreateUserModal = ({}: CreateUserModalProps) => {
           value={userRole}
           onChange={handleChangeUserRole}
         />
-        <MainSelect
-          width={inputWidth}
-          label="납품업체"
-          disabled={isLoading}
-          options={supplierOptions}
-          isLoading={isLoading}
-          value={supplierId}
-          onChange={handleChangeSupplierId}
-        />
+        {userRole === "공급업체" && (
+          <MainSelect
+            width={inputWidth}
+            label="납품업체"
+            disabled={isLoading}
+            options={supplierOptions}
+            isLoading={isLoading}
+            value={supplierId}
+            onChange={handleChangeSupplierId}
+          />
+        )}
       </form>
     </BasicModal>
   );
