@@ -6,6 +6,12 @@ function InboundCompletePage() {
   const navigate = useNavigate();
   const { inboundList, resetInbound } = useInboundStore();
 
+  const normalItemsCount = inboundList.items.filter(
+    item => !inboundList.rejectedItems.includes(item.id)
+  ).length;
+
+  const rejectedItemsCount = inboundList.rejectedItems.length;
+
   const handleHomeClick = () => {
     resetInbound(); // 입고 상태 초기화
     navigate('/');  // 홈으로 이동
@@ -22,12 +28,11 @@ function InboundCompletePage() {
         <Success />
       </div>
 
-      {/* 완료 메시지 */}
       <h1 className="text-2xl font-bold text-gray-800 mb-2">
         배치 완료
       </h1>
       <p className="text-gray-800 mb-6 text-center">
-        총 {inboundList.items.length}개 물품의 배치가 완료되었습니다.
+        총 {normalItemsCount}개 물품의 배치가 완료되었습니다.
       </p>
 
       {/* 입고 결과 요약 */}
@@ -36,10 +41,16 @@ function InboundCompletePage() {
           <span className="text-gray-800">입고 ID</span>
           <span className="font-medium">{inboundList.inboundId}</span>
         </div>
-        <div className="flex justify-between items-center py-2">
-          <span className="text-gray-600">완료 품목 수</span>
-          <span className="font-medium">{inboundList.items.length}개</span>
+        <div className="flex justify-between items-center border-b border-gray-200 py-2">
+          <span className="text-gray-600">정상 품목 수</span>
+          <span className="font-medium text-green-600">{normalItemsCount}개</span>
         </div>
+        {rejectedItemsCount > 0 && (
+          <div className="flex justify-between items-center py-2">
+            <span className="text-gray-600">불량 품목 수</span>
+            <span className="font-medium text-red-600">{rejectedItemsCount}개</span>
+          </div>
+        )}
       </div>
 
       {/* 버튼 영역 */}

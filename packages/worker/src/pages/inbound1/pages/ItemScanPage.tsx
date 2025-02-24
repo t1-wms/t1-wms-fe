@@ -35,6 +35,20 @@ function ItemScanPage() {
     }
   }, [location.state, navigate, setItemScanned, itemId]);
 
+  useEffect(() => {
+    if (currentItem && inboundList.rejectedItems.includes(currentItem.id)) {
+      const nextAcceptedItemIndex = inboundList.items.findIndex((item, idx) => 
+        idx > (Number(itemId) - 1) && !inboundList.rejectedItems.includes(item.id)
+      );
+      
+      if (nextAcceptedItemIndex !== -1) {
+        navigate(`/inbound/item/${nextAcceptedItemIndex + 1}`, { replace: true });
+      } else {
+        navigate('/inbound/complete', { replace: true });
+      }
+    }
+  }, [currentItem, inboundList.rejectedItems, inboundList.items, navigate, itemId]);
+
   const handleItemScan = () => {
     console.log('Expected Code:', currentItem.code);
     navigate('/camera', {
