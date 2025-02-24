@@ -77,6 +77,11 @@
   font-family: inherit;
 }
 
+.visual-container * {
+  margin: initial;
+  padding: initial;
+}
+
 html::-webkit-scrollbar {
   display: none;
 }

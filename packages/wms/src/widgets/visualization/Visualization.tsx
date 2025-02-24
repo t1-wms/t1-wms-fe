@@ -1,13 +1,13 @@
 import { BinResponseDto, useBins } from "@/features";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReactGridLayout, { Layout } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import RackDetail from "./ReckDetail";
 import ZoneLegend from "./ZoneLegend";
 import { zoneColor } from "./constants";
-import { RackProps } from "./types";
 import "./tailwind.css";
+import { RackProps } from "./types";
 
 const generateRacksForZone = (
   zone: string,
@@ -18,17 +18,19 @@ const generateRacksForZone = (
   const racks: RackProps[] = [];
 
   for (let aisle = 0; aisle < 6; aisle++) {
-    for (let row = 0; row < 6; row++) {
+    for (let row = 5; row >= 0; row--) {
       const currentZoneBins = binData.filter(
         (bin) =>
-          bin.zone === zone && bin.aisle === aisle + 1 && bin.row === row + 1
+          bin.zone === zone &&
+          bin.aisle === aisle + 1 &&
+          bin.row === 5 - row + 1
       );
 
       const isOccupied = currentZoneBins.some((bin) => bin.amount > 0);
 
       racks.push({
         id: `${zone}-${String(aisle + 1).padStart(2, "0")}-${String(
-          row + 1
+          5 - row + 1
         ).padStart(2, "0")}-01`,
         x: startX + aisle,
         y: startY + row,
@@ -37,7 +39,7 @@ const generateRacksForZone = (
         isOccupied,
         zone,
         aisle: aisle + 1,
-        row: row + 1,
+        row: 5 - row + 1, // row 값을 역순으로 매핑
         binData: currentZoneBins,
       });
     }
@@ -48,16 +50,14 @@ const generateRacksForZone = (
 const WarehouseVisualization = () => {
   const { data } = useBins();
 
-  const newRacks = useMemo(() => {
-    return [
-      ...generateRacksForZone("D", 0, 0, data),
-      ...generateRacksForZone("E", 6, 0, data),
-      ...generateRacksForZone("F", 12, 0, data),
-      ...generateRacksForZone("A", 0, 7, data),
-      ...generateRacksForZone("B", 6, 7, data),
-      ...generateRacksForZone("C", 12, 7, data),
-    ];
-  }, [data]);
+  const newRacks = [
+    ...generateRacksForZone("D", 6, 0, data),
+    ...generateRacksForZone("E", 12, 7, data),
+    ...generateRacksForZone("F", 12, 0, data),
+    ...generateRacksForZone("A", 0, 7, data),
+    ...generateRacksForZone("B", 0, 0, data),
+    ...generateRacksForZone("C", 6, 7, data),
+  ];
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [selectedRack, setSelectedRack] = useState<RackProps | null>(null);
@@ -73,7 +73,7 @@ const WarehouseVisualization = () => {
   }, []);
 
   const calculateGridWidth = useCallback(() => {
-    return windowWidth * 0.75;
+    return (windowWidth - 240) * 0.75;
   }, [windowWidth]);
 
   //랙 클릭시 동작 함수 및 콘솔로그로 받아오는 데이터 확인
@@ -120,9 +120,9 @@ const WarehouseVisualization = () => {
   };
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-full visual-container">
       <div className="w-3/4 bg-gray-100 rounded-sm">
-        <div className="overflow-hidden">
+        <div className="">
           <div className="">
             <div className="p-4">
               <ReactGridLayout
@@ -137,7 +137,7 @@ const WarehouseVisualization = () => {
                 cols={19}
                 rowHeight={40}
                 width={calculateGridWidth()}
-                margin={[25, 2]}
+                margin={[10, 2]}
                 preventCollision={true}
                 isDraggable={false}
                 isResizable={false}
