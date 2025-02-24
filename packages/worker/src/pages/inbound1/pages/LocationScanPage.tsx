@@ -14,22 +14,15 @@ function LocationScanPage() {
   const currentItem = inboundList.items[Number(itemId) - 1];
 
   useEffect(() => {
+    if (!inboundList.inboundId) {
+      navigate('/tasklist');
+      return;
+    }
     if (!currentItem) {
       navigate('/inbound/complete', { replace: true });
       return;
     }
-  }, [currentItem, navigate]);
-
-  useEffect(() => {
-    if (currentItem?.isLocationScanned) {
-      const nextItemIndex = Number(itemId);
-      if (nextItemIndex < inboundList.items.length) {
-        navigate(`/inbound/inspection/${nextItemIndex + 1}`, { replace: true });
-      } else {
-        navigate('/inbound/complete', { replace: true });
-      }
-    }
-  }, [currentItem, navigate, itemId, inboundList.items.length]);
+  }, [currentItem, navigate, inboundList]);
 
   useEffect(() => {
     const state = location.state as { scanSuccess?: boolean };
@@ -38,17 +31,17 @@ function LocationScanPage() {
       setLocationScanned();
       
       setTimeout(() => {
-        const nextItemIndex = Number(itemId);
-        moveToNextItem();
-        
-        if (nextItemIndex < inboundList.items.length) {
-          navigate(`/inbound/inspection/${nextItemIndex + 1}`, {
-            replace: true,
-            state: {}
-          });
+        const currentIndex = Number(itemId);
+        const nextIndex = currentIndex + 1;
+
+        if (nextIndex > inboundList.items.length) {
+          moveToNextItem();
+          navigate('/inbound/complete', { replace: true });
         } else {
-          navigate('/inbound/complete', { 
-            replace: true 
+          moveToNextItem();
+          navigate(`/inbound/item/${nextIndex}`, { 
+            replace: true,
+            state: {} 
           });
         }
       }, 1000);
@@ -60,9 +53,11 @@ function LocationScanPage() {
   }
 
   const handleLocationScan = () => {
+    const expectedLocation = `${currentItem.location.zone}-${currentItem.location.aisle}-${currentItem.location.rack}-${currentItem.location.floor}`;
+    console.log('Expected Location:', expectedLocation);
     navigate('/camera', {
       state: {
-        expectedCode: `${currentItem.location.zone}-${currentItem.location.aisle}-${currentItem.location.rack}-${currentItem.location.floor}`,
+        expectedCode: expectedLocation,
         returnPath: `/inbound/location/${itemId}`
       }
     });

@@ -23,6 +23,13 @@ const inboundData = [
           productImage:
             "https://hellowcar.com/web/product/medium/202111/58e6b3aa8945db2c8000e46a49c34312.jpg",
         },
+        // {
+        //   productId: 30,
+        //   productCode: "82850P1000",
+        //   productName: "몰딩 어셈블리－프론트 도어 프레임,좌측",
+        //   productImage:
+        //     "https://hellowcar.com/web/product/medium/202111/58e6b3aa8945db2c8000e46a49c34312.jpg",
+        // },
       ],
     },
     {
@@ -74,6 +81,62 @@ const inboundData = [
       ],
     },
   ];
+
+
+  // 입하검사 끝나면 오는 입고적치 위치 데이터
+
+const item1 = {
+  inboundId: 1,
+  checkNumber: "IC202502230000",
+  lotList: [
+    {
+      LotId: 1,
+      LotCode: "LO202502230000",
+      ProductId: 2,
+      productCode: "83270P1010",
+      productName: "가니쉬 어셈블리－리어 도어 리어 프레임,좌측",
+      productImage:
+        "https://hellowcar.com/web/product/medium/202108/31c33242bd0d70b016b15bda57ab4445.jpg",
+      binCode: "A-01-02-03",
+    },
+  ],
+};
+
+const item2 = {
+  inboundId: 1,
+  checkNumber: "IC202502230000",
+  lotList: [
+    {
+      LotId: 2,
+      LotCode: "LO202502230001",
+      ProductId: 14,
+      productCode: "87721P1000BKL",
+      productName: "가니쉬 어셈블리-프론트 도어 사이드,좌측",
+      productImage:
+        "https://hellowcar.com/web/product/medium/202112/159ab768a15bbfaacb87f6133acd2def.jpg",
+      binCode: "B-03-01-01",
+    },
+  ],
+};
+
+const item3 = {
+  inboundId: 1,
+  checkNumber: "IC202502230000",
+  lotList: [
+    {
+      LotId: 3,
+      LotCode: "LO202502230002",
+      ProductId: 30,
+      productId: 30,
+      productCode: "82850P1000",
+      productName: "몰딩 어셈블리－프론트 도어 프레임,좌측",
+      productImage:
+        "https://hellowcar.com/web/product/medium/202111/58e6b3aa8945db2c8000e46a49c34312.jpg",
+      binCode: "A-06-06-05",
+    },
+  ],
+};
+
   
 
 
@@ -236,4 +299,4 @@ const outboundData = [
   },
 ];
 
-export { inboundData, outboundData }
+export { inboundData, outboundData,  item1, item2,item3  }
