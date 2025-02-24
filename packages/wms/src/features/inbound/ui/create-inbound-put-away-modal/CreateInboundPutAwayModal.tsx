@@ -38,6 +38,7 @@ export const CreateInboundPutAwayModal = ({
 
   const handleSubmitValid = () => {
     createInboundPutAway(inboundId);
+    closeModal();
   };
 
   return (
