@@ -23,13 +23,6 @@ const inboundData = [
           productImage:
             "https://hellowcar.com/web/product/medium/202111/58e6b3aa8945db2c8000e46a49c34312.jpg",
         },
-        // {
-        //   productId: 30,
-        //   productCode: "82850P1000",
-        //   productName: "몰딩 어셈블리－프론트 도어 프레임,좌측",
-        //   productImage:
-        //     "https://hellowcar.com/web/product/medium/202111/58e6b3aa8945db2c8000e46a49c34312.jpg",
-        // },
       ],
     },
     {
@@ -179,19 +172,7 @@ const outboundData = [
         rowNum: 6,
         floor: 6,
         productName: "핀 부트",
-        productCode: "581641H00",
-        productImage:
-          "https://hellowcar.com/web/product/medium/202408/5ac95c0e81f3f92fcf7f41a46f8adfbf.jpg",
-      },
-      {
-        lotId: 102,
-        binCode: "C-01-03-06",
-        zone: "C",
-        aisle: 1,
-        rowNum: 3,
-        floor: 6,
-        productName: "핀 부트",
-        productCode: "581641H00",
+        productCode: "581641H000",
         productImage:
           "https://hellowcar.com/web/product/medium/202408/5ac95c0e81f3f92fcf7f41a46f8adfbf.jpg",
       },

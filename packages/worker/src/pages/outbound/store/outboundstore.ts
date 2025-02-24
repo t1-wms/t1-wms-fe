@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { OutboundTask } from '@/pages/tasklist/types/tasktypes';
+import { outboundData } from '@/shared/api/mocks';
 
 interface PickingStore {
   pickingList: {
@@ -18,6 +19,7 @@ interface PickingStore {
       isLocationScanned: boolean;
       isItemScanned: boolean;
       quantity: number;
+      pickingSeq: number;
     }>;
     currentItemIndex: number;
   };
@@ -34,28 +36,35 @@ export const usePickingStore = create<PickingStore>((set) => ({
     items: [],
     currentItemIndex: 0
   },
-
-  setPickingList: (task: OutboundTask) => set({
-    pickingList: {
-      pickingId: task.outboundAssignNumber,
-      items: task.lotLocations.map(lot => ({
-        id: lot.lotId,
-        code: lot.productCode,
-        name: lot.productName,
-        image: lot.productImage,  
-        location: {
-          zone: lot.zone,
-          aisle: lot.aisle.toString(),
-          rack: lot.rowNum.toString(),
-          floor: lot.floor.toString()
-        },
-        isLocationScanned: false,
-        isItemScanned: false,
-        quantity: 1
-      })),
-      currentItemIndex: 0
+  setPickingList: (task: OutboundTask) => {
+    const selectedOutbound = outboundData.find((item) => item.outboundId === task.outboundId);
+    if (selectedOutbound) {
+      set({
+        pickingList: {
+          pickingId: String(task.outboundId),
+          items: selectedOutbound.lotLocations.map((lot, index) => {
+            return {
+              id: lot.lotId,
+              code: lot.productCode,
+              name: lot.productName,
+              image: lot.productImage,
+              quantity: 1,
+              pickingSeq: index + 1,
+              location: {
+                zone: lot.zone,
+                aisle: String(lot.aisle).padStart(2, '0'),
+                rack: String(lot.rowNum).padStart(2, '0'),
+                floor: String(lot.floor).padStart(2, '0')
+              },
+              isLocationScanned: false,
+              isItemScanned: false
+            };
+          }),
+          currentItemIndex: 0
+        }
+      });
     }
-  }),
+  },
 
   setLocationScanned: () => set((state) => ({
     pickingList: {

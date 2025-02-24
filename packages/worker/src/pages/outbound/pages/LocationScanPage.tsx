@@ -31,12 +31,6 @@ export const LocationScanPage = () => {
     }
   }, [currentItem, navigate]);
 
-  // useEffect(() => {
-  //   if (currentItem?.isLocationScanned) {
-  //     navigate(`/outbound/item/${itemId}`, { replace: true });
-  //   }
-  // }, [currentItem, navigate, itemId]);
-
   useEffect(() => {
     const state = location.state as { scanSuccess?: boolean };
     if (state?.scanSuccess) {

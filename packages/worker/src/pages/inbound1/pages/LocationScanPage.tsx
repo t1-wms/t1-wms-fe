@@ -33,12 +33,11 @@ function LocationScanPage() {
       setTimeout(() => {
         const currentIndex = Number(itemId);
         const nextIndex = currentIndex + 1;
-
+        
         if (nextIndex > inboundList.items.length) {
-          moveToNextItem();
           navigate('/inbound/complete', { replace: true });
         } else {
-          moveToNextItem();
+          moveToNextItem();  // 수정된 moveToNextItem이 불량 물품을 건너뜀
           navigate(`/inbound/item/${nextIndex}`, { 
             replace: true,
             state: {} 
