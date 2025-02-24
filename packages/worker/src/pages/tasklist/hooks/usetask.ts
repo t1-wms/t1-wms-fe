@@ -65,6 +65,7 @@ import { useTaskStore } from '../store/taskstore';
 import { Task, TabType, isInboundTask } from '../types/tasktypes';
 import { inboundData, outboundData } from '../../../shared/api/mocks';
 import { usePickingStore } from '@/pages/outbound/store/outboundstore';
+import { useInboundStore } from '@/pages/inbound1/store/inboundstore';
 
 export const useTask = (defaultTab: TabType = 'inbound') => {
   const navigate = useNavigate();
@@ -80,6 +81,7 @@ export const useTask = (defaultTab: TabType = 'inbound') => {
   } = useTaskStore();
 
   const setPickingList = usePickingStore(state => state.setPickingList);
+  const setInboundTask = useInboundStore(state => state.setInboundTask);
 
   // 초기 탭 설정
   useEffect(() => {
@@ -114,7 +116,8 @@ export const useTask = (defaultTab: TabType = 'inbound') => {
 
   const handleTaskClick = (task: Task) => {
     if (isInboundTask(task)) {
-      console.log('입고 작업 시작:', task.inboundId);
+      console.log('입하 작업 시작:', task);
+      setInboundTask(task.inboundId); // store 설정 추가
       navigate(`/inbound/inspection/${task.inboundId}`);
     } else {
       console.log('출고 작업 시작:', task);

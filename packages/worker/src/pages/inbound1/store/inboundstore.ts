@@ -1,47 +1,16 @@
 import { create } from 'zustand';
 import { PickingItem } from '@/shared/types/items';
-
-const dummyInboundItems: PickingItem[] = [
-  // {
-  //   pickingSeq: 1,
-  //   id: 1,
-  //   code: "AX-100",
-  //   name: "부품 A",
-  //   quantity: 2,
-  //   location: {
-  //     zone: "A",
-  //     aisle: "01",
-  //     rack: "01",
-  //     shelf: "03"
-  //   },
-  //   isLocationScanned: false,
-  //   isItemScanned: false,
-  //   isInspectionComplete: false
-  // },
-  // {
-  //   pickingSeq: 2,
-  //   id: 2,
-  //   code: "BX-200",
-  //   name: "부품 B",
-  //   quantity: 1,
-  //   location: {
-  //     zone: "B",
-  //     aisle: "02",
-  //     rack: "03",
-  //     shelf: "01"
-  //   },
-  //   isLocationScanned: false,
-  //   isItemScanned: false,
-  //   isInspectionComplete: false
-  // }
-];
+import { inboundData } from '@/shared/api/mocks';
 
 interface InboundStore {
   inboundList: {
     inboundId: string;
+    checkNumber?: string;
     items: PickingItem[];
     currentItemIndex: number;
   };
+  setInboundTask: (inboundId: number) => void;
+  setInboundLocations: (checkNumber: string, lotList: any[]) => void;
   setInspectionComplete: () => void;
   setItemScanned: () => void;
   setLocationScanned: () => void;
@@ -51,11 +20,65 @@ interface InboundStore {
 
 export const useInboundStore = create<InboundStore>((set) => ({
   inboundList: {
-    inboundId: 'I001',
-    items: dummyInboundItems, // 더미데이터 초기화
+    inboundId: '',
+    items: [],
     currentItemIndex: 0
   },
 
+  // 입하 검사 시작시 초기 데이터 설정
+  setInboundTask: (inboundId: number) => {
+    const selectedInbound = inboundData.find(item => item.inboundId === inboundId);
+    if (selectedInbound) {
+      set({
+        inboundList: {
+          inboundId: String(inboundId),
+          items: selectedInbound.productList.map((product, index) => ({
+            id: product.productId,
+            code: product.productCode,
+            name: product.productName,
+            image: product.productImage,
+            quantity: 1,
+            pickingSeq: index + 1,
+            location: {
+              zone: '',
+              aisle: '',
+              rack: '',
+              floor: ''
+            },
+            isLocationScanned: false,
+            isItemScanned: false,
+            isInspectionComplete: false
+          })),
+          currentItemIndex: 0
+        }
+      });
+    }
+  },
+
+  // 입하 검사 완료 후 위치 정보 설정
+  setInboundLocations: (checkNumber: string, lotList) => set((state) => ({
+    inboundList: {
+      ...state.inboundList,
+      checkNumber,
+      items: state.inboundList.items.map(item => {
+        const lot = lotList.find(l => l.ProductId === item.id);
+        if (lot) {
+          const [zone, aisle, rack, floor] = lot.binCode.split('-');
+          return {
+            ...item,
+            location: {
+              zone,
+              aisle,
+              rack,
+              floor
+            }
+          };
+        }
+        return item;
+      })
+    }
+  })),
+  
   setInspectionComplete: () => set((state) => ({
     inboundList: {
       ...state.inboundList,
