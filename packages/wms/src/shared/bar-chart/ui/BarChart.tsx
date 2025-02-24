@@ -14,31 +14,11 @@ const BarChart = ({ indexBy, keys, data }: BarChartProps) => {
       keys={keys}
       indexBy={indexBy}
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-      padding={0.1}
+      padding={0.2}
       colors={{ scheme: "tableau10" }}
       groupMode="grouped"
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      defs={[
-        {
-          id: "dots",
-          type: "patternDots",
-          background: "inherit",
-          color: "#38bcb2",
-          size: 4,
-          padding: 1,
-          stagger: true,
-        },
-        {
-          id: "lines",
-          type: "patternLines",
-          background: "inherit",
-          color: "#eed312",
-          rotation: -45,
-          lineWidth: 6,
-          spacing: 10,
-        },
-      ]}
       fill={[
         {
           match: {
@@ -60,14 +40,13 @@ const BarChart = ({ indexBy, keys, data }: BarChartProps) => {
       axisTop={null}
       axisRight={null}
       axisBottom={{
-        tickSize: 5,
+        tickSize: 10,
         tickPadding: 5,
-        tickRotation: 0,
+        tickRotation: -5,
         legendPosition: "middle",
         legendOffset: 32,
         truncateTickAt: 0,
       }}
-      // axisBottom={null}
       axisLeft={{
         tickSize: 5,
         tickPadding: 5,

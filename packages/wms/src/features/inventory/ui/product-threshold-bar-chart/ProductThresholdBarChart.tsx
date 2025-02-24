@@ -23,9 +23,8 @@ export const ProductThresholdBarChart = () => {
 
     return newChartData;
   }, [data]);
-
   return (
-    <div style={{ width: "100%", aspectRatio: 2 }}>
+    <div style={{ width: "100%", aspectRatio: 3 }}>
       <BarChart indexBy={indexBy} keys={keys} data={chartData} />
     </div>
   );
