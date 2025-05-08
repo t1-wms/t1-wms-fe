@@ -29,6 +29,15 @@
 
 ## ✏️ Issue
 
+### 원활한 코드 리뷰를 위한 코드 리뷰 주제 제안 시스템 도입
+
+원활한 코드 리뷰를 위해, 코드 리뷰 주제를 자동으로 제안하는 AI 기반 서비스를 기획했습니다. 개발자는 PR 작성 시 변경된 코드가 자동으로 추출되어, 사전에 정의된 프롬프트와 함께 AI에게 전달되고, 그에 대한 리뷰 주제를 응답받는 구조입니다. 이를 위해 OpenAI API와 연동되는 Express 서버를 직접 구현해, 코드 변경 사항을 분석하고 리뷰어에게 실질적인 도움을 줄 수 있도록 했습니다.
+
+[karpo-review-server](https://github.com/ektto1041/karpo-review-server)
+
+<img width="535" alt="스크린샷 2025-05-08 오후 1 46 40" src="https://github.com/user-attachments/assets/9f2b3cff-3a97-4860-b256-c2d70bb23f12" />
+
+
 ### Suspense + Error Boundary 설계
 
 StockHolmes 프로젝트에서는 UI/UX의 높은 반응성을 프론트엔드의 핵심 목표로 삼았기 때문에, UI 기획 단계에서부터 Suspense와 ErrorBoundary 영역을 미리 설계했습니다.
